@@ -3,6 +3,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
+from companies.models import Company
 from datetime import datetime, timedelta
 
 
@@ -75,6 +76,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=75)
     last_name = models.CharField(max_length=75)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to=profile_pic_upload_path, null=True, blank=True)
 
     def __str__(self):
