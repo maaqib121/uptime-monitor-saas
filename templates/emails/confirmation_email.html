@@ -1,0 +1,57 @@
+{% extends 'emails/base.html' %}
+
+
+{% block content %}
+<tr>
+  <td>
+    <span style="font-size: 25px; font-weight: bold;">
+      Verify your new Ping-App account
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <span style="font-size: 22px;">
+      Verifying your email helps us to confirm we have the right email address to send you important messages about
+      your Ping-App account.
+    </span>
+    <br> <br> <br>
+
+    <span style="font-size: 22px;">
+      To complete the email verification process of your Ping-App account, please select the button below
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <a href="{{ redirect_uri }}/{{ uidb64 }}/{{ token }}"
+       style="color: white; display: inline-block; background-color: #815B12; padding: 15px 40px; text-decoration: none; border-radius: 5px;">
+      Verify Email Address
+    </a>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <span style="font-size: 22px;">
+      If you didn't attempt to verify your Adulis email address or you feel that your account may have been accessed
+      by someone else, please let us know.
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <span style="font-size: 22px; font-weight: bold;">
+      Looking forward to see you onboard!
+    </span>
+    <br><br>
+  </td>
+</tr>
+{% endblock content %}
