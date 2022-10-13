@@ -2,7 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.response import Response
-from users.api.v1.serializers import SignupSerializer, AuthenticateSerializer, UserSerializer
+from users.api.v1.serializers import (
+    SignupSerializer,
+    AuthenticateSerializer,
+    UserSerializer
+)
+from users.utils.common import send_confirmation_email
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -13,7 +18,10 @@ class SignupView(APIView):
     def post(self, request):
         serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
-            serializer = UserSerializer(serializer.save())
+            user = serializer.save()
+            user.generate_confirmation_token()
+            send_confirmation_email(user, serializer.get_redirect_uri())
+            serializer = UserSerializer(user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

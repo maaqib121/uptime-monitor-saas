@@ -10,10 +10,18 @@ class SignupSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     company_name = serializers.CharField()
+    redirect_uri = serializers.URLField()
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'company_name')
+        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'company_name', 'redirect_uri')
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.redirect_uri = None
+
+    def get_redirect_uri(self):
+        return self.redirect_uri
 
     def validate_password(self, value):
         is_password_valid(value)
@@ -26,6 +34,7 @@ class SignupSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
+        self.redirect_uri = validated_data.pop('redirect_uri')
         password = validated_data.pop('password')
         first_name = validated_data.pop('first_name')
         last_name = validated_data.pop('last_name')
