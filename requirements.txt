@@ -8,6 +8,9 @@ Pillow==9.2.0
 psycopg2==2.9.4
 pycodestyle==2.9.1
 PyJWT==2.5.0
+python-http-client==3.3.7
 pytz==2022.4
+sendgrid==6.9.7
 sqlparse==0.4.3
+starkbank-ecdsa==2.1.0
 toml==0.10.2
