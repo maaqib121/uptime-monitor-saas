@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
+from django.contrib.auth.password_validation import validate_password as is_password_valid
 from companies.models import Company
 from users.models import User, Profile
 
@@ -13,6 +14,10 @@ class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'company_name')
+
+    def validate_password(self, value):
+        is_password_valid(value)
+        return value
 
     def validate_password2(self, value):
         if self.initial_data['password'] != value:
@@ -31,6 +36,31 @@ class SignupSerializer(serializers.ModelSerializer):
         company = Company.objects.create(name=company_name)
         Profile.objects.create(company=company, user=user, first_name=first_name, last_name=last_name)
         return user
+
+
+class AuthenticateSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.user = None
+
+    def get_user(self):
+        return self.user
+
+    def validate(self, attrs):
+        self.user = User.objects.filter(email=attrs['email']).first()
+        if not self.user or not self.user.check_password(attrs['password']):
+            raise serializers.ValidationError('Password incorrect or user does not exist.')
+
+        if not self.user.is_active:
+            raise serializers.ValidationError('User inactive.')
+
+        if not self.user:
+            raise serializers.ValidationError('Invalid credentials.')
+
+        return super().validate(attrs)
 
 
 class UserSerializer(serializers.ModelSerializer):
