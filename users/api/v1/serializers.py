@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
+from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.password_validation import validate_password as is_password_valid
+from django.conf import settings
 from companies.models import Company
 from users.models import User, Profile
+from datetime import datetime
+from pytz import timezone
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -69,6 +73,29 @@ class AuthenticateSerializer(serializers.Serializer):
         if not self.user:
             raise serializers.ValidationError('Invalid credentials.')
 
+        return super().validate(attrs)
+
+
+class UserConfirmationSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.user = None
+
+    def get_user(self):
+        return self.user
+
+    def validate(self, attrs):
+        user = User.objects.filter(id=urlsafe_base64_decode(attrs['uidb64']).decode()).first()
+        if not user or user.confirmation_token != attrs['token']:
+            raise serializers.ValidationError('Invalid confirmation token.')
+
+        if user.confirmation_token_expiry_date < datetime.now(tz=timezone(settings.TIME_ZONE)):
+            raise serializers.ValidationError('Confirmation token has been expired.')
+
+        self.user = user
         return super().validate(attrs)
 
 

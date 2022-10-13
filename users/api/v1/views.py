@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from users.api.v1.serializers import (
     SignupSerializer,
     AuthenticateSerializer,
+    UserConfirmationSerializer,
     UserSerializer
 )
 from users.utils.common import send_confirmation_email
@@ -21,6 +22,23 @@ class SignupView(APIView):
             user = serializer.save()
             user.generate_confirmation_token()
             send_confirmation_email(user, serializer.get_redirect_uri())
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserConfirmationView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (AllowAny,)
+
+    def post(self, request, uidb64, token):
+        request_data = request.data.copy()
+        request_data.update({'uidb64': uidb64, 'token': token})
+        serializer = UserConfirmationSerializer(data=request_data)
+        if serializer.is_valid():
+            user = serializer.get_user()
+            user.clear_confirmation_token()
+            user.activate()
             serializer = UserSerializer(user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
