@@ -6,9 +6,11 @@ from users.api.v1.serializers import (
     SignupSerializer,
     AuthenticateSerializer,
     UserConfirmationSerializer,
-    UserSerializer
+    UserSerializer,
+    ForgetPasswordSerializer,
+    ResetPasswordSerializer
 )
-from users.utils.common import send_confirmation_email
+from users.utils.common import send_confirmation_email, send_reset_password_email
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -44,6 +46,21 @@ class UserConfirmationView(APIView):
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class VerifyConfirmationTokenView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (AllowAny,)
+
+    def post(self, request, uidb64, token):
+        request_data = request.data.copy()
+        request_data.update({'uidb64': uidb64, 'token': token})
+        serializer = UserConfirmationSerializer(data=request_data)
+        if serializer.is_valid():
+            user = serializer.get_user()
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class AuthenticateView(APIView):
     http_method_names = ('post',)
     permission_classes = (AllowAny,)
@@ -59,4 +76,38 @@ class AuthenticateView(APIView):
                 'user': UserSerializer(user).data
             }
             return Response(response_data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ForgetPasswordView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = ForgetPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.get_user()
+            user.generate_confirmation_token()
+            response = send_reset_password_email(user, serializer.validated_data['redirect_uri'])
+            if isinstance(response, Response):
+                return response
+            response_data = {'success': True}
+            return Response(response_data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResetPasswordView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (AllowAny,)
+
+    def post(self, request, uidb64, token):
+        form_data = request.data.copy()
+        form_data.update({'uidb64': uidb64, 'token': token})
+        serializer = ResetPasswordSerializer(data=form_data)
+        if serializer.is_valid():
+            user = serializer.get_user()
+            user.update_password(serializer.validated_data['password'])
+            user.clear_confirmation_token()
+            serializer = UserSerializer(user, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

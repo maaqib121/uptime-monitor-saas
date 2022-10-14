@@ -36,6 +36,11 @@ class SignupSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Password fields didn\'t match.')
         return value
 
+    def validate_company_name(self, value):
+        if Company.objects.filter(name=value).exists():
+            raise serializers.ValidationError('Name already taken')
+        return value
+
     def create(self, validated_data):
         validated_data.pop('password2')
         self.redirect_uri = validated_data.pop('redirect_uri')
@@ -113,3 +118,62 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude = ('user',)
+
+
+class ForgetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    redirect_uri = serializers.URLField()
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.user = None
+
+    def get_user(self):
+        return self.user
+
+    def validate_email(self, value):
+        user = User.objects.filter(email=value).first()
+        if not user:
+            raise serializers.ValidationError('No user exists against this email address.')
+        if not user.is_active:
+            raise serializers.ValidationError('User inactive.')
+        self.user = user
+        return value
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+    password = serializers.CharField()
+    password2 = serializers.CharField()
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.user = None
+
+    def get_user(self):
+        return self.user
+
+    def validate(self, attrs):
+        user = User.objects.filter(id=urlsafe_base64_decode(attrs['uidb64']).decode()).first()
+        if not user or user.confirmation_token != attrs['token']:
+            raise serializers.ValidationError('Invalid password reset token.')
+
+        if user.confirmation_token_expiry_date < datetime.now(tz=timezone('UTC')):
+            raise serializers.ValidationError('Reset Password token has been expired.')
+
+        try:
+            is_password_valid(attrs['password'])
+        except Exception as exception:
+            error_list = []
+            for exception in exception.error_list:
+                if exception.params:
+                    exception.message = exception.message % {list(exception.params.keys())[0]: list(exception.params.values())[0]}
+                error_list.append(exception.message)
+            raise serializers.ValidationError({'password': error_list})
+
+        if self.initial_data['password'] != attrs['password2']:
+            raise serializers.ValidationError({'password2': 'Password fields didn\'t match.'})
+
+        self.user = user
+        return super().validate(attrs)

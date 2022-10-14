@@ -55,6 +55,10 @@ class User(AbstractUser):
         self.is_active = True
         self.save()
 
+    def update_password(self, password):
+        self.set_password(password)
+        self.save()
+
     @property
     def first_name(self):
         return self.profile.first_name
