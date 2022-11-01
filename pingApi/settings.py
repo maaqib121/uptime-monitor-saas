@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'companies',
-    'users'
+    'users',
+    'plans'
 ]
 
 SIMPLE_JWT = {
