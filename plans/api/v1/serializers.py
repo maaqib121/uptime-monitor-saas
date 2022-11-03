@@ -8,6 +8,11 @@ class PriceSerializer(serializers.ModelSerializer):
         model = Price
         exclude = ('plan', 'stripe_price_id')
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['frequency'] = instance.get_frequency_display()
+        return representation
+
 
 class PlanSerializer(serializers.ModelSerializer):
     class Meta:
