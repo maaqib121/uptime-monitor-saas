@@ -6,7 +6,7 @@ from plans.models import Plan, Price
 class PriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Price
-        exclude = ('plan',)
+        exclude = ('plan', 'stripe_price_id')
 
 
 class PlanSerializer(serializers.ModelSerializer):
