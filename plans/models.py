@@ -19,6 +19,7 @@ class Price(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     frequency = models.CharField(max_length=7, choices=Frequency.choices)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    stripe_price_id = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f'{self.plan} {self.get_frequency_display()} - {self.amount}'
