@@ -124,6 +124,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
         if data == empty:
             self.fields['company'] = CompanySerializer()
+        else:
+            self.fields.pop('company')
 
 
 class ForgetPasswordSerializer(serializers.Serializer):

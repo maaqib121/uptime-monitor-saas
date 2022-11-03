@@ -8,6 +8,7 @@ from users.api.v1.serializers import (
     AuthenticateSerializer,
     UserConfirmationSerializer,
     UserSerializer,
+    ProfileSerializer,
     ForgetPasswordSerializer,
     ResetPasswordSerializer
 )
@@ -122,3 +123,11 @@ class UserProfileView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        serializer = ProfileSerializer(request.user.profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            profile = serializer.save()
+            serializer = UserSerializer(profile.user, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
