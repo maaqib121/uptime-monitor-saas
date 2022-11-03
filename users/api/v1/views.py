@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
 from users.api.v1.serializers import (
@@ -111,3 +112,13 @@ class ResetPasswordView(APIView):
             serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileView(APIView):
+    http_method_names = ('get', 'patch')
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request):
+        serializer = UserSerializer(request.user, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
