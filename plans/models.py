@@ -2,11 +2,17 @@ from django.db import models
 
 
 class Plan(models.Model):
+    title = models.CharField(max_length=100)
+    allowed_users = models.PositiveIntegerField()
+    allowed_domains = models.PositiveIntegerField()
+    allowed_urls = models.PositiveIntegerField()
+
+
+class Price(models.Model):
     class Frequency(models.TextChoices):
         MONTHLY = 'monthly', 'Monthly'
         YEARLY = 'yearly', 'Yearly'
 
-    title = models.CharField(max_length=100)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     frequency = models.CharField(max_length=7, choices=Frequency.choices)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    is_active = models.BooleanField(default=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
