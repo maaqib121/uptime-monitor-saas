@@ -7,6 +7,9 @@ class Plan(models.Model):
     allowed_domains = models.PositiveIntegerField()
     allowed_urls = models.PositiveIntegerField()
 
+    def __str__(self):
+        return self.title
+
 
 class Price(models.Model):
     class Frequency(models.TextChoices):
@@ -16,3 +19,6 @@ class Price(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     frequency = models.CharField(max_length=7, choices=Frequency.choices)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.plan} {self.get_frequency_display()} - {self.amount}'
