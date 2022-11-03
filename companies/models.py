@@ -1,4 +1,5 @@
 from django.db import models
+from plans.models import Price
 
 
 def logo_upload_path(instance, filename):
@@ -11,6 +12,8 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     stripe_customer_id = models.CharField(max_length=100, null=True, blank=True)
+    stripe_subscription_id = models.CharField(max_length=100, null=True, blank=True)
+    subscribed_plan = models.ForeignKey(Price, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Companies'

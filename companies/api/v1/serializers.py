@@ -10,7 +10,7 @@ from math import ceil
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = '__all__'
+        exclude = ('stripe_customer_id', 'stripe_subscription_id')
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
