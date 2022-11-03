@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password as is_pass
 from django.conf import settings
 from companies.models import Company
 from users.models import User, Profile
+from companies.api.v1.serializers import CompanySerializer
 from datetime import datetime
 from pytz import timezone
 
@@ -118,6 +119,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude = ('user',)
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        if data == empty:
+            self.fields['company'] = CompanySerializer()
 
 
 class ForgetPasswordSerializer(serializers.Serializer):
