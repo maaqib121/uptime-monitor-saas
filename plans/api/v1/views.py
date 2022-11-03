@@ -11,7 +11,7 @@ class PlanView(APIView):
     permission_classes = (AllowAny,)
 
     def get_queryset(self):
-        return Plan.objects.all()
+        return Plan.objects.all().order_by('id')
 
     def get(self, request):
         serializer = PlanSerializer(self.get_queryset(), many=True)
