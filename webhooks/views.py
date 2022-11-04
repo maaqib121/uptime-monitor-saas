@@ -30,19 +30,21 @@ class StripeWebhookView(APIView):
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
         if event.type == 'invoice.created':
+            stripe_subscription = stripe.Subscription.retrieve(event.data.object.subscription)
             price = Price.objects.filter(stripe_price_id=event.data.object.lines.data[0].plan.id).first()
             Invoice.objects.create(
                 stripe_invoice_id=event.data.object.id,
-                amount=event.data.object.lines.data[0].amount,
+                amount=event.data.object.subtotal / 100,
                 plan_name=f'{price.plan} - {price.get_frequency_display()}',
-                company_id=event.data.object.lines.data[0].metadata['company_id'],
+                company_id=stripe_subscription.metadata['company_id'],
                 created_at=datetime.fromtimestamp(event.data.object.created)
             )
 
         elif event.type == 'invoice.payment_succeeded':
+            stripe_subscription = stripe.Subscription.retrieve(event.data.object.subscription)
             Invoice.objects.filter(stripe_invoice_id=event.data.object.id).update(paid=True)
-            company = Company.objects.filter(id=event.data.object.lines.data[0].metadata['company_id']).first()
-            price = Price.objects.filter(stripe_price_id=event.data.object.lines.data[0].price.id).first()
+            company = Company.objects.filter(id=stripe_subscription.metadata['company_id']).first()
+            price = Price.objects.filter(stripe_price_id=event.data.object.lines.data[-1].price.id).first()
             if company and price:
                 company.subscribed_plan = price
                 company.is_subscription_active = True
