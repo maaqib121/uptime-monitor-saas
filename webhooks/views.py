@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.response import Response
 from django.conf import settings
+from companies.models import Company
 from plans.models import Price
 from invoices.models import Invoice
 from datetime import datetime
@@ -40,9 +41,12 @@ class StripeWebhookView(APIView):
 
         elif event.type == 'invoice.payment_succeeded':
             Invoice.objects.filter(stripe_invoice_id=event.data.object.id).update(paid=True)
-
-        elif event.type == 'payment_intent.succeeded':
-            print('Payment intent succeeded')
+            company = Company.objects.filter(id=event.data.object.lines.data[0].metadata['company_id']).first()
+            price = Price.objects.filter(stripe_price_id=event.data.object.lines.data[0].price.id).first()
+            if company and price:
+                company.subscribed_plan = price
+                company.is_subscription_active = True
+                company.save()
 
         response_data = {'success': True}
         return Response(response_data, status=status.HTTP_200_OK)
