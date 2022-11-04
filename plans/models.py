@@ -9,6 +9,7 @@ class Plan(models.Model):
     allowed_urls = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, null=True, blank=True)
+    stripe_product_id = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -28,6 +29,6 @@ class Price(models.Model):
         return f'{self.plan} {self.get_frequency_display()} - {self.amount}'
 
     def clean(self):
-        if Price.objects.filter(plan=self.plan, frequency=self.frequency).exists():
+        if Price.objects.filter(plan=self.plan, frequency=self.frequency).exclude(id=self.id).exists():
             raise exceptions.ValidationError(f'{self.get_frequency_display()} price already exists against this plan.')
         return super().clean()
