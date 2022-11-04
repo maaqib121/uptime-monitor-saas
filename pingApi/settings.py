@@ -55,7 +55,8 @@ INSTALLED_APPS = [
 
     'companies',
     'users',
-    'plans'
+    'plans',
+    'subscriptions'
 ]
 
 SIMPLE_JWT = {
@@ -201,3 +202,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 POSTMARK_SERVER_TOKEN = os.environ.get('POSTMARK_SERVER_TOKEN')
 POSTMARK_SENDER_EMAIL = os.environ.get('POSTMARK_SENDER_EMAIL')
+
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
