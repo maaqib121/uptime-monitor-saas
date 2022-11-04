@@ -31,7 +31,7 @@ class CompanyQuotationView(APIView):
         serializer = CompanyQuotationSerializer(data=request.data)
         if serializer.is_valid():
             response = send_quotation_email(
-                request.user.company,
+                request.user,
                 serializer.validated_data['allowed_users'],
                 serializer.validated_data['allowed_domains'],
                 serializer.validated_data['allowed_urls'],

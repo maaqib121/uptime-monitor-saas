@@ -5,9 +5,9 @@ from django.conf import settings
 from postmarker.core import PostmarkClient
 
 
-def send_quotation_email(company, allowed_users, allowed_domains, allowed_urls, body):
+def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, body):
     message = render_to_string('emails/quotation_email.html', {
-        'company': company,
+        'user': user,
         'allowed_users': allowed_users,
         'allowed_domains': allowed_domains,
         'allowed_urls': allowed_urls,
@@ -18,7 +18,7 @@ def send_quotation_email(company, allowed_users, allowed_domains, allowed_urls, 
         postmark.emails.send(
             From=settings.POSTMARK_SENDER_EMAIL,
             To=settings.ADMIN_EMAIL,
-            Subject=f'Quotation from {company}',
+            Subject=f'Quotation from {user.company}',
             HtmlBody=message
         )
     except:
