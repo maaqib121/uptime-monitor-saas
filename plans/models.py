@@ -7,6 +7,7 @@ class Plan(models.Model):
     allowed_domains = models.PositiveIntegerField()
     allowed_urls = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.title
