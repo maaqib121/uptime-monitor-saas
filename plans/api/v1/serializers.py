@@ -8,6 +8,11 @@ class PriceSerializer(serializers.ModelSerializer):
         model = Price
         exclude = ('plan', 'stripe_price_id')
 
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        if 'no_plan' not in self.context:
+            self.fields['plan'] = PlanSerializer(context={'no_prices': True})
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['frequency'] = instance.get_frequency_display()
@@ -22,4 +27,5 @@ class PlanSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         if data == empty:
-            self.fields['prices'] = PriceSerializer(source='price_set', many=True)
+            if 'no_prices' not in self.context:
+                self.fields['prices'] = PriceSerializer(source='price_set', many=True, context={'no_plan': True})

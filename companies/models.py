@@ -20,3 +20,15 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def set_stripe_customer_id(self, stripe_customer_id):
+        self.stripe_customer_id = stripe_customer_id
+        self.save()
+
+    def set_stripe_subscription_id(self, stripe_subscription_id):
+        self.stripe_subscription_id = stripe_subscription_id
+        self.save()
+
+    def set_subscribed_plan(self, subscribed_plan):
+        self.subscribed_plan = subscribed_plan
+        self.save()
