@@ -24,7 +24,8 @@ urlpatterns = [
     path('', include('companies.urls')),
     path('', include('users.urls')),
     path('', include('plans.urls')),
-    path('', include('subscriptions.urls'))
+    path('', include('subscriptions.urls')),
+    path('webhooks/', include('webhooks.urls'))
 ]
 
 if settings.DEBUG:
