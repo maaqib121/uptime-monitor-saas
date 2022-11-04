@@ -26,15 +26,30 @@ class SubscriptionView(APIView):
                 )
                 request.user.company.set_stripe_customer_id(stripe_customer.id)
 
-            stripe_subscription = stripe.Subscription.create(
-                customer=request.user.company.stripe_customer_id,
-                off_session=True,
-                payment_behavior='default_incomplete',
-                items=[{'price': serializer.validated_data['plan_price'].stripe_price_id}],
-                expand=['latest_invoice.payment_intent'],
-                metadata={'company_id': request.user.company.id, 'user_id': request.user.id}
-            )
-            request.user.company.set_stripe_subscription_id(stripe_subscription.id)
+            if request.user.company.stripe_subscription_id:
+                subscription = stripe.Subscription.retrieve(request.user.company.stripe_subscription_id)
+                stripe_subscription = stripe.Subscription.modify(
+                    subscription.id,
+                    cancel_at_period_end=False,
+                    proration_behavior='always_invoice',
+                    expand=['latest_invoice.payment_intent'],
+                    items=[{
+                        'id': subscription['items']['data'][0].id,
+                        'price': serializer.validated_data['plan_price'].stripe_price_id
+                    }],
+                    metadata={'company_id': request.user.company.id, 'user_id': request.user.id}
+                )
+            else:
+                stripe_subscription = stripe.Subscription.create(
+                    customer=request.user.company.stripe_customer_id,
+                    off_session=True,
+                    payment_behavior='default_incomplete',
+                    items=[{'price': serializer.validated_data['plan_price'].stripe_price_id}],
+                    expand=['latest_invoice.payment_intent'],
+                    metadata={'company_id': request.user.company.id, 'user_id': request.user.id}
+                )
+                request.user.company.set_stripe_subscription_id(stripe_subscription.id)
+
             response_data = {
                 'client_secret': stripe_subscription.latest_invoice.payment_intent.client_secret,
                 'price': PriceSerializer(serializer.validated_data['plan_price']).data
