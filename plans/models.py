@@ -1,4 +1,5 @@
 from django.db import models
+from django.core import exceptions
 
 
 class Plan(models.Model):
@@ -25,3 +26,8 @@ class Price(models.Model):
 
     def __str__(self):
         return f'{self.plan} {self.get_frequency_display()} - {self.amount}'
+
+    def clean(self):
+        if Price.objects.filter(plan=self.plan, frequency=self.frequency).exists():
+            raise exceptions.ValidationError(f'{self.get_frequency_display()} price already exists against this plan.')
+        return super().clean()
