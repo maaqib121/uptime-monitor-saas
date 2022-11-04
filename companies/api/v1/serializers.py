@@ -21,3 +21,10 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def get_remaining_trial_days(self, obj):
         return ceil((obj.created_at + timedelta(days=7) - datetime.now(tz=timezone(settings.TIME_ZONE))).total_seconds() / (60 * 60 * 24))
+
+
+class CompanyQuotationSerializer(serializers.Serializer):
+    allowed_users = serializers.IntegerField()
+    allowed_domains = serializers.IntegerField()
+    allowed_urls = serializers.IntegerField()
+    body = serializers.CharField()

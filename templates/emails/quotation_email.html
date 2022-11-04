@@ -1,0 +1,45 @@
+{% extends 'emails/base.html' %}
+
+
+{% block content %}
+<tr>
+  <td>
+    <span style="font-size: 25px; font-weight: bold;">
+      Quotation by {{ company }}
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <span style="font-size: 18px;">
+      <span style="font-weight: bold;">Users Required:</span>
+      {{ allowed_users }}
+    </span>
+    <br> <br> <br>
+
+    <span style="font-size: 18px;">
+      <span style="font-weight: bold;">Domains Required:</span>
+      {{ allowed_domains }}
+    </span>
+    <br> <br> <br>
+
+    <span style="font-size: 18px;">
+      <span style="font-weight: bold;">URLs Required:</span>
+      {{ allowed_urls }}
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <span style="font-size: 18px;">
+      <span style="font-weight: bold;">Body:</span>
+      {{ body }}
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+{% endblock content %}
