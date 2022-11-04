@@ -15,7 +15,7 @@ class SubscriptionView(APIView):
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request):
-        serializer = SubscriptionSerializer(data=request.data)
+        serializer = SubscriptionSerializer(data=request.data, context={'company': request.user.company})
         if serializer.is_valid():
             stripe.api_key = settings.STRIPE_SECRET_KEY
             if not request.user.company.stripe_customer_id:
