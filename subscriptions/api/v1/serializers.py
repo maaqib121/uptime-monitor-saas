@@ -8,4 +8,6 @@ class SubscriptionSerializer(serializers.Serializer):
     def validate_plan_price(self, value):
         if value.plan.company != None and value.plan.company != self.context['company']:
             raise serializers.ValidationError('Cannot link this plan with your company.')
+        if self.context['company'].subscribed_plan == value:
+            raise serializers.ValidationError('Already subscribed.')
         return value
