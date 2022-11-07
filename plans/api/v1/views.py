@@ -13,9 +13,9 @@ class PlanView(APIView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Plan.objects.filter(Q(company__isnull=True) | Q(company=self.request.user.company)).order_by('id')
+            return Plan.objects.filter(Q(company__isnull=True) | Q(company=self.request.user.company))
         else:
-            return Plan.objects.filter(company__isnull=True).order_by('id')
+            return Plan.objects.filter(company__isnull=True)
 
     def get(self, request):
         serializer = PlanSerializer(self.get_queryset(), many=True)

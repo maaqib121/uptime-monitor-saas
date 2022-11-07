@@ -38,6 +38,9 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    class Meta:
+        ordering = ('id',)
+
     def __str__(self):
         return self.email
 

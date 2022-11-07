@@ -25,6 +25,9 @@ class Price(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     stripe_price_id = models.CharField(max_length=100, null=True, blank=True)
 
+    class Meta:
+        ordering = ('id',)
+
     def __str__(self):
         return f'{self.plan} {self.get_frequency_display()} - {self.amount}'
 

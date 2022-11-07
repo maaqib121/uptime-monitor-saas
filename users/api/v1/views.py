@@ -159,16 +159,16 @@ class UserView(APIView, CustomPagination):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        return self.request.user.company_members().order_by('id')
+        return self.request.user.company_members()
 
     def get_paginated_response(self):
         page = self.paginate_queryset(self.get_queryset(), self.request)
-        serializer = UserSerializer(page, many=True, context={'request': self.request, 'no_company': True})
+        serializer = UserSerializer(page, many=True, context={'request': self.request})
         return super().get_paginated_response(serializer.data)
 
     def get(self, request):
         if 'no_paginate' in request.GET:
-            serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request, 'no_company': True})
+            serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return self.get_paginated_response()
 
