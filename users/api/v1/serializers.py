@@ -5,7 +5,6 @@ from django.contrib.auth.password_validation import validate_password as is_pass
 from django.conf import settings
 from companies.models import Company
 from users.models import User, Profile
-from companies.api.v1.serializers import CompanySerializer
 from datetime import datetime
 from pytz import timezone
 
@@ -175,7 +174,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         if data == empty:
-            if 'no_company' in self.context:
+            if 'company' in self.context:
+                from companies.api.v1.serializers import CompanySerializer
                 self.fields['company'] = CompanySerializer()
         else:
             if self.instance:
