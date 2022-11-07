@@ -13,7 +13,7 @@ from users.api.v1.serializers import (
     ForgetPasswordSerializer,
     ResetPasswordSerializer
 )
-from users.permissions import IsUserExists
+from users.permissions import IsUserExists, IsCurrentUserAdmin, IsUserNotAdmin
 from users.utils.common import send_confirmation_email, send_reset_password_email
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -28,7 +28,7 @@ class SignupView(APIView):
             user = serializer.save()
             user.generate_confirmation_token()
             send_confirmation_email(user, serializer.get_redirect_uri())
-            serializer = UserSerializer(user)
+            serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -45,7 +45,7 @@ class UserConfirmationView(APIView):
             user = serializer.get_user()
             user.clear_confirmation_token()
             user.activate()
-            serializer = UserSerializer(user)
+            serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -60,7 +60,7 @@ class VerifyConfirmationTokenView(APIView):
         serializer = UserConfirmationSerializer(data=request_data)
         if serializer.is_valid():
             user = serializer.get_user()
-            serializer = UserSerializer(user)
+            serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -77,7 +77,7 @@ class AuthenticateView(APIView):
             response_data = {
                 'access_token': str(refresh.access_token),
                 'refresh_token': str(refresh),
-                'user': UserSerializer(user).data
+                'user': UserSerializer(user, context={'request': request}).data
             }
             return Response(response_data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -156,11 +156,22 @@ class UserView(APIView):
 
 
 class UserDetailView(APIView):
-    http_method_names = ('get',)
-    permission_classes = (IsAuthenticated, IsUserExists)
+    http_method_names = ('get', 'delete')
     authentication_classes = (JWTAuthentication,)
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = (IsAuthenticated, IsUserExists)
+        else:
+            permission_classes = (IsAuthenticated, IsUserExists, IsCurrentUserAdmin, IsUserNotAdmin)
+        return [permission() for permission in permission_classes]
 
     def get(self, request, pk):
         user = User.objects.get(id=pk)
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        user = User.objects.get(id=pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -78,6 +78,10 @@ class User(AbstractUser):
     def company(self):
         return self.profile.company
 
+    @property
+    def is_company_admin(self):
+        return self.profile.is_company_admin
+
 
 def profile_pic_upload_path(instance, filename):
     return f'users/{instance.user_id}/profile_pic/{filename}'
