@@ -88,6 +88,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=75)
     last_name = models.CharField(max_length=75)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    is_company_admin = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to=profile_pic_upload_path, null=True, blank=True)
 
     def __str__(self):
