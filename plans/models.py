@@ -32,3 +32,15 @@ class Price(models.Model):
         if Price.objects.filter(plan=self.plan, frequency=self.frequency).exclude(id=self.id).exists():
             raise exceptions.ValidationError(f'{self.get_frequency_display()} price already exists against this plan.')
         return super().clean()
+
+    @property
+    def allowed_users(self):
+        return self.plan.allowed_users
+
+    @property
+    def allowed_domains(self):
+        return self.plan.allowed_domains
+
+    @property
+    def allowed_urls(self):
+        return self.plan.allowed_urls

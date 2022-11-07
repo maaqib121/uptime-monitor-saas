@@ -17,10 +17,18 @@ class CompanySerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
         if data == empty:
             self.fields['remaining_trial_days'] = serializers.SerializerMethodField()
+            self.fields['plan_restrictions'] = serializers.SerializerMethodField()
             self.fields['subscribed_plan'] = PriceSerializer()
 
     def get_remaining_trial_days(self, obj):
         return ceil((obj.created_at + timedelta(days=7) - datetime.now(tz=timezone(settings.TIME_ZONE))).total_seconds() / (60 * 60 * 24))
+
+    def get_plan_restrictions(self, obj):
+        return {
+            'allowed_users': obj.subscribed_plan.allowed_users if obj.subscribed_plan else int(settings.TRIAL_ALLOWED_USERS),
+            'allowed_domains': obj.subscribed_plan.allowed_domains if obj.subscribed_plan else int(settings.TRIAL_ALLOWED_DOMAINS),
+            'allowed_urls': obj.subscribed_plan.allowed_urls if obj.subscribed_plan else int(settings.TRIAL_ALLOWED_URLS)
+        }
 
 
 class CompanyQuotationSerializer(serializers.Serializer):
