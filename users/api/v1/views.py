@@ -26,6 +26,7 @@ from users.utils.common import (
     send_set_password_email
 )
 from rest_framework_simplejwt.tokens import RefreshToken
+from pingApi.utils.pagination import CustomPagination
 
 
 class SignupView(APIView):
@@ -145,17 +146,24 @@ class UserProfileView(APIView):
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserView(APIView):
+class UserView(APIView, CustomPagination):
     http_method_names = ('get', 'post')
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self):
-        return self.request.user.company_members()
+        return self.request.user.company_members().order_by('id')
+
+    def get_paginated_response(self):
+        page = self.paginate_queryset(self.get_queryset(), self.request)
+        serializer = UserSerializer(page, many=True, context={'request': self.request, 'no_company': True})
+        return super().get_paginated_response(serializer.data)
 
     def get(self, request):
-        serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request, 'no_company': True})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if 'no_paginate' in request.GET:
+            serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request, 'no_company': True})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return self.get_paginated_response()
 
     def post(self, request):
         serializer = UserSerializer(data=request.data, context={'company': request.user.company})
