@@ -186,20 +186,30 @@ class UserView(APIView, CustomPagination):
 
 
 class UserDetailView(APIView):
-    http_method_names = ('get', 'delete')
+    http_method_names = ('get', 'patch', 'delete')
     authentication_classes = (JWTAuthentication,)
 
     def get_permissions(self):
         if self.request.method == 'GET':
             permission_classes = (IsAuthenticated, IsUserExists)
+        elif self.request.method == 'PATCH':
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserExists)
         else:
-            permission_classes = (IsAuthenticated, IsUserExists, IsCurrentUserAdmin, IsUserNotAdmin)
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserExists, IsUserNotAdmin)
         return [permission() for permission in permission_classes]
 
     def get(self, request, pk):
         user = User.objects.get(id=pk)
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        user = User.objects.get(id=pk)
+        serializer = UserSerializer(user, data=request.data, partial=True, context={'user': request.user})
+        if serializer.is_valid():
+            serializer = UserSerializer(serializer.save(), context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         user = User.objects.get(id=pk)

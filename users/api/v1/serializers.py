@@ -52,7 +52,7 @@ class SignupSerializer(serializers.ModelSerializer):
         user = super().create(validated_data)
         user.set_password(password)
         user.save()
-        company = Company.objects.create(name=company_name)
+        company = Company.objects.create(name=company_name, created_by=user)
         Profile.objects.create(company=company, user=user, first_name=first_name, last_name=last_name, is_company_admin=True)
         return user
 
@@ -115,9 +115,13 @@ class UserSerializer(serializers.ModelSerializer):
         if data == empty:
             self.fields['profile'] = ProfileSerializer()
         else:
-            self.profile_serializer = None
-            self.fields['profile'] = serializers.JSONField()
-            self.fields['redirect_uri'] = serializers.URLField()
+            self.fields.pop('email')
+            if self.instance:
+                self.fields['is_company_admin'] = serializers.BooleanField()
+            else:
+                self.profile_serializer = None
+                self.fields['profile'] = serializers.JSONField()
+                self.fields['redirect_uri'] = serializers.URLField()
 
     def validate_profile(self, value):
         value['company'] = self.context['company'].id
@@ -128,6 +132,24 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(self.profile_serializer.errors)
         return value
 
+    def validate_is_company_admin(self, value):
+        if (
+            not value and
+            self.context['user'] == self.instance and
+            self.context['user'].company_members().filter(profile__is_company_admin=True).count() == 1
+        ):
+            raise serializers.ValidationError('You are the only company admin. Assign anyone else before quitting this role.')
+
+        if (
+            not value and
+            self.context['user'] != self.instance and
+            self.context['user'].company.created_by == self.instance and
+            self.instance.is_company_admin
+        ):
+            raise serializers.ValidationError('You cannot make company creator as non-admin.')
+
+        return value
+
     def create(self, validated_data):
         validated_data.pop('redirect_uri')
         validated_data.pop('profile')
@@ -136,6 +158,13 @@ class UserSerializer(serializers.ModelSerializer):
         self.profile_serializer.validated_data['user'] = user
         self.profile_serializer.save()
         return user
+
+    def update(self, instance, validated_data):
+        if 'is_company_admin' in validated_data:
+            profile = instance.profile
+            profile.is_company_admin = validated_data['is_company_admin']
+            profile.save()
+        return instance
 
 
 class ProfileSerializer(serializers.ModelSerializer):
