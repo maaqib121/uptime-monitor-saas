@@ -25,3 +25,11 @@ class IsUserNotAdmin(permissions.BasePermission):
             profile__is_company_admin=False,
             id=view.kwargs['pk']
         ).exists()
+
+
+class IsUserPasswordNotSet(permissions.BasePermission):
+    message = 'Password already set by user.'
+
+    def has_permission(self, request, view):
+        user = User.objects.filter(profile__company=request.user.company, id=view.kwargs['pk']).first()
+        return not (user.password and user.has_usable_password)

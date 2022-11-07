@@ -210,3 +210,7 @@ class ResetPasswordSerializer(serializers.Serializer):
 
         self.user = user
         return super().validate(attrs)
+
+
+class UserSendPasswordSerializer(serializers.Serializer):
+    redirect_uri = serializers.URLField()

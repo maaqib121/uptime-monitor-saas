@@ -8,7 +8,8 @@ from users.api.v1.views import (
     ResetPasswordView,
     UserProfileView,
     UserView,
-    UserDetailView
+    UserDetailView,
+    UserSendPasswordView
 )
 
 
@@ -21,5 +22,6 @@ urlpatterns = [
     path('reset_password/<uidb64>/<token>/', ResetPasswordView.as_view()),
     path('users/profile/', UserProfileView.as_view()),
     path('users/', UserView.as_view()),
-    path('users/<int:pk>/', UserDetailView.as_view())
+    path('users/<int:pk>/', UserDetailView.as_view()),
+    path('users/<int:pk>/send_password/', UserSendPasswordView.as_view())
 ]

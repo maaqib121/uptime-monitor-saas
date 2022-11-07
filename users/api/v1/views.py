@@ -11,10 +11,20 @@ from users.api.v1.serializers import (
     UserSerializer,
     ProfileSerializer,
     ForgetPasswordSerializer,
-    ResetPasswordSerializer
+    ResetPasswordSerializer,
+    UserSendPasswordSerializer
 )
-from users.permissions import IsUserExists, IsCurrentUserAdmin, IsUserNotAdmin
-from users.utils.common import send_confirmation_email, send_reset_password_email, send_set_password_email
+from users.permissions import (
+    IsUserExists,
+    IsCurrentUserAdmin,
+    IsUserNotAdmin,
+    IsUserPasswordNotSet
+)
+from users.utils.common import (
+    send_confirmation_email,
+    send_reset_password_email,
+    send_set_password_email
+)
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -180,3 +190,21 @@ class UserDetailView(APIView):
         user = User.objects.get(id=pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserSendPasswordView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (IsAuthenticated, IsUserExists, IsUserPasswordNotSet)
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request, pk):
+        serializer = UserSendPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            user = User.objects.get(id=pk)
+            user.generate_confirmation_token()
+            response = send_set_password_email(user, serializer.validated_data['redirect_uri'])
+            if isinstance(response, Response):
+                return response
+            serializer = UserSerializer(user, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
