@@ -53,7 +53,7 @@ class SignupSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         company = Company.objects.create(name=company_name)
-        Profile.objects.create(company=company, user=user, first_name=first_name, last_name=last_name)
+        Profile.objects.create(company=company, user=user, first_name=first_name, last_name=last_name, is_company_admin=True)
         return user
 
 
@@ -129,6 +129,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('profile')
+        validated_data['is_active'] = True
         user = super().create(validated_data)
         self.profile_serializer.validated_data['user'] = user
         self.profile_serializer.save()
