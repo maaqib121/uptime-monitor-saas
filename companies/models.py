@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from plans.models import Price
 
 
@@ -33,3 +34,15 @@ class Company(models.Model):
     def set_subscribed_plan(self, subscribed_plan):
         self.subscribed_plan = subscribed_plan
         self.save()
+
+    @property
+    def allowed_users(self):
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_USERS)
+
+    @property
+    def allowed_domains(self):
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_DOMAINS)
+
+    @property
+    def allowed_urls(self):
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_URLS)
