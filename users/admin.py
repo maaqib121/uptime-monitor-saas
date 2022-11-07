@@ -3,10 +3,13 @@ from users.models import User, Profile
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'email', 'is_active', 'date_joined')
+    list_display = ('id', 'email', 'is_active', 'company', 'date_joined')
     list_display_links = ('id', 'email')
     list_filter = ('is_active',)
     search_fields = ('email',)
+
+    def company(self, obj):
+        return obj.profile.company
 
 
 class ProfileAdmin(admin.ModelAdmin):
