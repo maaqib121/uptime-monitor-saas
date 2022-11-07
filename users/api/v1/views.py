@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from users.models import User
 from users.api.v1.serializers import (
     SignupSerializer,
     AuthenticateSerializer,
@@ -12,6 +13,7 @@ from users.api.v1.serializers import (
     ForgetPasswordSerializer,
     ResetPasswordSerializer
 )
+from users.permissions import IsUserExists
 from users.utils.common import send_confirmation_email, send_reset_password_email
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -151,3 +153,14 @@ class UserView(APIView):
             serializer = UserSerializer(serializer.save(), context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserDetailView(APIView):
+    http_method_names = ('get',)
+    permission_classes = (IsAuthenticated, IsUserExists)
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, pk):
+        user = User.objects.get(id=pk)
+        serializer = UserSerializer(user, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
