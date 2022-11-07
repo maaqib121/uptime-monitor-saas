@@ -33,3 +33,12 @@ class IsUserPasswordNotSet(permissions.BasePermission):
     def has_permission(self, request, view):
         user = User.objects.filter(profile__company=request.user.company, id=view.kwargs['pk']).first()
         return not (user.password and user.has_usable_password)
+
+
+class IsUserLessThanAllowed(permissions.BasePermission):
+    def has_permission(self, request, view):
+        self.message = (
+            f'Only {request.user.company.allowed_users} users are allowed in your company in current plan. '
+            'Upgrade your plan to allow more users.'
+        )
+        return request.user.company_members().count() < request.user.company.allowed_users

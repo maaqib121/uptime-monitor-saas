@@ -18,7 +18,8 @@ from users.permissions import (
     IsUserExists,
     IsCurrentUserAdmin,
     IsUserNotAdmin,
-    IsUserPasswordNotSet
+    IsUserPasswordNotSet,
+    IsUserLessThanAllowed
 )
 from users.utils.common import (
     send_confirmation_email,
@@ -148,8 +149,14 @@ class UserProfileView(APIView):
 
 class UserView(APIView, CustomPagination):
     http_method_names = ('get', 'post')
-    permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = (IsAuthenticated,)
+        else:
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserLessThanAllowed)
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         return self.request.user.company_members().order_by('id')
