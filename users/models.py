@@ -59,6 +59,9 @@ class User(AbstractUser):
         self.set_password(password)
         self.save()
 
+    def company_members(self):
+        return User.objects.filter(profile__company=self.company)
+
     @property
     def first_name(self):
         return self.profile.first_name

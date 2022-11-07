@@ -123,7 +123,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         if data == empty:
-            self.fields['company'] = CompanySerializer()
+            if 'no_company' in self.context:
+                self.fields['company'] = CompanySerializer()
         else:
             self.fields.pop('company')
 

@@ -131,3 +131,16 @@ class UserProfileView(APIView):
             serializer = UserSerializer(profile.user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserView(APIView):
+    http_method_names = ('get',)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+
+    def get_queryset(self):
+        return self.request.user.company_members()
+
+    def get(self, request):
+        serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request, 'no_company': True})
+        return Response(serializer.data, status=status.HTTP_200_OK)
