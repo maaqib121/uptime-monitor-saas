@@ -14,7 +14,7 @@ from users.api.v1.serializers import (
     ResetPasswordSerializer
 )
 from users.permissions import IsUserExists, IsCurrentUserAdmin, IsUserNotAdmin
-from users.utils.common import send_confirmation_email, send_reset_password_email
+from users.utils.common import send_confirmation_email, send_reset_password_email, send_set_password_email
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -150,7 +150,12 @@ class UserView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data, context={'company': request.user.company})
         if serializer.is_valid():
-            serializer = UserSerializer(serializer.save(), context={'request': request})
+            user = serializer.save()
+            user.generate_confirmation_token()
+            response = send_set_password_email(user, serializer.validated_data['redirect_uri'])
+            if isinstance(response, Response):
+                return response
+            serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

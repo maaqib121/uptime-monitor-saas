@@ -117,6 +117,7 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             self.profile_serializer = None
             self.fields['profile'] = serializers.JSONField()
+            self.fields['redirect_uri'] = serializers.URLField()
 
     def validate_profile(self, value):
         value['company'] = self.context['company'].id
@@ -128,6 +129,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        validated_data.pop('redirect_uri')
         validated_data.pop('profile')
         validated_data['is_active'] = True
         user = super().create(validated_data)
