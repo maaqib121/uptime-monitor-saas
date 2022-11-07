@@ -209,7 +209,7 @@ class UserDetailView(APIView):
 
 class UserSendPasswordView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated, IsUserExists, IsUserPasswordNotSet)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserExists, IsUserPasswordNotSet)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request, pk):
