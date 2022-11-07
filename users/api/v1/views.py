@@ -134,7 +134,7 @@ class UserProfileView(APIView):
 
 
 class UserView(APIView):
-    http_method_names = ('get',)
+    http_method_names = ('get', 'post')
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
 
@@ -144,3 +144,10 @@ class UserView(APIView):
     def get(self, request):
         serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request, 'no_company': True})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data, context={'company': request.user.company})
+        if serializer.is_valid():
+            serializer = UserSerializer(serializer.save(), context={'request': request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

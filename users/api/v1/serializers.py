@@ -112,7 +112,27 @@ class UserSerializer(serializers.ModelSerializer):
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
-        self.fields['profile'] = ProfileSerializer()
+        if data == empty:
+            self.fields['profile'] = ProfileSerializer()
+        else:
+            self.profile_serializer = None
+            self.fields['profile'] = serializers.JSONField()
+
+    def validate_profile(self, value):
+        value['company'] = self.context['company'].id
+        if self.initial_data.get('profile_pic'):
+            value['profile_pic'] = self.initial_data['profile_pic']
+        self.profile_serializer = ProfileSerializer(data=value)
+        if not self.profile_serializer.is_valid():
+            raise serializers.ValidationError(self.profile_serializer.errors)
+        return value
+
+    def create(self, validated_data):
+        validated_data.pop('profile')
+        user = super().create(validated_data)
+        self.profile_serializer.validated_data['user'] = user
+        self.profile_serializer.save()
+        return user
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -126,7 +146,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             if 'no_company' in self.context:
                 self.fields['company'] = CompanySerializer()
         else:
-            self.fields.pop('company')
+            if self.instance:
+                self.fields.pop('company')
 
 
 class ForgetPasswordSerializer(serializers.Serializer):
