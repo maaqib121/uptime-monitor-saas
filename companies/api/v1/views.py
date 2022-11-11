@@ -5,12 +5,19 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from companies.api.v1.serializers import CompanySerializer, CompanyQuotationSerializer
 from companies.utils.common import send_quotation_email
+from users.permissions import IsCurrentUserAdmin
 
 
 class CompanyView(APIView):
     http_method_names = ('get', 'patch')
-    permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = (IsAuthenticated,)
+        else:
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
+        return [permission() for permission in permission_classes]
 
     def get(self, request):
         serializer = CompanySerializer(request.user.company, context={'request': request})

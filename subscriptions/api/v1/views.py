@@ -6,12 +6,13 @@ from rest_framework.response import Response
 from django.conf import settings
 from subscriptions.api.v1.serializers import SubscriptionSerializer
 from plans.api.v1.serializers import PriceSerializer
+from users.permissions import IsCurrentUserAdmin
 import stripe
 
 
 class SubscriptionView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request):

@@ -164,7 +164,7 @@ class UserView(APIView, CustomPagination):
     def get_queryset(self):
         user_qs = self.request.user.company_members()
         if self.request.GET.get('search'):
-            user_qs = user_qs.annotate(name=Concat('profile__first_name', Value(' '), 'profile__last_name')).filter(
+            user_qs = user_qs.annotate(name=Concat('profile__first_name', Value(' '), 'profile__gitlast_name')).filter(
                 name__icontains=self.request.GET['search']
             )
         return user_qs
@@ -185,9 +185,7 @@ class UserView(APIView, CustomPagination):
         if serializer.is_valid():
             user = serializer.save()
             user.generate_confirmation_token()
-            response = send_set_password_email(user, serializer.validated_data['redirect_uri'])
-            if isinstance(response, Response):
-                return response
+            send_set_password_email(user, serializer.validated_data['redirect_uri'])
             serializer = UserSerializer(user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
