@@ -27,7 +27,7 @@ class SubscriptionView(APIView):
                 )
                 request.user.company.set_stripe_customer_id(stripe_customer.id)
 
-            if request.user.company.stripe_subscription_id:
+            if request.user.company.stripe_subscription_id and request.user.company.subscribed_plan:
                 subscription = stripe.Subscription.retrieve(request.user.company.stripe_subscription_id)
                 stripe_subscription = stripe.Subscription.modify(
                     subscription.id,
