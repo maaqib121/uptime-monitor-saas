@@ -42,3 +42,17 @@ class PaymentMethodView(APIView, CustomPagination):
             response_data = {'success': True}
             return Response(response_data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PaymentMethodDetailView(APIView):
+    http_method_names = ('delete',)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
+    authentication_classes = (JWTAuthentication,)
+
+    def delete(self, request, payment_method_id):
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        try:
+            stripe.PaymentMethod.detach(payment_method_id)
+        except Exception as exception:
+            return Response({'errors': str(exception)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
