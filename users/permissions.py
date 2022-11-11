@@ -17,14 +17,20 @@ class IsCurrentUserAdmin(permissions.BasePermission):
 
 
 class IsUserNotAdmin(permissions.BasePermission):
-    message = 'You do not have permission to delete company admin.'
+    message = 'You do not have permission to delete company admin unless you are company owner.'
 
     def has_permission(self, request, view):
-        return User.objects.filter(
-            profile__company=request.user.company,
-            profile__is_company_admin=False,
-            id=view.kwargs['pk']
-        ).exists()
+        if request.user.company.created_by == request.user:
+            return User.objects.filter(
+                profile__company=request.user.company,
+                id=view.kwargs['pk']
+            ).exclude(id=request.user.id).exists()
+        else:
+            return User.objects.filter(
+                profile__company=request.user.company,
+                profile__is_company_admin=False,
+                id=view.kwargs['pk']
+            ).exists()
 
 
 class IsUserPasswordNotSet(permissions.BasePermission):
