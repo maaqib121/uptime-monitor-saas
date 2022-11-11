@@ -23,8 +23,8 @@ class CompanySerializer(serializers.ModelSerializer):
                 from users.api.v1.serializers import UserSerializer
                 self.fields['created_by'] = UserSerializer()
 
-    def get_remaining_trial_days(self, obj):
-        return ceil((obj.created_at + timedelta(days=7) - datetime.now(tz=timezone(settings.TIME_ZONE))).total_seconds() / (60 * 60 * 24))
+    def get_remaining_trial_days(self, instance):
+        return instance.remaining_trail_days
 
     def get_plan_restrictions(self, obj):
         return {

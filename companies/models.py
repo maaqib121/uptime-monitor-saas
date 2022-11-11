@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from plans.models import Price
+from datetime import datetime, timedelta
+from pytz import timezone
+from math import ceil
 
 
 def logo_upload_path(instance, filename):
@@ -47,3 +50,7 @@ class Company(models.Model):
     @property
     def allowed_urls(self):
         return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_URLS)
+
+    @property
+    def remaining_trail_days(self):
+        return ceil((self.created_at + timedelta(days=7) - datetime.now(tz=timezone(settings.TIME_ZONE))).total_seconds() / (60 * 60 * 24))
