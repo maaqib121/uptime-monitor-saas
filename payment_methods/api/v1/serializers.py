@@ -23,7 +23,7 @@ class PaymentMethodSerializer(serializers.Serializer):
         return datetime.utcfromtimestamp(instance.created)
 
     def get_is_default_payment_method(self, instance):
-        return instance.id == instance.customer.default_source
+        return instance.id == instance.customer.invoice_settings.default_payment_method
 
     def validate(self, attrs):
         stripe.api_key = settings.STRIPE_SECRET_KEY

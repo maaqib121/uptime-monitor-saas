@@ -45,9 +45,20 @@ class PaymentMethodView(APIView, CustomPagination):
 
 
 class PaymentMethodDetailView(APIView):
-    http_method_names = ('delete',)
+    http_method_names = ('patch', 'delete')
     permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
     authentication_classes = (JWTAuthentication,)
+
+    def patch(self, request, payment_method_id):
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        if request.user.company.stripe_customer_id:
+            try:
+                stripe.Customer.modify(request.user.company.stripe_customer_id, invoice_settings={
+                                       'default_payment_method': payment_method_id})
+            except Exception as exception:
+                return Response({'errors': str(exception)}, status=status.HTTP_400_BAD_REQUEST)
+        response_data = {'success': True}
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def delete(self, request, payment_method_id):
         stripe.api_key = settings.STRIPE_SECRET_KEY
