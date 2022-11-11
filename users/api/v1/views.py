@@ -3,6 +3,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from django.db.models import Value
+from django.db.models.functions import Concat
 from users.models import User
 from users.api.v1.serializers import (
     SignupSerializer,
@@ -26,6 +28,7 @@ from users.utils.common import (
     send_reset_password_email,
     send_set_password_email
 )
+
 from rest_framework_simplejwt.tokens import RefreshToken
 from pingApi.utils.pagination import CustomPagination
 
@@ -159,7 +162,12 @@ class UserView(APIView, CustomPagination):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        return self.request.user.company_members()
+        user_qs = self.request.user.company_members()
+        if self.request.GET.get('search'):
+            user_qs = user_qs.annotate(name=Concat('profile__first_name', Value(' '), 'profile__last_name')).filter(
+                name__icontains=self.request.GET['search']
+            )
+        return user_qs
 
     def get_paginated_response(self):
         page = self.paginate_queryset(self.get_queryset(), self.request)
