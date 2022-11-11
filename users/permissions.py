@@ -32,7 +32,7 @@ class IsUserPasswordNotSet(permissions.BasePermission):
 
     def has_permission(self, request, view):
         user = User.objects.filter(profile__company=request.user.company, id=view.kwargs['pk']).first()
-        return not (user.password and user.has_usable_password)
+        return not (user.password and user.has_usable_password())
 
 
 class IsUserLessThanAllowed(permissions.BasePermission):
