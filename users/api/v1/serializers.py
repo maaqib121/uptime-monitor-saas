@@ -113,6 +113,7 @@ class UserSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
         if data == empty:
             self.fields['profile'] = ProfileSerializer()
+            self.fields['is_password_set'] = serializers.SerializerMethodField()
         else:
             if self.instance:
                 self.fields.pop('email')
@@ -121,6 +122,9 @@ class UserSerializer(serializers.ModelSerializer):
                 self.profile_serializer = None
                 self.fields['profile'] = serializers.JSONField()
                 self.fields['redirect_uri'] = serializers.URLField()
+
+    def get_is_password_set(self, instance):
+        return not not (instance.password and instance.has_usable_password())
 
     def validate_profile(self, value):
         value['company'] = self.context['company'].id
