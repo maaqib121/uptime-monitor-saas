@@ -52,7 +52,11 @@ class StripeWebhookView(APIView):
 
         elif event.type == 'payment_intent.succeeded':
             if event.data.object['payment_method']:
-                stripe.PaymentMethod.attach(event.data.object.payment_method, customer=event.data.object.customer)
+                stripe.PaymentMethod.attach(event.data.object.payment_method, customer=event.data.object.customer,)
+                stripe.Customer.modify(
+                    event.data.object.customer,
+                    invoice_settings={'default_payment_method': event.data.object.payment_method}
+                )
 
         response_data = {'success': True}
         return Response(response_data, status=status.HTTP_200_OK)

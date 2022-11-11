@@ -53,8 +53,10 @@ class PaymentMethodDetailView(APIView):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         if request.user.company.stripe_customer_id:
             try:
-                stripe.Customer.modify(request.user.company.stripe_customer_id, invoice_settings={
-                                       'default_payment_method': payment_method_id})
+                stripe.Customer.modify(
+                    request.user.company.stripe_customer_id,
+                    invoice_settings={'default_payment_method': payment_method_id}
+                )
             except Exception as exception:
                 return Response({'errors': str(exception)}, status=status.HTTP_400_BAD_REQUEST)
         response_data = {'success': True}
