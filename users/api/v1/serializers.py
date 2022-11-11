@@ -134,20 +134,21 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_is_company_admin(self, value):
         if (
             not value and
-            self.context['user'] == self.instance and
-            self.context['user'].company_members().filter(profile__is_company_admin=True).count() == 1
-        ):
-            raise serializers.ValidationError('You are the only company admin. Assign anyone else before quitting this role.')
-
-        if (
-            not value and
             self.context['user'] != self.instance and
             self.context['user'].company.created_by == self.instance and
             self.instance.is_company_admin
         ):
             raise serializers.ValidationError('You cannot make company creator as non-admin.')
-
         return value
+
+    def validate(self, attrs):
+        if (
+            not attrs['is_company_admin'] and
+            self.context['user'] == self.instance and
+            self.context['user'].company_members().filter(profile__is_company_admin=True).count() == 1
+        ):
+            raise serializers.ValidationError('You are the only company admin. Assign anyone else before quitting this role.')
+        return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data.pop('redirect_uri')
