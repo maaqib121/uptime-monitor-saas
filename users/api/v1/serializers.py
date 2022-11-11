@@ -143,6 +143,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if (
+            'is_company_admin' in attrs and
             not attrs['is_company_admin'] and
             self.context['user'] == self.instance and
             self.context['user'].company_members().filter(profile__is_company_admin=True).count() == 1
