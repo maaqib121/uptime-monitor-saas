@@ -114,8 +114,8 @@ class UserSerializer(serializers.ModelSerializer):
         if data == empty:
             self.fields['profile'] = ProfileSerializer()
         else:
-            self.fields.pop('email')
             if self.instance:
+                self.fields.pop('email')
                 self.fields['is_company_admin'] = serializers.BooleanField()
             else:
                 self.profile_serializer = None
