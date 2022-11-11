@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('plans.urls')),
     path('', include('subscriptions.urls')),
+    path('', include('payment_methods.urls')),
     path('webhooks/', include('webhooks.urls'))
 ]
 

@@ -57,8 +57,9 @@ INSTALLED_APPS = [
     'users',
     'plans',
     'subscriptions',
-    'webhooks',
-    'invoices'
+    'invoices',
+    'payment_methods',
+    'webhooks'
 ]
 
 SIMPLE_JWT = {
