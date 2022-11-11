@@ -50,5 +50,9 @@ class StripeWebhookView(APIView):
                 company.is_subscription_active = True
                 company.save()
 
+        elif event.type == 'payment_intent.succeeded':
+            if event.data.object['payment_method']:
+                stripe.PaymentMethod.attach(event.data.object.payment_method, customer=event.data.object.customer)
+
         response_data = {'success': True}
         return Response(response_data, status=status.HTTP_200_OK)
