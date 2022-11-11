@@ -17,8 +17,8 @@ class PaymentMethodView(APIView):
     def get(self, request):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         if request.user.company.stripe_customer_id:
-            stripe_payment_methods = stripe.PaymentMethod.list(
-                customer=request.user.company.stripe_customer_id,
+            stripe_payment_methods = stripe.Customer.list_payment_methods(
+                request.user.company.stripe_customer_id,
                 type='card'
             )['data']
         else:
