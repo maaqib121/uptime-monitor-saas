@@ -8,4 +8,5 @@ class Invoice(models.Model):
     plan_name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     paid = models.BooleanField(default=False)
+    invoice_url = models.URLField(null=True)
     created_at = models.DateTimeField()
