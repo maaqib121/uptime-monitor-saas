@@ -59,20 +59,20 @@ class DomainDetailView(APIView):
             permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainExists)
         return [permission() for permission in permission_classes]
 
-    def get(self, request, pk):
-        domain = Domain.objects.get(id=pk)
+    def get(self, request, domain_id):
+        domain = Domain.objects.get(id=domain_id)
         serializer = DomainSerializer(domain, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def patch(self, request, pk):
-        domain = Domain.objects.get(id=pk)
+    def patch(self, request, domain_id):
+        domain = Domain.objects.get(id=domain_id)
         serializer = DomainSerializer(domain, data=request.data, partial=True, context={'company': request.user.company})
         if serializer.is_valid():
             serializer = DomainSerializer(serializer.save(), context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        domain = Domain.objects.get(id=pk)
+    def delete(self, request, domain_id):
+        domain = Domain.objects.get(id=domain_id)
         domain.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

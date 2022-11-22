@@ -5,7 +5,7 @@ class IsDomainExists(permissions.BasePermission):
     message = 'Domain does not exists.'
 
     def has_permission(self, request, view):
-        return request.user.company.domain_set.filter(id=view.kwargs['pk']).exists()
+        return request.user.company.domain_set.filter(id=view.kwargs['domain_id']).exists()
 
 
 class IsDomainLessThanAllowed(permissions.BasePermission):

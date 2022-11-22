@@ -1,8 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from domains.api.v1.views import DomainView, DomainDetailView
 
 
 urlpatterns = [
     path('', DomainView.as_view()),
-    path('<int:pk>/', DomainDetailView.as_view()),
+    path('<int:domain_id>/', DomainDetailView.as_view()),
+    path('<int:domain_id>/urls/', include('urls.api.v1.urls')),
 ]
