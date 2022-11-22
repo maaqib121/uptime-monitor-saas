@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_cleanup',
     'corsheaders',
 
+    'countries',
     'companies',
     'users',
     'plans',
