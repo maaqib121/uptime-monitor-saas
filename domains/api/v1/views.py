@@ -39,7 +39,7 @@ class DomainView(APIView, CustomPagination):
     def post(self, request):
         request_data = request.data.copy()
         request_data['company'] = request.user.company.id
-        serializer = DomainSerializer(data=request_data, context={'company': request.user.company})
+        serializer = DomainSerializer(data=request_data)
         if serializer.is_valid():
             serializer = DomainSerializer(serializer.save(), context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -47,12 +47,14 @@ class DomainView(APIView, CustomPagination):
 
 
 class DomainDetailView(APIView):
-    http_method_names = ('get', 'delete')
+    http_method_names = ('get', 'patch', 'delete')
     authentication_classes = (JWTAuthentication,)
 
     def get_permissions(self):
         if self.request.method == 'GET':
             permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
+        elif self.request.method == 'PATCH':
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainExists)
         else:
             permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainExists)
         return [permission() for permission in permission_classes]
@@ -61,6 +63,14 @@ class DomainDetailView(APIView):
         domain = Domain.objects.get(id=pk)
         serializer = DomainSerializer(domain, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        domain = Domain.objects.get(id=pk)
+        serializer = DomainSerializer(domain, data=request.data, partial=True, context={'company': request.user.company})
+        if serializer.is_valid():
+            serializer = DomainSerializer(serializer.save(), context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         domain = Domain.objects.get(id=pk)
