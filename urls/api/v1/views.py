@@ -3,11 +3,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from urls.models import Url
 from urls.api.v1.serializers import UrlSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
 from users.permissions import IsCurrentUserAdmin
-from urls.permissions import IsUrlLessThanAllowed
+from urls.permissions import IsUrlExists, IsUrlLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
 
 
@@ -50,3 +51,35 @@ class UrlView(APIView, CustomPagination):
             serializer = UrlSerializer(serializer.save(), context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UrlDetailView(APIView):
+    http_method_names = ('get', 'patch', 'delete')
+    authentication_classes = (JWTAuthentication,)
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUrlExists)
+        elif self.request.method == 'PATCH':
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUrlExists)
+        else:
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUrlExists)
+        return [permission() for permission in permission_classes]
+
+    def get(self, request, domain_id, url_id):
+        url = Url.objects.get(id=url_id)
+        serializer = UrlSerializer(url, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, domain_id, url_id):
+        url = Url.objects.get(id=url_id)
+        serializer = UrlSerializer(url, data=request.data, partial=True, context={'company': request.user.company})
+        if serializer.is_valid():
+            serializer = UrlSerializer(serializer.save(), context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, domain_id, url_id):
+        url = Url.objects.get(id=url_id)
+        url.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
