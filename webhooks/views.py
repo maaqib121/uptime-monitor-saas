@@ -34,6 +34,7 @@ class StripeWebhookView(APIView):
             price = Price.objects.filter(stripe_price_id=event.data.object.lines.data[0].plan.id).first()
             Invoice.objects.create(
                 stripe_invoice_id=event.data.object.id,
+                invoice_url=event.data.object.invoice_pdf,
                 amount=event.data.object.subtotal / 100,
                 plan_name=f'{price.plan} - {price.get_frequency_display()}',
                 company_id=stripe_subscription.metadata['company_id'],
