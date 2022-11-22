@@ -3,5 +3,5 @@ from countries.api.v1.views import CountryView
 
 
 urlpatterns = [
-    path('countries/', CountryView.as_view()),
+    path('', CountryView.as_view()),
 ]
