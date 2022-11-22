@@ -3,10 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from domains.models import Domain
 from domains.api.v1.serializers import DomainSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
 from users.permissions import IsCurrentUserAdmin
-from domains.permissions import IsDomainLessThanAllowed
+from domains.permissions import IsDomainExists, IsDomainLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
 
 
@@ -43,3 +44,25 @@ class DomainView(APIView, CustomPagination):
             serializer = DomainSerializer(serializer.save(), context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DomainDetailView(APIView):
+    http_method_names = ('get', 'delete')
+    authentication_classes = (JWTAuthentication,)
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
+        else:
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainExists)
+        return [permission() for permission in permission_classes]
+
+    def get(self, request, pk):
+        domain = Domain.objects.get(id=pk)
+        serializer = DomainSerializer(domain, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        domain = Domain.objects.get(id=pk)
+        domain.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
