@@ -1,0 +1,1972 @@
+[
+    {
+        "model": "countries.country",
+        "pk": 1,
+        "fields": {
+            "name": "Andorra",
+            "code": "AD",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 2,
+        "fields": {
+            "name": "Afghanistan",
+            "code": "AF",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 3,
+        "fields": {
+            "name": "Antigua and Barbuda",
+            "code": "AG",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 4,
+        "fields": {
+            "name": "Albania",
+            "code": "AL",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 5,
+        "fields": {
+            "name": "Armenia",
+            "code": "AM",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 6,
+        "fields": {
+            "name": "Angola",
+            "code": "AO",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 7,
+        "fields": {
+            "name": "Argentina",
+            "code": "AR",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 8,
+        "fields": {
+            "name": "Austria",
+            "code": "AT",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 9,
+        "fields": {
+            "name": "Australia",
+            "code": "AU",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 10,
+        "fields": {
+            "name": "Azerbaijan",
+            "code": "AZ",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 11,
+        "fields": {
+            "name": "Barbados",
+            "code": "BB",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 12,
+        "fields": {
+            "name": "Bangladesh",
+            "code": "BD",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 13,
+        "fields": {
+            "name": "Belgium",
+            "code": "BE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 14,
+        "fields": {
+            "name": "Burkina Faso",
+            "code": "BF",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 15,
+        "fields": {
+            "name": "Bulgaria",
+            "code": "BG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 16,
+        "fields": {
+            "name": "Bahrain",
+            "code": "BH",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 17,
+        "fields": {
+            "name": "Burundi",
+            "code": "BI",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 18,
+        "fields": {
+            "name": "Benin",
+            "code": "BJ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 19,
+        "fields": {
+            "name": "Brunei Darussalam",
+            "code": "BN",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 20,
+        "fields": {
+            "name": "Bolivia",
+            "code": "BO",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 21,
+        "fields": {
+            "name": "Brazil",
+            "code": "BR",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 22,
+        "fields": {
+            "name": "Bahamas",
+            "code": "BS",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 23,
+        "fields": {
+            "name": "Bhutan",
+            "code": "BT",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 24,
+        "fields": {
+            "name": "Botswana",
+            "code": "BW",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 25,
+        "fields": {
+            "name": "Belarus",
+            "code": "BY",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 26,
+        "fields": {
+            "name": "Belize",
+            "code": "BZ",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 27,
+        "fields": {
+            "name": "Canada",
+            "code": "CA",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 28,
+        "fields": {
+            "name": "Democratic Republic of the Congo",
+            "code": "CD",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 29,
+        "fields": {
+            "name": "Republic of the Congo",
+            "code": "CG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 30,
+        "fields": {
+            "name": "CÃ´te d'Ivoire",
+            "code": "CI",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 31,
+        "fields": {
+            "name": "Chile",
+            "code": "CL",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 32,
+        "fields": {
+            "name": "Cameroon",
+            "code": "CM",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 33,
+        "fields": {
+            "name": "People's Republic of China",
+            "code": "CN",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 34,
+        "fields": {
+            "name": "Colombia",
+            "code": "CO",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 35,
+        "fields": {
+            "name": "Costa Rica",
+            "code": "CR",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 36,
+        "fields": {
+            "name": "Cuba",
+            "code": "CU",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 37,
+        "fields": {
+            "name": "Cape Verde",
+            "code": "CV",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 38,
+        "fields": {
+            "name": "Cyprus",
+            "code": "CY",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 39,
+        "fields": {
+            "name": "Czech Republic",
+            "code": "CZ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 40,
+        "fields": {
+            "name": "Germany",
+            "code": "DE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 41,
+        "fields": {
+            "name": "Djibouti",
+            "code": "DJ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 42,
+        "fields": {
+            "name": "Denmark",
+            "code": "DK",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 43,
+        "fields": {
+            "name": "Dominica",
+            "code": "DM",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 44,
+        "fields": {
+            "name": "Dominican Republic",
+            "code": "DO",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 45,
+        "fields": {
+            "name": "Ecuador",
+            "code": "EC",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 46,
+        "fields": {
+            "name": "Estonia",
+            "code": "EE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 47,
+        "fields": {
+            "name": "Egypt",
+            "code": "EG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 48,
+        "fields": {
+            "name": "Eritrea",
+            "code": "ER",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 49,
+        "fields": {
+            "name": "Ethiopia",
+            "code": "ET",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 50,
+        "fields": {
+            "name": "Finland",
+            "code": "FI",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 51,
+        "fields": {
+            "name": "Fiji",
+            "code": "FJ",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 52,
+        "fields": {
+            "name": "France",
+            "code": "FR",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 53,
+        "fields": {
+            "name": "Gabon",
+            "code": "GA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 54,
+        "fields": {
+            "name": "Georgia",
+            "code": "GE",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 55,
+        "fields": {
+            "name": "Ghana",
+            "code": "GH",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 56,
+        "fields": {
+            "name": "The Gambia",
+            "code": "GM",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 57,
+        "fields": {
+            "name": "Guinea",
+            "code": "GN",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 58,
+        "fields": {
+            "name": "Greece",
+            "code": "GR",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 59,
+        "fields": {
+            "name": "Guatemala",
+            "code": "GT",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 60,
+        "fields": {
+            "name": "Haiti",
+            "code": "HT",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 61,
+        "fields": {
+            "name": "Guinea-Bissau",
+            "code": "GW",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 62,
+        "fields": {
+            "name": "Guyana",
+            "code": "GY",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 63,
+        "fields": {
+            "name": "Honduras",
+            "code": "HN",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 64,
+        "fields": {
+            "name": "Hungary",
+            "code": "HU",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 65,
+        "fields": {
+            "name": "Indonesia",
+            "code": "ID",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 66,
+        "fields": {
+            "name": "Republic of Ireland",
+            "code": "IE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 67,
+        "fields": {
+            "name": "Israel",
+            "code": "IL",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 68,
+        "fields": {
+            "name": "India",
+            "code": "IN",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 69,
+        "fields": {
+            "name": "Iraq",
+            "code": "IQ",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 70,
+        "fields": {
+            "name": "Iran",
+            "code": "IR",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 71,
+        "fields": {
+            "name": "Iceland",
+            "code": "IS",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 72,
+        "fields": {
+            "name": "Italy",
+            "code": "IT",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 73,
+        "fields": {
+            "name": "Jamaica",
+            "code": "JM",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 74,
+        "fields": {
+            "name": "Jordan",
+            "code": "JO",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 75,
+        "fields": {
+            "name": "Japan",
+            "code": "JP",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 76,
+        "fields": {
+            "name": "Kenya",
+            "code": "KE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 77,
+        "fields": {
+            "name": "Kyrgyzstan",
+            "code": "KG",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 78,
+        "fields": {
+            "name": "Kiribati",
+            "code": "KI",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 79,
+        "fields": {
+            "name": "North Korea",
+            "code": "KP",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 80,
+        "fields": {
+            "name": "South Korea",
+            "code": "KR",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 81,
+        "fields": {
+            "name": "Kuwait",
+            "code": "KW",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 82,
+        "fields": {
+            "name": "Lebanon",
+            "code": "LB",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 83,
+        "fields": {
+            "name": "Liechtenstein",
+            "code": "LI",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 84,
+        "fields": {
+            "name": "Liberia",
+            "code": "LR",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 85,
+        "fields": {
+            "name": "Lesotho",
+            "code": "LS",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 86,
+        "fields": {
+            "name": "Lithuania",
+            "code": "LT",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 87,
+        "fields": {
+            "name": "Luxembourg",
+            "code": "LU",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 88,
+        "fields": {
+            "name": "Latvia",
+            "code": "LV",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 89,
+        "fields": {
+            "name": "Libya",
+            "code": "LY",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 90,
+        "fields": {
+            "name": "Madagascar",
+            "code": "MG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 91,
+        "fields": {
+            "name": "Marshall Islands",
+            "code": "MH",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 92,
+        "fields": {
+            "name": "Macedonia",
+            "code": "MK",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 93,
+        "fields": {
+            "name": "Mali",
+            "code": "ML",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 94,
+        "fields": {
+            "name": "Myanmar",
+            "code": "MM",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 95,
+        "fields": {
+            "name": "Mongolia",
+            "code": "MN",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 96,
+        "fields": {
+            "name": "Mauritania",
+            "code": "MR",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 97,
+        "fields": {
+            "name": "Malta",
+            "code": "MT",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 98,
+        "fields": {
+            "name": "Mauritius",
+            "code": "MU",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 99,
+        "fields": {
+            "name": "Maldives",
+            "code": "MV",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 100,
+        "fields": {
+            "name": "Malawi",
+            "code": "MW",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 101,
+        "fields": {
+            "name": "Mexico",
+            "code": "MX",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 102,
+        "fields": {
+            "name": "Malaysia",
+            "code": "MY",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 103,
+        "fields": {
+            "name": "Mozambique",
+            "code": "MZ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 104,
+        "fields": {
+            "name": "Namibia",
+            "code": "NA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 105,
+        "fields": {
+            "name": "Niger",
+            "code": "NE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 106,
+        "fields": {
+            "name": "Nigeria",
+            "code": "NG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 107,
+        "fields": {
+            "name": "Nicaragua",
+            "code": "NI",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 108,
+        "fields": {
+            "name": "Kingdom of the Netherlands",
+            "code": "NL",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 109,
+        "fields": {
+            "name": "Norway",
+            "code": "NO",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 110,
+        "fields": {
+            "name": "Nepal",
+            "code": "NP",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 111,
+        "fields": {
+            "name": "Nauru",
+            "code": "NR",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 112,
+        "fields": {
+            "name": "New Zealand",
+            "code": "NZ",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 113,
+        "fields": {
+            "name": "Oman",
+            "code": "OM",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 114,
+        "fields": {
+            "name": "Panama",
+            "code": "PA",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 115,
+        "fields": {
+            "name": "Peru",
+            "code": "PE",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 116,
+        "fields": {
+            "name": "Papua New Guinea",
+            "code": "PG",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 117,
+        "fields": {
+            "name": "Philippines",
+            "code": "PH",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 118,
+        "fields": {
+            "name": "Pakistan",
+            "code": "PK",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 119,
+        "fields": {
+            "name": "Poland",
+            "code": "PL",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 120,
+        "fields": {
+            "name": "Portugal",
+            "code": "PT",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 121,
+        "fields": {
+            "name": "Palau",
+            "code": "PW",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 122,
+        "fields": {
+            "name": "Paraguay",
+            "code": "PY",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 123,
+        "fields": {
+            "name": "Qatar",
+            "code": "QA",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 124,
+        "fields": {
+            "name": "Romania",
+            "code": "RO",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 125,
+        "fields": {
+            "name": "Russia",
+            "code": "RU",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 126,
+        "fields": {
+            "name": "Rwanda",
+            "code": "RW",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 127,
+        "fields": {
+            "name": "Saudi Arabia",
+            "code": "SA",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 128,
+        "fields": {
+            "name": "Solomon Islands",
+            "code": "SB",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 129,
+        "fields": {
+            "name": "Seychelles",
+            "code": "SC",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 130,
+        "fields": {
+            "name": "Sudan",
+            "code": "SD",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 131,
+        "fields": {
+            "name": "Sweden",
+            "code": "SE",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 132,
+        "fields": {
+            "name": "Singapore",
+            "code": "SG",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 133,
+        "fields": {
+            "name": "Slovenia",
+            "code": "SI",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 134,
+        "fields": {
+            "name": "Slovakia",
+            "code": "SK",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 135,
+        "fields": {
+            "name": "Sierra Leone",
+            "code": "SL",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 136,
+        "fields": {
+            "name": "San Marino",
+            "code": "SM",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 137,
+        "fields": {
+            "name": "Senegal",
+            "code": "SN",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 138,
+        "fields": {
+            "name": "Somalia",
+            "code": "SO",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 139,
+        "fields": {
+            "name": "Suriname",
+            "code": "SR",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 140,
+        "fields": {
+            "name": "SÃ£o TomÃ© and PrÃ­ncipe",
+            "code": "ST",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 141,
+        "fields": {
+            "name": "Syria",
+            "code": "SY",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 142,
+        "fields": {
+            "name": "Togo",
+            "code": "TG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 143,
+        "fields": {
+            "name": "Thailand",
+            "code": "TH",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 144,
+        "fields": {
+            "name": "Tajikistan",
+            "code": "TJ",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 145,
+        "fields": {
+            "name": "Turkmenistan",
+            "code": "TM",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 146,
+        "fields": {
+            "name": "Tunisia",
+            "code": "TN",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 147,
+        "fields": {
+            "name": "Tonga",
+            "code": "TO",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 148,
+        "fields": {
+            "name": "Turkey",
+            "code": "TR",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 149,
+        "fields": {
+            "name": "Trinidad and Tobago",
+            "code": "TT",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 150,
+        "fields": {
+            "name": "Tuvalu",
+            "code": "TV",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 151,
+        "fields": {
+            "name": "Tanzania",
+            "code": "TZ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 152,
+        "fields": {
+            "name": "Ukraine",
+            "code": "UA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 153,
+        "fields": {
+            "name": "Uganda",
+            "code": "UG",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 154,
+        "fields": {
+            "name": "United States",
+            "code": "US",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 155,
+        "fields": {
+            "name": "Uruguay",
+            "code": "UY",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 156,
+        "fields": {
+            "name": "Uzbekistan",
+            "code": "UZ",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 157,
+        "fields": {
+            "name": "Vatican City",
+            "code": "VA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 158,
+        "fields": {
+            "name": "Venezuela",
+            "code": "VE",
+            "continent": "south-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 159,
+        "fields": {
+            "name": "Vietnam",
+            "code": "VN",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 160,
+        "fields": {
+            "name": "Vanuatu",
+            "code": "VU",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 161,
+        "fields": {
+            "name": "Yemen",
+            "code": "YE",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 162,
+        "fields": {
+            "name": "Zambia",
+            "code": "ZM",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 163,
+        "fields": {
+            "name": "Zimbabwe",
+            "code": "ZW",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 164,
+        "fields": {
+            "name": "Algeria",
+            "code": "DZ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 165,
+        "fields": {
+            "name": "Bosnia and Herzegovina",
+            "code": "BA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 166,
+        "fields": {
+            "name": "Cambodia",
+            "code": "KH",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 167,
+        "fields": {
+            "name": "Central African Republic",
+            "code": "CF",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 168,
+        "fields": {
+            "name": "Chad",
+            "code": "TD",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 169,
+        "fields": {
+            "name": "Comoros",
+            "code": "KM",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 170,
+        "fields": {
+            "name": "Croatia",
+            "code": "HR",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 171,
+        "fields": {
+            "name": "East Timor",
+            "code": "TL",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 172,
+        "fields": {
+            "name": "El Salvador",
+            "code": "SV",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 173,
+        "fields": {
+            "name": "Equatorial Guinea",
+            "code": "GQ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 174,
+        "fields": {
+            "name": "Grenada",
+            "code": "GD",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 175,
+        "fields": {
+            "name": "Kazakhstan",
+            "code": "KZ",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 176,
+        "fields": {
+            "name": "Laos",
+            "code": "LA",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 177,
+        "fields": {
+            "name": "Federated States of Micronesia",
+            "code": "FM",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 178,
+        "fields": {
+            "name": "Moldova",
+            "code": "MD",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 179,
+        "fields": {
+            "name": "Monaco",
+            "code": "MC",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 180,
+        "fields": {
+            "name": "Montenegro",
+            "code": "ME",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 181,
+        "fields": {
+            "name": "Morocco",
+            "code": "MA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 182,
+        "fields": {
+            "name": "Saint Kitts and Nevis",
+            "code": "KN",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 183,
+        "fields": {
+            "name": "Saint Lucia",
+            "code": "LC",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 184,
+        "fields": {
+            "name": "Saint Vincent and the Grenadines",
+            "code": "VC",
+            "continent": "north-america",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 185,
+        "fields": {
+            "name": "Samoa",
+            "code": "WS",
+            "continent": "oceania",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 186,
+        "fields": {
+            "name": "Serbia",
+            "code": "RS",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 187,
+        "fields": {
+            "name": "South Africa",
+            "code": "ZA",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 188,
+        "fields": {
+            "name": "Spain",
+            "code": "ES",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 189,
+        "fields": {
+            "name": "Sri Lanka",
+            "code": "LK",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 190,
+        "fields": {
+            "name": "Swaziland",
+            "code": "SZ",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 191,
+        "fields": {
+            "name": "Switzerland",
+            "code": "CH",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 192,
+        "fields": {
+            "name": "United Arab Emirates",
+            "code": "AE",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 193,
+        "fields": {
+            "name": "United Kingdom",
+            "code": "GB",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 194,
+        "fields": {
+            "name": "Taiwan",
+            "code": "TW",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 195,
+        "fields": {
+            "name": "Hong Kong",
+            "code": "HK",
+            "continent": "asia",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 196,
+        "fields": {
+            "name": "Kosovo",
+            "code": "XK",
+            "continent": "africa",
+            "is_active": false
+        }
+    },
+    {
+        "model": "countries.country",
+        "pk": 197,
+        "fields": {
+            "name": "Puerto Rico",
+            "code": "PR",
+            "continent": "north-america",
+            "is_active": false
+        }
+    }
+]
