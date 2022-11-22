@@ -3,9 +3,9 @@ from urls.models import Url, UrlLabel
 
 
 class UrlAdmin(admin.ModelAdmin):
-    list_display = ('id', 'url', 'domain')
+    list_display = ('id', 'url', 'domain', 'company')
     list_display_links = ('id', 'url')
-    list_filter = ('domain',)
+    list_filter = ('domain', 'company')
     search_fields = ('url',)
 
     def labels(self, instance):

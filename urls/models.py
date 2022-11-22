@@ -1,17 +1,15 @@
 from django.db import models
+from companies.models import Company
 from domains.models import Domain
 
 
 class Url(models.Model):
     url = models.URLField()
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.url
-
-    @property
-    def company(self):
-        return self.domain.company
 
 
 class UrlLabel(models.Model):
