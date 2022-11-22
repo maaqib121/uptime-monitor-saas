@@ -25,7 +25,7 @@ class DomainSerializer(serializers.ModelSerializer):
         if data == empty:
             self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
         else:
-            self.fields['labels'] = serializers.JSONField()
+            self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
 
     def validate_labels(self, value):
@@ -35,12 +35,13 @@ class DomainSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        validated_data.pop('labels')
+        validated_data.pop('labels', [])
         domain = super().create(validated_data)
-        domain_labels = []
-        for domain_label in self.label_serializer.validated_data:
-            domain_labels.append(DomainLabel(domain=domain, label=domain_label['label'],))
-        DomainLabel.objects.bulk_create(domain_labels)
+        if self.label_serializer:
+            domain_labels = []
+            for domain_label in self.label_serializer.validated_data:
+                domain_labels.append(DomainLabel(domain=domain, label=domain_label['label'],))
+            DomainLabel.objects.bulk_create(domain_labels)
         return domain
 
     def update(self, instance, validated_data):
