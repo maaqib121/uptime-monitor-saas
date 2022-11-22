@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'invoices',
     'payment_methods',
     'domains',
+    'urls',
     'webhooks'
 ]
 
