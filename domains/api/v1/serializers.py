@@ -45,20 +45,22 @@ class DomainSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         validated_data.pop('labels', [])
-        new_domain_labels = []
-        domain_labels = []
-        removable_domain_labels = []
 
-        for domain_label in self.label_serializer.validated_data:
-            if 'id' in domain_label and domain_label.get('delete'):
-                removable_domain_labels.append(domain_label['id'])
-            elif 'id' in domain_label:
-                domain_labels.append(DomainLabel(id=domain_label['id'], label=domain_label['label'],))
-            else:
-                new_domain_labels.append(DomainLabel(domain=instance, label=domain_label['label']))
+        if self.label_serializer:
+            new_domain_labels = []
+            domain_labels = []
+            removable_domain_labels = []
 
-        DomainLabel.objects.bulk_create(new_domain_labels)
-        DomainLabel.objects.bulk_update(domain_labels, fields=['label'])
-        DomainLabel.objects.filter(id__in=removable_domain_labels).delete()
+            for domain_label in self.label_serializer.validated_data:
+                if 'id' in domain_label and domain_label.get('delete'):
+                    removable_domain_labels.append(domain_label['id'])
+                elif 'id' in domain_label:
+                    domain_labels.append(DomainLabel(id=domain_label['id'], label=domain_label['label'],))
+                else:
+                    new_domain_labels.append(DomainLabel(domain=instance, label=domain_label['label']))
+
+            DomainLabel.objects.bulk_create(new_domain_labels)
+            DomainLabel.objects.bulk_update(domain_labels, fields=['label'])
+            DomainLabel.objects.filter(id__in=removable_domain_labels).delete()
 
         return super().update(instance, validated_data)
