@@ -37,10 +37,11 @@ class UrlSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('labels', [])
         url = super().create(validated_data)
-        url_labels = []
-        for url_label in self.label_serializer.validated_data:
-            url_labels.append(UrlLabel(url=url, label=url_label['label']))
-        UrlLabel.objects.bulk_create(url_labels)
+        if self.label_serializer:
+            url_labels = []
+            for url_label in self.label_serializer.validated_data:
+                url_labels.append(UrlLabel(url=url, label=url_label['label']))
+            UrlLabel.objects.bulk_create(url_labels)
         return url
 
     def update(self, instance, validated_data):
