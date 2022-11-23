@@ -40,11 +40,17 @@ class UrlView(APIView, CustomPagination):
         serializer = UrlSerializer(page, many=True, context={'request': self.request})
         return super().get_paginated_response(serializer.data)
 
+    def set_total_urls(self, response_data):
+        response_data['total_urls'] = self.request.user.company.url_set.count()
+        return response_data
+
     def get(self, request, domain_id):
         if 'no_paginate' in request.GET:
             serializer = UrlSerializer(self.get_queryset(), many=True, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return self.get_paginated_response()
+            response = Response(serializer.data, status=status.HTTP_200_OK)
+        response = self.get_paginated_response()
+        self.set_total_urls(response.data)
+        return response
 
     def post(self, request, domain_id):
         request_data = request.data.copy()
