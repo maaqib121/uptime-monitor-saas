@@ -175,11 +175,18 @@ class UserView(APIView, CustomPagination):
         serializer = UserSerializer(page, many=True, context={'request': self.request})
         return super().get_paginated_response(serializer.data)
 
+    def set_total_users(self, response_data):
+        response_data['total_users'] = self.request.user.company_members().count()
+        return response_data
+
     def get(self, request):
         if 'no_paginate' in request.GET:
             serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return self.get_paginated_response()
+            response = Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            response = self.get_paginated_response()
+        self.set_total_users(response.data)
+        return response
 
     def post(self, request):
         serializer = UserSerializer(data=request.data, context={'company': request.user.company})

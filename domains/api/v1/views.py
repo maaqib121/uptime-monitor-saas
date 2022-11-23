@@ -33,11 +33,18 @@ class DomainView(APIView, CustomPagination):
         serializer = DomainSerializer(page, many=True, context={'request': self.request})
         return super().get_paginated_response(serializer.data)
 
+    def set_total_domains(self, response_data):
+        response_data['total_domains'] = self.request.user.company.domain_set.count()
+        return response_data
+
     def get(self, request):
         if 'no_paginate' in request.GET:
             serializer = DomainSerializer(self.get_queryset(), many=True, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return self.get_paginated_response()
+            response = Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            response = self.get_paginated_response()
+        self.set_total_domains(response.data)
+        return response
 
     def post(self, request):
         request_data = request.data.copy()

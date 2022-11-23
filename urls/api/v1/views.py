@@ -48,7 +48,8 @@ class UrlView(APIView, CustomPagination):
         if 'no_paginate' in request.GET:
             serializer = UrlSerializer(self.get_queryset(), many=True, context={'request': request})
             response = Response(serializer.data, status=status.HTTP_200_OK)
-        response = self.get_paginated_response()
+        else:
+            response = self.get_paginated_response()
         self.set_total_urls(response.data)
         return response
 

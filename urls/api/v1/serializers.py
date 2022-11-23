@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
 from urls.models import Url, UrlLabel
+from urllib.parse import urlparse
 
 
 class UrlLabelSerializer(serializers.ModelSerializer):
@@ -33,6 +34,12 @@ class UrlSerializer(serializers.ModelSerializer):
         if not self.label_serializer.is_valid():
             raise serializers.ValidationError(self.label_serializer.errors)
         return value
+
+    def validate(self, attrs):
+        domain = attrs['domain'] if attrs.get('domain') else self.instance.domain
+        if urlparse(attrs['url']).netloc != urlparse(domain.domain_url).netloc:
+            raise serializers.ValidationError({'url': 'URL not maching with the domain.'})
+        return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data.pop('labels', [])
