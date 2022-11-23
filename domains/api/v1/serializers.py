@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
 from domains.models import Domain, DomainLabel
+from countries.api.v1.serializers import CountrySerializer
 
 
 class DomainLabelSerializer(serializers.ModelSerializer):
@@ -24,6 +25,7 @@ class DomainSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
         if data == empty:
             self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
+            self.fields['country'] = CountrySerializer()
         else:
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
