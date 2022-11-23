@@ -30,7 +30,10 @@ class UrlView(APIView, CustomPagination):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        return self.request.user.company.url_set.filter(domain_id=self.kwargs['domain_id'])
+        url_qs = self.request.user.company.url_set.filter(domain_id=self.kwargs['domain_id'])
+        if self.request.GET.get('search'):
+            url_qs = url_qs.filter(url__icontains=self.request.GET['search'])
+        return url_qs
 
     def get_paginated_response(self):
         page = self.paginate_queryset(self.get_queryset(), self.request)

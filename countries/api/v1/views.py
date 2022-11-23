@@ -11,9 +11,14 @@ class CountryView(APIView):
 
     def get_queryset(self):
         country_qs = Country.objects.all()
+
         if self.request.GET.get('is_active'):
             is_active = True if self.request.GET['is_active'] == 'true' else False
             country_qs = country_qs.filter(is_active=is_active)
+
+        if self.request.GET.get('search'):
+            country_qs = country_qs.filter(name__icontains=self.request.GET['search'])
+
         return country_qs
 
     def get(self, request):

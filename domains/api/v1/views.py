@@ -23,7 +23,10 @@ class DomainView(APIView, CustomPagination):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        return self.request.user.company.domain_set.all()
+        domain_qs = self.request.user.company.domain_set.all()
+        if self.request.GET.get('search'):
+            domain_qs = domain_qs.filter(domain_url__icontains=self.request.GET['search'])
+        return domain_qs
 
     def get_paginated_response(self):
         page = self.paginate_queryset(self.get_queryset(), self.request)
