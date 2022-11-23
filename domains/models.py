@@ -4,7 +4,7 @@ from companies.models import Company
 
 
 class Domain(models.Model):
-    domain_url = models.URLField()
+    domain_url = models.URLField(unique=True)
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
