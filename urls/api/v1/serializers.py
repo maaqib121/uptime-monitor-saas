@@ -111,18 +111,20 @@ class UrlCreateSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
+        if attrs['company'].url_set.count() + len(attrs['urls']) > attrs['company'].allowed_urls:
+            raise serializers.ValidationError(
+                f'Only {attrs["company"].allowed_urls} urls can be added in your company in current subscribed plan. '
+                'Upgrade your plan to add more urls.'
+            )
         self.url_serializer = UrlSerializer(
             data=attrs['urls'],
             many=True,
             context={'company': attrs['company'], 'domain': attrs['domain']}
         )
         if not self.url_serializer.is_valid():
-            raise serializers.ValidationError({
-                'urls': (
-                    'One or more URLs are invalid. Error: '
-                    f'{str(self.url_serializer.errors[0]["url"][0])}'
-                )
-            })
+            for error in self.url_serializer.errors:
+                if error.get('url'):
+                    raise serializers.ValidationError({'urls': (f'One or more URLs are invalid. Error: {str(error["url"][0])}')})
         return super().validate(attrs)
 
     def create(self, validated_data):
