@@ -32,6 +32,13 @@ class UrlSerializer(serializers.ModelSerializer):
                 self.fields['labels'] = serializers.JSONField(required=False)
                 self.label_serializer = None
 
+    def validate_url(self, value):
+        url_id = self.instance.id if self.instance else None
+        domain = self.context['domain'] if self.context.get('domain') else self.instance.domain
+        if Url.objects.filter(url=value, domain=domain).exclude(id=url_id).exists():
+            raise serializers.ValidationError('Must be unique for a domain.')
+        return value
+
     def validate_labels(self, value):
         self.label_serializer = UrlLabelSerializer(data=value, many=True)
         if not self.label_serializer.is_valid():
