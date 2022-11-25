@@ -34,6 +34,10 @@ class UrlView(APIView, CustomPagination):
         url_qs = self.request.user.company.url_set.filter(domain_id=self.kwargs['domain_id'])
         if self.request.GET.get('search'):
             url_qs = url_qs.filter(url__icontains=self.request.GET['search'])
+
+        if self.request.GET.get('ordering') == 'url' or self.request.GET.get('ordering') == '-url':
+            url_qs = url_qs.order_by(self.request.GET['ordering'])
+
         return url_qs
 
     def get_paginated_response(self):
