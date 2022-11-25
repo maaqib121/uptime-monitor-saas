@@ -30,6 +30,12 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
 
+    def validate(self, attrs):
+        domain_id = self.instance.id if self.instance else None
+        if Domain.objects.filter(domain_url=attrs['domain_url'], country=attrs['country']).exclude(id=domain_id).exists():
+            raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
+        return super().validate(attrs)
+
     def validate_labels(self, value):
         self.label_serializer = DomainLabelSerializer(data=value, many=True)
         if not self.label_serializer.is_valid():

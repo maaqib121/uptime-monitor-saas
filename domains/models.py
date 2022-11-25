@@ -12,6 +12,15 @@ class Domain(models.Model):
     def __str__(self):
         return self.domain_url
 
+    def clean(self):
+        if Domain.objects.filter(
+            domain_url=self.domain_url,
+                country=self.country,
+                company=self.company
+        ).exclude(id=self.id).exists():
+            raise exceptions.ValidationError({'domain_url': 'Must be unique for a country.'})
+        return super().clean()
+
 
 class DomainLabel(models.Model):
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
