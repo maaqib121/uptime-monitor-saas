@@ -20,6 +20,13 @@ class UrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = Url
         fields = '__all__'
+        extra_kwargs = {
+            'url': {
+                'error_messages': {
+                    'invalid': 'Invalid URL format.'
+                },
+            }
+        }
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
@@ -110,7 +117,12 @@ class UrlCreateSerializer(serializers.ModelSerializer):
             context={'company': attrs['company'], 'domain': attrs['domain']}
         )
         if not self.url_serializer.is_valid():
-            raise serializers.ValidationError({'urls': self.url_serializer.errors})
+            raise serializers.ValidationError({
+                'urls': (
+                    'One or more URLs are invalid. Error: '
+                    f'{str(self.url_serializer.errors[0]["url"][0])}'
+                )
+            })
         return super().validate(attrs)
 
     def create(self, validated_data):
