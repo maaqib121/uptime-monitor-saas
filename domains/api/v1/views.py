@@ -26,6 +26,10 @@ class DomainView(APIView, CustomPagination):
         domain_qs = self.request.user.company.domain_set.all()
         if self.request.GET.get('search'):
             domain_qs = domain_qs.filter(domain_url__icontains=self.request.GET['search'])
+
+        if self.request.GET.get('ordering') == 'domain_url' or self.request.GET.get('ordering') == '-domain_url':
+            domain_qs = domain_qs.order_by(self.request.GET['ordering'])
+
         return domain_qs
 
     def get_paginated_response(self):
