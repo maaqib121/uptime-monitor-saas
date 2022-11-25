@@ -2,6 +2,7 @@ from django.db import models
 from django.core import exceptions
 from countries.models import Country
 from companies.models import Company
+from urllib.parse import urlparse
 
 
 class Domain(models.Model):
@@ -13,6 +14,10 @@ class Domain(models.Model):
         return self.domain_url
 
     def clean(self):
+        uri = urlparse(self.domain_url)
+        if self.domain_url != f'{uri.scheme}://{uri.netloc}':
+            raise exceptions.ValidationError({'domain_url': 'Must be domain only.'})
+
         if Domain.objects.filter(
             domain_url=self.domain_url,
                 country=self.country,

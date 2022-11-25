@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 from domains.models import Domain, DomainLabel
 from countries.api.v1.serializers import CountrySerializer
+from urllib.parse import urlparse
 
 
 class DomainLabelSerializer(serializers.ModelSerializer):
@@ -30,17 +31,23 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
 
-    def validate(self, attrs):
-        domain_id = self.instance.id if self.instance else None
-        if Domain.objects.filter(domain_url=attrs['domain_url'], country=attrs['country']).exclude(id=domain_id).exists():
-            raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
-        return super().validate(attrs)
+    def validate_domain_url(self, value):
+        uri = urlparse(value)
+        if value != f'{uri.scheme}://{uri.netloc}':
+            raise serializers.ValidationError('Must be domain only.')
+        return value
 
     def validate_labels(self, value):
         self.label_serializer = DomainLabelSerializer(data=value, many=True)
         if not self.label_serializer.is_valid():
             raise serializers.ValidationError(self.label_serializer.errors)
         return value
+
+    def validate(self, attrs):
+        domain_id = self.instance.id if self.instance else None
+        if Domain.objects.filter(domain_url=attrs['domain_url'], country=attrs['country']).exclude(id=domain_id).exists():
+            raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
+        return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data.pop('labels', [])
