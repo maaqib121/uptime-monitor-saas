@@ -3,8 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from domains.models import Domain
 from urls.models import Url
-from urls.api.v1.serializers import UrlSerializer
+from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
 from users.permissions import IsCurrentUserAdmin
@@ -56,9 +57,9 @@ class UrlView(APIView, CustomPagination):
     def post(self, request, domain_id):
         request_data = request.data.copy()
         request_data.update({'company': request.user.company.id, 'domain': domain_id})
-        serializer = UrlSerializer(data=request_data)
+        serializer = UrlCreateSerializer(data=request_data)
         if serializer.is_valid():
-            serializer = UrlSerializer(serializer.save(), context={'request': request})
+            serializer = UrlSerializer(serializer.save(), many=True, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

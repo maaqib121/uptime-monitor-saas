@@ -26,8 +26,11 @@ class UrlSerializer(serializers.ModelSerializer):
         if data == empty:
             self.fields['labels'] = UrlLabelSerializer(source='urllabel_set', many=True)
         else:
-            self.fields['labels'] = serializers.JSONField(required=False)
-            self.label_serializer = None
+            self.fields.pop('company')
+            self.fields.pop('domain')
+            if self.instance:
+                self.fields['labels'] = serializers.JSONField(required=False)
+                self.label_serializer = None
 
     def validate_labels(self, value):
         self.label_serializer = UrlLabelSerializer(data=value, many=True)
@@ -36,13 +39,14 @@ class UrlSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
-        domain = attrs['domain'] if attrs.get('domain') else self.instance.domain
-        if urlparse(attrs['url']).netloc != urlparse(domain.domain_url).netloc:
+        domain = self.context['domain'] if self.context.get('domain') else self.instance.domain
+        if attrs.get('url') and urlparse(attrs['url']).netloc != urlparse(domain.domain_url).netloc:
             raise serializers.ValidationError({'url': 'URL not maching with the domain.'})
         return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data.pop('labels', [])
+        validated_data.update({'company':  self.context['company'], 'domain': self.context['domain']})
         url = super().create(validated_data)
         if self.label_serializer:
             url_labels = []
@@ -72,3 +76,46 @@ class UrlSerializer(serializers.ModelSerializer):
             UrlLabel.objects.filter(id__in=removable_url_labels).delete()
 
         return super().update(instance, validated_data)
+
+
+class UrlCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Url
+        exclude = ('url',)
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.fields['urls'] = serializers.JSONField()
+        self.url_serializer = None
+        self.fields['labels'] = serializers.JSONField(required=False)
+        self.label_serializer = None
+
+    def validate_labels(self, value):
+        self.label_serializer = UrlLabelSerializer(data=value, many=True)
+        if not self.label_serializer.is_valid():
+            raise serializers.ValidationError(self.label_serializer.errors)
+        return value
+
+    def validate(self, attrs):
+        self.url_serializer = UrlSerializer(
+            data=attrs['urls'],
+            many=True,
+            context={'company': attrs['company'], 'domain': attrs['domain']}
+        )
+        if not self.url_serializer.is_valid():
+            raise serializers.ValidationError({'urls': self.url_serializer.errors})
+        return super().validate(attrs)
+
+    def create(self, validated_data):
+        urls = []
+        for url in self.url_serializer.validated_data:
+            urls.append(Url(url=url['url'], domain=validated_data['domain'], company=validated_data['company']))
+        urls = Url.objects.bulk_create(urls)
+
+        url_labels = []
+        for url in urls:
+            for label in self.label_serializer.validated_data:
+                url_labels.append(UrlLabel(url=url, label=label['label']))
+        UrlLabel.objects.bulk_create(url_labels)
+
+        return urls
