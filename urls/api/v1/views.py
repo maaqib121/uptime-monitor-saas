@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
-from domains.models import Domain
+from django.db.models import Q
 from urls.models import Url
 from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
@@ -32,8 +32,12 @@ class UrlView(APIView, CustomPagination):
 
     def get_queryset(self):
         url_qs = self.request.user.company.url_set.filter(domain_id=self.kwargs['domain_id'])
+
         if self.request.GET.get('search'):
-            url_qs = url_qs.filter(url__icontains=self.request.GET['search'])
+            url_qs = url_qs.filter(
+                Q(url__icontains=self.request.GET['search']) |
+                Q(urllabel__label__icontains=self.request.GET['search'])
+            ).distinct()
 
         if self.request.GET.get('ordering') == 'url' or self.request.GET.get('ordering') == '-url':
             url_qs = url_qs.order_by(self.request.GET['ordering'])

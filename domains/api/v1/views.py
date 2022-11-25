@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from django.db.models import Q
 from domains.models import Domain
 from domains.api.v1.serializers import DomainSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
@@ -24,8 +25,12 @@ class DomainView(APIView, CustomPagination):
 
     def get_queryset(self):
         domain_qs = self.request.user.company.domain_set.all()
+
         if self.request.GET.get('search'):
-            domain_qs = domain_qs.filter(domain_url__icontains=self.request.GET['search'])
+            domain_qs = domain_qs.filter(
+                Q(domain_url__icontains=self.request.GET['search']) |
+                Q(domainlabel__label__icontains=self.request.GET['search'])
+            ).distinct()
 
         if self.request.GET.get('ordering') == 'domain_url' or self.request.GET.get('ordering') == '-domain_url':
             domain_qs = domain_qs.order_by(self.request.GET['ordering'])
