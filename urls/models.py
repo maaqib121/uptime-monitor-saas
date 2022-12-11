@@ -9,6 +9,7 @@ class Url(models.Model):
     url = models.URLField()
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    last_ping_status_code = models.PositiveIntegerField()
 
     def __str__(self):
         return self.url
@@ -21,11 +22,6 @@ class Url(models.Model):
             raise exceptions.ValidationError({'url': 'Must be unique for a domain.'})
 
         return super().clean()
-
-    @property
-    def last_ping_status_code(self):
-        last_ping_response = self.pingresult_set.order_by('created_at').last()
-        return last_ping_response.status_code if last_ping_response else None
 
 
 class UrlLabel(models.Model):
