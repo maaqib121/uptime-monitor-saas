@@ -52,6 +52,7 @@ starkbank-ecdsa==2.1.0
 stripe==4.2.0
 toml==0.10.2
 traitlets==5.4.0
+twilio==7.15.4
 urllib3==1.26.12
 vine==5.0.0
 wcwidth==0.2.5
