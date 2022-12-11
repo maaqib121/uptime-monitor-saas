@@ -22,6 +22,11 @@ class Url(models.Model):
 
         return super().clean()
 
+    @property
+    def last_ping_status_code(self):
+        last_ping_response = self.pingresult_set.order_by('created_at').last()
+        return last_ping_response.status_code if last_ping_response else None
+
 
 class UrlLabel(models.Model):
     url = models.ForeignKey(Url, on_delete=models.CASCADE)
