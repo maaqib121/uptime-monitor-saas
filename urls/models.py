@@ -23,6 +23,10 @@ class Url(models.Model):
 
         return super().clean()
 
+    def set_last_ping_status_code(self, status_code):
+        self.last_ping_status_code = status_code
+        self.save()
+
 
 class UrlLabel(models.Model):
     url = models.ForeignKey(Url, on_delete=models.CASCADE)
