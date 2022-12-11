@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_cleanup',
     'corsheaders',
+    'django_celery_results',
 
     'countries',
     'companies',
@@ -180,7 +181,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Canada/Eastern'
 
 USE_I18N = True
 
@@ -200,6 +201,8 @@ AUTH_USER_MODEL = 'users.User'
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 
+CELERY_RESULT_BACKEND = 'django-db'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -218,3 +221,5 @@ POSTMARK_SENDER_EMAIL = os.environ.get('POSTMARK_SENDER_EMAIL')
 STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SIGNING_SECRET = os.environ.get('STRIPE_WEBHOOK_SIGNING_SECRET')
+
+BASE_REDIS_URL = os.environ.get('BASE_REDIS_URL', 'redis://localhost:6379')
