@@ -31,11 +31,11 @@ class UrlSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         if data == empty:
-            self.fields['last_ping_status_code'] = serializers.ReadOnlyField()
             self.fields['labels'] = UrlLabelSerializer(source='urllabel_set', many=True)
         else:
             self.fields.pop('company')
             self.fields.pop('domain')
+            self.fields.pop('last_ping_status_code')
             if self.instance:
                 self.fields['labels'] = serializers.JSONField(required=False)
                 self.label_serializer = None
