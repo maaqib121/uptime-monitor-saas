@@ -29,6 +29,8 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
+    is_phone_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     confirmation_token = models.CharField(max_length=50, null=True, blank=True)
     confirmation_token_expiry_date = models.DateTimeField(null=True, blank=True)
