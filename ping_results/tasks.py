@@ -15,4 +15,4 @@ def ping(company_id):
         url.set_last_ping_status_code(response.status_code)
 
     ping.apply_async((company_id,), countdown=1800)
-    return f'Successfully pinged with {response.status_code} status code.'
+    return f'All URLs of {company} have been pinged.'
