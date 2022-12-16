@@ -36,14 +36,12 @@ class UrlView(APIView, CustomPagination):
         if self.request.GET.get('search'):
             url_qs = url_qs.filter(
                 Q(url__icontains=self.request.GET['search']) |
-                Q(urllabel__label__icontains=self.request.GET['search'])
+                Q(urllabel__label__icontains=self.request.GET['search']) |
+                Q(last_ping_status_code=self.request.GET['search'])
             ).distinct()
 
         if self.request.GET.get('ordering') == 'url' or self.request.GET.get('ordering') == '-url':
             url_qs = url_qs.order_by(self.request.GET['ordering'])
-
-        if self.request.GET.get('status_code'):
-            url_qs = url_qs.filter(last_ping_status_code=self.request.GET['status_code'])
 
         return url_qs
 
