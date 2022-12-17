@@ -8,7 +8,6 @@ from urls.models import Url
 from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
-from users.permissions import IsCurrentUserAdmin
 from urls.permissions import IsUrlExists, IsUrlLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
 
@@ -24,7 +23,6 @@ class UrlView(APIView, CustomPagination):
             permission_classes = (
                 IsAuthenticated,
                 IsTrialActiveOrSubscribed,
-                IsCurrentUserAdmin,
                 IsDomainExists,
                 IsUrlLessThanAllowed
             )
@@ -75,16 +73,8 @@ class UrlView(APIView, CustomPagination):
 
 class UrlDetailView(APIView):
     http_method_names = ('get', 'patch', 'delete')
+    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUrlExists)
     authentication_classes = (JWTAuthentication,)
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUrlExists)
-        elif self.request.method == 'PATCH':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUrlExists)
-        else:
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUrlExists)
-        return [permission() for permission in permission_classes]
 
     def get(self, request, domain_id, url_id):
         url = Url.objects.get(id=url_id)
