@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from companies.models import Company
 from datetime import datetime, timedelta
+import random
 
 
 class UserManager(BaseUserManager):
@@ -34,6 +35,8 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False)
     confirmation_token = models.CharField(max_length=50, null=True, blank=True)
     confirmation_token_expiry_date = models.DateTimeField(null=True, blank=True)
+    phone_otp = models.CharField(max_length=6, null=True, blank=True)
+    phone_otp_expiry_date = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -56,12 +59,26 @@ class User(AbstractUser):
         self.confirmation_token_expiry_date = None
         self.save()
 
+    def generate_phone_otp(self):
+        self.phone_otp = random.randint(100000, 999999)
+        self.phone_otp_expiry_date = datetime.now() + timedelta(minutes=10)
+        self.save()
+
+    def clear_phone_otp(self):
+        self.phone_otp = None
+        self.phone_otp_expiry_date = None
+        self.save()
+
     def activate(self):
         self.is_active = True
         self.save()
 
     def update_password(self, password):
         self.set_password(password)
+        self.save()
+
+    def set_phone_number(self, phone_number):
+        self.phone_number = phone_number
         self.save()
 
     def company_members(self):
