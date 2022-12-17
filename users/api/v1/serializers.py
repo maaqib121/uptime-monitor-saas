@@ -257,3 +257,16 @@ class ResetPasswordSerializer(serializers.Serializer):
 
 class UserSendPasswordSerializer(serializers.Serializer):
     redirect_uri = serializers.URLField()
+
+
+class PhoneVerifySerializer(serializers.Serializer):
+    otp = serializers.CharField()
+
+    def validate(self, attrs):
+        if attrs['otp'] != self.context['user'].phone_otp:
+            raise serializers.ValidationError({'otp': 'Invalid OTP.'})
+
+        if self.context['user'].phone_otp_expiry_date < datetime.now(timezone('UTC')):
+            raise serializers.ValidationError('OTP has been expired.')
+
+        return super().validate(attrs)

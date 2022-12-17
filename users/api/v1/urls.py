@@ -9,7 +9,8 @@ from users.api.v1.views import (
     UserProfileView,
     UserView,
     UserDetailView,
-    UserSendPasswordView
+    UserSendPasswordView,
+    UserPhoneVerifyView
 )
 
 
@@ -23,5 +24,6 @@ urlpatterns = [
     path('users/profile/', UserProfileView.as_view()),
     path('users/', UserView.as_view()),
     path('users/<int:pk>/', UserDetailView.as_view()),
-    path('users/<int:pk>/send_password/', UserSendPasswordView.as_view())
+    path('users/<int:pk>/send_password/', UserSendPasswordView.as_view()),
+    path('users/verify_phone/', UserPhoneVerifyView.as_view())
 ]

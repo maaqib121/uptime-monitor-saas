@@ -81,6 +81,10 @@ class User(AbstractUser):
         self.phone_number = phone_number
         self.save()
 
+    def verify_phone(self):
+        self.is_phone_verified = True
+        self.save()
+
     def company_members(self):
         return User.objects.filter(profile__company=self.company)
 
