@@ -29,6 +29,7 @@ urlpatterns = [
     path('', include('payment_methods.urls')),
     path('', include('invoices.urls')),
     path('', include('domains.urls')),
+    path('', include('ping_results.urls')),
     path('webhooks/', include('webhooks.urls'))
 ]
 
