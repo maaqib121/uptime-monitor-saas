@@ -79,6 +79,7 @@ class User(AbstractUser):
 
     def set_phone_number(self, phone_number):
         self.phone_number = phone_number
+        self.is_phone_verified = False
         self.save()
 
     def verify_phone(self):

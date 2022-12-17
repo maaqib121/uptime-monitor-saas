@@ -191,7 +191,7 @@ class ProfileSerializer(serializers.ModelSerializer):
                 self.fields['phone_number'] = serializers.CharField()
 
     def update(self, instance, validated_data):
-        if validated_data.get('phone_number'):
+        if validated_data.get('phone_number') != instance.user.phone_number:
             self.instance.user.set_phone_number(validated_data.pop('phone_number'))
         return super().update(instance, validated_data)
 
