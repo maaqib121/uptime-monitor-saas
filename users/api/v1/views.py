@@ -27,7 +27,8 @@ from users.permissions import (
 from users.utils.common import (
     send_confirmation_email,
     send_reset_password_email,
-    send_set_password_email
+    send_set_password_email,
+    send_otp_sms
 )
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -145,6 +146,14 @@ class UserProfileView(APIView):
     def patch(self, request):
         serializer = ProfileSerializer(request.user.profile, data=request.data, partial=True)
         if serializer.is_valid():
+            if (
+                serializer.validated_data.get('phone_number') and
+                serializer.validated_data['phone_number'] != request.user.phone_number
+            ):
+                request.user.generate_phone_otp()
+                response = send_otp_sms(request.user, request.user.phone_otp, serializer.validated_data['phone_number'])
+                if isinstance(response, Response):
+                    return response
             profile = serializer.save()
             serializer = UserSerializer(profile.user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)

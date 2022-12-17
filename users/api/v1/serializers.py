@@ -107,7 +107,7 @@ class UserConfirmationSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email')
+        fields = ('id', 'email', 'phone_number', 'is_phone_verified')
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
@@ -115,8 +115,10 @@ class UserSerializer(serializers.ModelSerializer):
             self.fields['profile'] = ProfileSerializer()
             self.fields['is_password_set'] = serializers.SerializerMethodField()
         else:
+            self.fields.pop('is_phone_verified')
             if self.instance:
                 self.fields.pop('email')
+                self.fields.pop('phone_number')
                 self.fields['is_company_admin'] = serializers.BooleanField()
             else:
                 self.profile_serializer = None
@@ -186,6 +188,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         else:
             if self.instance:
                 self.fields.pop('company')
+                self.fields['phone_number'] = serializers.CharField()
+
+    def update(self, instance, validated_data):
+        if validated_data.get('phone_number'):
+            self.instance.user.set_phone_number(validated_data.pop('phone_number'))
+        return super().update(instance, validated_data)
 
 
 class ForgetPasswordSerializer(serializers.Serializer):
