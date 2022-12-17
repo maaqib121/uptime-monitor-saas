@@ -73,15 +73,14 @@ def send_set_password_email(user, redirect_uri):
         )
 
 
-def send_otp_sms(user, otp, phone_number=None):
-    phone_number = phone_number if phone_number is not None else user.phone_number
+def send_otp_sms(user, otp):
     message = (
         f'{otp} is your One Time Password (OTP) for verification. Do not share this password with anyone.\n'
         'OTP will expire within 10 minutes.'
     )
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     try:
-        client.messages.create(body=message, to=phone_number, from_=settings.TWILIO_SENDER_PHONE_NO)
+        client.messages.create(body=message, to=user.phone_number, from_=settings.TWILIO_SENDER_PHONE_NO)
     except Exception as exception:
         print(exception)
         return Response(

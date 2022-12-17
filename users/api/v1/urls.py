@@ -10,6 +10,7 @@ from users.api.v1.views import (
     UserView,
     UserDetailView,
     UserSendPasswordView,
+    RequestPhoneOtpView,
     UserPhoneVerifyView
 )
 
@@ -25,5 +26,6 @@ urlpatterns = [
     path('users/', UserView.as_view()),
     path('users/<int:pk>/', UserDetailView.as_view()),
     path('users/<int:pk>/send_password/', UserSendPasswordView.as_view()),
+    path('users/request_phone_otp/', RequestPhoneOtpView.as_view()),
     path('users/verify_phone/', UserPhoneVerifyView.as_view())
 ]

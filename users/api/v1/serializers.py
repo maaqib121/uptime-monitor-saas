@@ -259,6 +259,17 @@ class UserSendPasswordSerializer(serializers.Serializer):
     redirect_uri = serializers.URLField()
 
 
+class RequestPhoneOtpSerializer(serializers.Serializer):
+    def validate(self, attrs):
+        if not self.context['user'].phone_number:
+            raise serializers.ValidationError('Phone number not set.')
+
+        if self.context['user'].is_phone_verified:
+            raise serializers.ValidationError('Phone number already verified.')
+
+        return super().validate(attrs)
+
+
 class PhoneVerifySerializer(serializers.Serializer):
     otp = serializers.CharField()
 

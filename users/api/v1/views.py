@@ -15,6 +15,7 @@ from users.api.v1.serializers import (
     ForgetPasswordSerializer,
     ResetPasswordSerializer,
     UserSendPasswordSerializer,
+    RequestPhoneOtpSerializer,
     PhoneVerifySerializer
 )
 from companies.permissions import IsTrialActiveOrSubscribed
@@ -147,14 +148,6 @@ class UserProfileView(APIView):
     def patch(self, request):
         serializer = ProfileSerializer(request.user.profile, data=request.data, partial=True)
         if serializer.is_valid():
-            if (
-                serializer.validated_data.get('phone_number') and
-                serializer.validated_data['phone_number'] != request.user.phone_number
-            ):
-                request.user.generate_phone_otp()
-                response = send_otp_sms(request.user, request.user.phone_otp, serializer.validated_data['phone_number'])
-                if isinstance(response, Response):
-                    return response
             profile = serializer.save()
             serializer = UserSerializer(profile.user, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -259,6 +252,23 @@ class UserSendPasswordView(APIView):
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RequestPhoneOtpView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request):
+        serializer = RequestPhoneOtpSerializer(data=request.data, context={'user': request.user})
+        if serializer.is_valid():
+            request.user.generate_phone_otp()
+            response = send_otp_sms(request.user, request.user.phone_otp)
+            if isinstance(response, Response):
+                return response
+            serializer = UserSerializer(request.user, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserPhoneVerifyView(APIView):
     http_method_names = ('post',)
     permission_classes = (IsAuthenticated,)
@@ -270,5 +280,5 @@ class UserPhoneVerifyView(APIView):
             request.user.verify_phone()
             request.user.clear_phone_otp()
             serializer = UserSerializer(request.user, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
