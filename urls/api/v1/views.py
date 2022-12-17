@@ -37,7 +37,7 @@ class UrlView(APIView, CustomPagination):
             url_qs = url_qs.filter(
                 Q(url__icontains=self.request.GET['search']) |
                 Q(urllabel__label__icontains=self.request.GET['search']) |
-                Q(last_ping_status_code=self.request.GET['search'])
+                Q(last_ping_status_code__startswith=self.request.GET['search'])
             ).distinct()
 
         if self.request.GET.get('ordering') == 'url' or self.request.GET.get('ordering') == '-url':
