@@ -5,6 +5,7 @@ from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 from django.conf import settings
 from postmarker.core import PostmarkClient
+from twilio.rest import Client
 
 
 def send_confirmation_email(user, redirect_uri):
@@ -68,5 +69,22 @@ def send_set_password_email(user, redirect_uri):
     except:
         return Response(
             {'errors': {'non_field_errors': ['Could not send confirmation email to this email address.']}},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+def send_otp_sms(user, otp, phone_number=None):
+    phone_number = phone_number if phone_number is not None else user.phone_number
+    message = (
+        f'{otp} is your One Time Password (OTP) for verification. Do not share this password with anyone.\n'
+        'OTP will expire within 10 minutes.'
+    )
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    try:
+        client.messages.create(body=message, to=phone_number, from_=settings.TWILIO_SENDER_PHONE_NO)
+    except Exception as exception:
+        print(exception)
+        return Response(
+            {'errors': {'non_field_errors': ['Could not send OTP text to this phone number.']}},
             status=status.HTTP_400_BAD_REQUEST
         )
