@@ -7,7 +7,6 @@ from django.db.models import Q
 from domains.models import Domain
 from domains.api.v1.serializers import DomainSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
-from users.permissions import IsCurrentUserAdmin
 from domains.permissions import IsDomainExists, IsDomainLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
 
@@ -20,7 +19,7 @@ class DomainView(APIView, CustomPagination):
         if self.request.method == 'GET':
             permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed)
         else:
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainLessThanAllowed)
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainLessThanAllowed)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -73,9 +72,9 @@ class DomainDetailView(APIView):
         if self.request.method == 'GET':
             permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
         elif self.request.method == 'PATCH':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainExists)
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
         else:
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsDomainExists)
+            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
         return [permission() for permission in permission_classes]
 
     def get(self, request, domain_id):
