@@ -20,7 +20,7 @@ def send_confirmation_email(user, redirect_uri):
         postmark.emails.send(
             From=settings.POSTMARK_SENDER_EMAIL,
             To=user.email,
-            Subject='Verify your new TakeMint account',
+            Subject='Verify your new Takemint account',
             HtmlBody=message
         )
     except:
@@ -41,7 +41,7 @@ def send_reset_password_email(user, redirect_uri):
         postmark.emails.send(
             From=settings.POSTMARK_SENDER_EMAIL,
             To=user.email,
-            Subject='Reset your TakeMint Password',
+            Subject='Reset your Takemint Password',
             HtmlBody=message
         )
     except:
@@ -63,7 +63,7 @@ def send_set_password_email(user, redirect_uri):
         postmark.emails.send(
             From=settings.POSTMARK_SENDER_EMAIL,
             To=user.email,
-            Subject='Set your TakeMint Password',
+            Subject='Set your Takemint Password',
             HtmlBody=message
         )
     except:
