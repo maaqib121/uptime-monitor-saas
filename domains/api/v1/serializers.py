@@ -45,8 +45,16 @@ class DomainSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         domain_id = self.instance.id if self.instance else None
-        if Domain.objects.filter(domain_url=attrs['domain_url'], country=attrs['country']).exclude(id=domain_id).exists():
+        domain_url = attrs['domain_url'] if attrs.get('domain_url') else self.instance.domain_url
+        country = attrs['country'] if attrs.get('country') else self.instance.country
+        company = attrs['company'] if attrs.get('company') else self.instance.company
+
+        if (
+            (attrs.get('domain_url') or attrs.get('country')) and
+            Domain.objects.filter(domain_url=domain_url, country=country).exclude(id=domain_id).exists()
+        ):
             raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
+
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -71,7 +79,7 @@ class DomainSerializer(serializers.ModelSerializer):
                 if 'id' in domain_label and domain_label.get('delete'):
                     removable_domain_labels.append(domain_label['id'])
                 elif 'id' in domain_label:
-                    domain_labels.append(DomainLabel(id=domain_label['id'], label=domain_label['label'],))
+                    domain_labels.append(DomainLabel(id=domain_label['id'], label=domain_label['label']))
                 else:
                     new_domain_labels.append(DomainLabel(domain=instance, label=domain_label['label']))
 
