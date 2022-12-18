@@ -2,7 +2,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.template.loader import render_to_string
 from django.conf import settings
+from users.models import User
 from postmarker.core import PostmarkClient
+from twilio.rest import Client
 
 
 def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, body):
@@ -26,3 +28,24 @@ def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, bod
             {'errors': {'non_field_errors': ['Could not send quotation email.']}},
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+def send_ping_email(url, status_code):
+    subject = f'URL Alert for {url}'
+    postmark = PostmarkClient(server_token=settings.POSTMARK_SERVER_TOKEN)
+    for user in User.objects.filter(profile__company=url.company):
+        try:
+            message = render_to_string('emails/ping_email.html', {'user': user, 'status_code': status_code, 'url': url})
+            postmark.emails.send(From=settings.POSTMARK_SENDER_EMAIL, To=user.email, Subject=subject, HtmlBody=message)
+        except Exception as exception:
+            print(exception)
+
+
+def send_ping_sms(url, status_code):
+    message = f'Following url of domain {url.domain} is returning {status_code} status code.\n\n{url}'
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    for user in User.objects.filter(profile__company=url.company, is_phone_verified=True):
+        try:
+            client.messages.create(body=message, to=user.phone_number, from_=settings.TWILIO_SENDER_PHONE_NO)
+        except Exception as exception:
+            print(exception)
