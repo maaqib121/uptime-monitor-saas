@@ -1,0 +1,33 @@
+{% extends 'emails/base.html' %}
+
+
+{% block content %}
+<tr>
+  <td>
+    <span style="font-size: 25px; font-weight: bold;">
+      Alert for Domain:
+      <a href="{{ url.domain }}">{{ url.domain }}</a>
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <span style="font-size: 18px;">
+      An anomoly has been detected in the following URL:
+    </span>
+    <br><br>
+    <span style="font-size: 16px;">
+      <a href="{{ url }}">{{ url }}</a>
+    </span>
+    <br><br><br>
+
+    <span style="font-size: 18px;">
+      <span style="font-weight: bold;">Status Code:</span>
+      {{ status_code }}
+    </span>
+    <br> <br> <br>
+  </td>
+</tr>
+{% endblock content %}
