@@ -1,5 +1,7 @@
 from pingApi.celery import app
 from companies.models import Company
+from companies.utils.common import send_ping_email, send_ping_sms
+from datetime import timedelta
 import requests
 
 
@@ -12,6 +14,13 @@ def ping(company_id):
     for url in company.url_set.all():
         response = requests.get(url.url)
         url.pingresult_set.create(status_code=response.status_code, company=url.company)
+        if (
+            url.last_ping_status_code != response.status_code or
+            (url.last_ping_date_time > timedelta(days=1) and response.status_code != 200)
+        ):
+            send_ping_email(url, response.status_code)
+            send_ping_sms(url, response.status_code)
+
         url.set_last_ping_status_code(response.status_code)
 
     ping.apply_async((company_id,), countdown=1800)
