@@ -86,11 +86,11 @@ class HealthRateView(APIView):
 
     def get(self, request, *args, **kwargs):
         ping_result_qs = self.get_queryset()
-        response_data = []
+        response_data = {}
         while self.from_date < self.to_date:
             success_results_count = ping_result_qs.filter(created_at__date=self.from_date, status_code=200).count()
             total_results_count = ping_result_qs.filter(created_at__date=self.from_date).count()
-            response_data.append({
+            response_data.update({
                 str(self.from_date): success_results_count / total_results_count * 100 if total_results_count != 0 else 0
             })
             self.from_date += timedelta(days=1)
