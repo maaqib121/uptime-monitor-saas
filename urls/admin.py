@@ -7,6 +7,7 @@ class UrlAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'url')
     list_filter = ('domain', 'company')
     search_fields = ('url',)
+    readonly_fields = ('last_ping_status_code', 'last_ping_date_time')
 
     def labels(self, instance):
         return list(instance.urllabel_set.values_list('label', flat=True))

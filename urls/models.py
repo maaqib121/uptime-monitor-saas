@@ -7,8 +7,8 @@ from urllib.parse import urlparse
 
 class Url(models.Model):
     url = models.URLField()
-    last_ping_status_code = models.PositiveIntegerField()
-    last_ping_date_time = models.DateTimeField()
+    last_ping_status_code = models.PositiveIntegerField(null=True, blank=True)
+    last_ping_date_time = models.DateTimeField(null=True, blank=True)
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
