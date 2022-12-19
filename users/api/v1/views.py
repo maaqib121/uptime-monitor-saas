@@ -185,9 +185,8 @@ class UserView(APIView, CustomPagination):
     def get(self, request):
         if 'no_paginate' in request.GET:
             serializer = UserSerializer(self.get_queryset(), many=True, context={'request': request})
-            response = Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            response = self.get_paginated_response()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        response = self.get_paginated_response()
         self.set_total_users(response.data)
         return response
 
