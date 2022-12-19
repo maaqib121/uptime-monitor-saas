@@ -14,7 +14,10 @@ def ping(company_id):
         return 'Company not Found.'
 
     for url in company.url_set.all():
-        response = requests.get(url.url)
+        try:
+            response = requests.get(url.url)
+        except:
+            continue
         url.pingresult_set.create(status_code=response.status_code, company=url.company)
         if (
             url.last_ping_status_code != response.status_code or
