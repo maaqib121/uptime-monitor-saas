@@ -12,6 +12,9 @@ class Url(models.Model):
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ('id',)
+
     def __str__(self):
         return self.url
 

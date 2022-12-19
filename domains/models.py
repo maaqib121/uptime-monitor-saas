@@ -12,6 +12,9 @@ class Domain(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     users = models.ManyToManyField(User, blank=True)
 
+    class Meta:
+        ordering = ('id',)
+
     def __str__(self):
         return self.domain_url
 
