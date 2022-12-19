@@ -23,17 +23,18 @@ def ping(company_id):
             try:
                 response = client.get(url.url)
             except:
-                response = namedtuple('Response', {'status_code': 200})(**{'status_code': 200})
+                response = namedtuple('Response', {'status_code': 500})(**{'status_code': 500})
 
-            url.pingresult_set.create(status_code=response.status_code, company=url.company)
-            url.set_last_ping_status_code(response.status_code)
-
+            ping_result = url.pingresult_set.create(status_code=response.status_code, company=url.company)
             if response.status_code != 200 and (
                 url.last_ping_status_code != response.status_code or
-                url.last_ping_date_time is None or
-                datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_ping_date_time + timedelta(days=1)
+                url.last_alert_date_time is None or
+                datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_alert_date_time + timedelta(days=1)
             ):
                 urls.append({'url': url, 'status_code': response.status_code})
+                url.set_last_alert_date_time(ping_result.created_at)
+
+            url.set_last_ping_status_code(response.status_code)
 
         if urls:
             send_ping_email(domain, urls)
