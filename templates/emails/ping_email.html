@@ -6,7 +6,7 @@
   <td>
     <span style="font-size: 25px; font-weight: bold;">
       Alert for Domain:
-      <a href="{{ url.domain }}">{{ url.domain }}</a>
+      <a href="{{ url.domain }}">{{ domain }}</a>
     </span>
     <br> <br> <br>
   </td>
@@ -15,19 +15,21 @@
 <tr>
   <td>
     <span style="font-size: 18px;">
-      An anomoly has been detected in the following URL:
+      An anomoly has been detected in the following URLs:
     </span>
-    <br><br>
-    <span style="font-size: 16px;">
-      <a href="{{ url }}">{{ url }}</a>
-    </span>
-    <br><br><br>
 
-    <span style="font-size: 18px;">
-      <span style="font-weight: bold;">Status Code:</span>
-      {{ status_code }}
-    </span>
-    <br> <br> <br>
+    <br>
+
+    <ul style="padding-left: 0;">
+      {% for url in urls %}
+      <li>
+        <span style="font-size: 16px;">
+          <a href="{{ url.url }}">{{ url.url }}</a>
+          <span style="font-size:14px; color:red">({{ url.status_code }})</span>
+        </span>
+      </li>
+      {% endfor %}
+      <br><br>
   </td>
 </tr>
 {% endblock content %}
