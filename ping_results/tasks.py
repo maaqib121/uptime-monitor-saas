@@ -18,16 +18,15 @@ def ping(company_id):
         try:
             response = requests.get(
                 url.url,
-                headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+                headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'}
             )
         except:
             response = namedtuple('Response', {'status_code': 200})(**{'status_code': 200})
 
-        if url.last_ping_status_code != response.status_code or (
-            response.status_code != 200 and (
-                url.last_ping_date_time is None or
-                datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_ping_date_time + timedelta(days=1)
-            )
+        if response.status_code != 200 and (
+            url.last_ping_status_code != response.status_code or
+            url.last_ping_date_time is None or
+            datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_ping_date_time + timedelta(days=1)
         ):
             send_ping_email(url, response.status_code)
             send_ping_sms(url, response.status_code)
