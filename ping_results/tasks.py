@@ -5,7 +5,7 @@ from companies.utils.common import send_ping_email, send_ping_sms
 from datetime import datetime, timedelta
 from pytz import timezone
 from collections import namedtuple
-import cloudscraper
+import httpx
 
 
 @app.task(name='tasks.ping')
@@ -14,10 +14,12 @@ def ping(company_id):
     if not company:
         return 'Company not Found.'
 
-    scraper = cloudscraper.create_scraper()
+    ping.apply_async((company_id,), countdown=1800)
+    client = httpx.Client(http2=True)
+
     for url in company.url_set.all():
         try:
-            response = scraper.get(url.url)
+            response = client.get(url.url)
         except:
             response = namedtuple('Response', {'status_code': 200})(**{'status_code': 200})
 
@@ -32,5 +34,4 @@ def ping(company_id):
         url.pingresult_set.create(status_code=response.status_code, company=url.company)
         url.set_last_ping_status_code(response.status_code)
 
-    ping.apply_async((company_id,), countdown=1800)
     return f'All URLs of {company} have been pinged.'
