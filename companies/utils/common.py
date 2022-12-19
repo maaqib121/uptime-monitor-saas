@@ -30,21 +30,27 @@ def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, bod
         )
 
 
-def send_ping_email(url, status_code):
-    subject = f'URL Alert for {url}'
+def send_ping_email(domain, urls):
+    subject = f'Alert for {domain}'
     postmark = PostmarkClient(server_token=settings.POSTMARK_SERVER_TOKEN)
-    for user in User.objects.filter(profile__company=url.company):
+    for user in User.objects.filter(profile__company=domain.company):
         try:
-            message = render_to_string('emails/ping_email.html', {'user': user, 'status_code': status_code, 'url': url})
+            message = render_to_string('emails/ping_email.html', {
+                'user': user,
+                'domain': domain,
+                'urls': urls
+            })
             postmark.emails.send(From=settings.POSTMARK_SENDER_EMAIL, To=user.email, Subject=subject, HtmlBody=message)
         except Exception as exception:
             print(exception)
 
 
-def send_ping_sms(url, status_code):
-    message = f'Following url of domain {url.domain} is returning {status_code} status code.\n\n{url}'
+def send_ping_sms(domain, urls):
+    message = f'There is a problem in following urls of domain {domain}\n'
+    for url in urls:
+        message = f"{message}\n{url['url']}\n({url['status_code']})"
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-    for user in User.objects.filter(profile__company=url.company, is_phone_verified=True):
+    for user in User.objects.filter(profile__company=domain.company, is_phone_verified=True):
         try:
             client.messages.create(body=message, to=user.phone_number, from_=settings.TWILIO_SENDER_PHONE_NO)
         except Exception as exception:
