@@ -42,6 +42,8 @@ class DomainSerializer(serializers.ModelSerializer):
         uri = urlparse(value)
         if value != f'{uri.scheme}://{uri.netloc}':
             raise serializers.ValidationError('Must be domain only.')
+        if self.instance and self.instance.url_set.exists():
+            raise serializers.ValidationError('Cannot be updated since URLs across this domain already exists.')
         return value
 
     def validate_labels(self, value):
