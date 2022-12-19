@@ -28,7 +28,7 @@ class PingHistoryView(APIView):
         ping_result_qs = self.get_queryset()
         response_data = []
 
-        while self.from_date < self.to_date:
+        while self.from_date <= self.to_date:
             result = {
                 str(self.from_date): [
                     {'name': '200', 'count': 0},
@@ -87,7 +87,7 @@ class HealthRateView(APIView):
     def get(self, request, *args, **kwargs):
         ping_result_qs = self.get_queryset()
         response_data = {}
-        while self.from_date < self.to_date:
+        while self.from_date <= self.to_date:
             success_results_count = ping_result_qs.filter(created_at__date=self.from_date, status_code=200).count()
             total_results_count = ping_result_qs.filter(created_at__date=self.from_date).count()
             response_data.update({
