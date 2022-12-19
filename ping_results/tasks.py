@@ -5,7 +5,7 @@ from companies.utils.common import send_ping_email, send_ping_sms
 from datetime import datetime, timedelta
 from pytz import timezone
 from collections import namedtuple
-import requests
+import cloudscraper
 
 
 @app.task(name='tasks.ping')
@@ -14,12 +14,10 @@ def ping(company_id):
     if not company:
         return 'Company not Found.'
 
+    scraper = cloudscraper.create_scraper()
     for url in company.url_set.all():
         try:
-            response = requests.get(
-                url.url,
-                headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'}
-            )
+            response = scraper.get(url.url)
         except:
             response = namedtuple('Response', {'status_code': 200})(**{'status_code': 200})
 
