@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
+from users.models import User
 from domains.models import Domain, DomainLabel
+from users.api.v1.serializers import UserSerializer
 from countries.api.v1.serializers import CountrySerializer
 from urllib.parse import urlparse
 
@@ -26,7 +28,9 @@ class DomainSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
         if data == empty:
             self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
+            self.fields['users'] = UserSerializer(many=True)
             self.fields['country'] = CountrySerializer()
+            self.fields['total_urls'] = serializers.SerializerMethodField()
         else:
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
@@ -54,6 +58,10 @@ class DomainSerializer(serializers.ModelSerializer):
             Domain.objects.filter(domain_url=domain_url, country=country).exclude(id=domain_id).exists()
         ):
             raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
+
+        user_ids = [user.id for user in attrs.get('users', [])]
+        if user_ids and User.objects.filter(id__in=user_ids, profile__company=company).count() != len(attrs['users']):
+            raise serializers.ValidationError({'users': 'One or more user does not exists.'})
 
         return super().validate(attrs)
 
