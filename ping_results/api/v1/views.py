@@ -39,7 +39,7 @@ class PingHistoryView(APIView):
             }
 
             for ping_result in ping_result_qs:
-                if ping_result.created_at.date() >= self.from_date:
+                if ping_result.created_at.date() == self.from_date:
                     if ping_result.status_code == 200:
                         result[str(self.from_date)][0]['count'] += 1
                     elif ping_result.status_code >= 300 and ping_result.status_code <= 399:
