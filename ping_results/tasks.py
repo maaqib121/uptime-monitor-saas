@@ -15,7 +15,10 @@ def ping(company_id):
 
     for url in company.url_set.all():
         try:
-            response = requests.get(url.url)
+            response = requests.get(
+                url.url,
+                headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+            )
         except:
             continue
         url.pingresult_set.create(status_code=response.status_code, company=url.company)
