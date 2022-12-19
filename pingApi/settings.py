@@ -182,7 +182,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Canada/Eastern'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 

@@ -1,7 +1,9 @@
+from django.conf import settings
 from pingApi.celery import app
 from companies.models import Company
 from companies.utils.common import send_ping_email, send_ping_sms
-from datetime import timedelta
+from datetime import datetime, timedelta
+from pytz import timezone
 import requests
 
 
@@ -16,7 +18,7 @@ def ping(company_id):
         url.pingresult_set.create(status_code=response.status_code, company=url.company)
         if (
             url.last_ping_status_code != response.status_code or
-            (url.last_ping_date_time > timedelta(days=1) and response.status_code != 200)
+            (datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_ping_date_time + timedelta(days=1) and response.status_code != 200)
         ):
             send_ping_email(url, response.status_code)
             send_ping_sms(url, response.status_code)
