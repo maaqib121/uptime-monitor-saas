@@ -2,6 +2,7 @@ from django.db import models
 from django.core import exceptions
 from countries.models import Country
 from companies.models import Company
+from users.models import User
 from urllib.parse import urlparse
 
 
@@ -9,6 +10,7 @@ class Domain(models.Model):
     domain_url = models.URLField()
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.domain_url
@@ -20,10 +22,11 @@ class Domain(models.Model):
 
         if Domain.objects.filter(
             domain_url=self.domain_url,
-                country=self.country,
-                company=self.company
+            country=self.country,
+            company=self.company
         ).exclude(id=self.id).exists():
             raise exceptions.ValidationError({'domain_url': 'Must be unique for a country.'})
+
         return super().clean()
 
 
