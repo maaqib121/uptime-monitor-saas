@@ -36,7 +36,7 @@ class UrlSerializer(serializers.ModelSerializer):
             self.fields.pop('company')
             self.fields.pop('domain')
             self.fields.pop('last_ping_status_code')
-            self.fields.pop('last_ping_date_time')
+            self.fields.pop('last_alert_date_time')
             if self.instance:
                 self.fields['labels'] = serializers.JSONField(required=False)
                 self.label_serializer = None
@@ -97,7 +97,7 @@ class UrlSerializer(serializers.ModelSerializer):
 class UrlCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Url
-        exclude = ('url', 'last_ping_status_code', 'last_ping_date_time')
+        exclude = ('url', 'last_ping_status_code', 'last_alert_date_time')
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
