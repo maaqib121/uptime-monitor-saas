@@ -22,9 +22,11 @@ def ping(company_id):
         except:
             continue
         url.pingresult_set.create(status_code=response.status_code, company=url.company)
-        if (
-            url.last_ping_status_code != response.status_code or
-            (datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_ping_date_time + timedelta(days=1) and response.status_code != 200)
+        if url.last_ping_status_code != response.status_code or (
+            response.status_code != 200 and (
+                url.last_ping_date_time is None or
+                datetime.now(tz=timezone(settings.TIME_ZONE)) > url.last_ping_date_time + timedelta(days=1)
+            )
         ):
             send_ping_email(url, response.status_code)
             send_ping_sms(url, response.status_code)
