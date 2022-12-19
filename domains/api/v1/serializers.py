@@ -35,6 +35,9 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
 
+    def get_total_urls(self, instance):
+        return instance.url_set.count()
+
     def validate_domain_url(self, value):
         uri = urlparse(value)
         if value != f'{uri.scheme}://{uri.netloc}':

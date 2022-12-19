@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, Count
 from domains.models import Domain
 from domains.api.v1.serializers import DomainSerializer
 from companies.permissions import IsTrialActiveOrSubscribed
@@ -31,8 +31,11 @@ class DomainView(APIView, CustomPagination):
                 Q(domainlabel__label__icontains=self.request.GET['search'])
             ).distinct()
 
-        if self.request.GET.get('ordering') == 'domain_url' or self.request.GET.get('ordering') == '-domain_url':
-            domain_qs = domain_qs.order_by(self.request.GET['ordering'])
+        if (
+            self.request.GET.get('ordering') == 'domain_url' or self.request.GET.get('ordering') == '-domain_url' or
+            self.request.GET.get('ordering') == 'total_urls' or self.request.GET.get('ordering') == '-total_urls'
+        ):
+            domain_qs = domain_qs.annotate(total_urls=Count('url')).order_by(self.request.GET['ordering'])
 
         return domain_qs
 
@@ -48,9 +51,8 @@ class DomainView(APIView, CustomPagination):
     def get(self, request):
         if 'no_paginate' in request.GET:
             serializer = DomainSerializer(self.get_queryset(), many=True, context={'request': request})
-            response = Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            response = self.get_paginated_response()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        response = self.get_paginated_response()
         self.set_total_domains(response.data)
         return response
 
