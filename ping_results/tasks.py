@@ -4,6 +4,7 @@ from companies.models import Company
 from companies.utils.common import send_ping_email, send_ping_sms
 from datetime import datetime, timedelta
 from pytz import timezone
+from collections import namedtuple
 import requests
 
 
@@ -20,8 +21,8 @@ def ping(company_id):
                 headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
             )
         except:
-            continue
-        url.pingresult_set.create(status_code=response.status_code, company=url.company)
+            response = namedtuple('Response', {'status_code': 200})(**{'status_code': 200})
+
         if url.last_ping_status_code != response.status_code or (
             response.status_code != 200 and (
                 url.last_ping_date_time is None or
@@ -31,6 +32,7 @@ def ping(company_id):
             send_ping_email(url, response.status_code)
             send_ping_sms(url, response.status_code)
 
+        url.pingresult_set.create(status_code=response.status_code, company=url.company)
         url.set_last_ping_status_code(response.status_code)
 
     ping.apply_async((company_id,), countdown=1800)
