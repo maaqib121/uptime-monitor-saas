@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from pingApi.constants import TRIAL_ALLOWED_USERS, TRIAL_ALLOWED_DOMAINS, TRIAL_ALLOWED_URLS, TRIAL_PING_INTERVAL
 from plans.models import Price
 from datetime import datetime, timedelta
 from pytz import timezone
@@ -41,15 +42,23 @@ class Company(models.Model):
 
     @property
     def allowed_users(self):
-        return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_USERS)
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_USERS
 
     @property
     def allowed_domains(self):
-        return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_DOMAINS)
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_DOMAINS
 
     @property
     def allowed_urls(self):
-        return self.subscribed_plan.allowed_users if self.subscribed_plan else int(settings.TRIAL_ALLOWED_URLS)
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_URLS
+
+    @property
+    def allowed_urls(self):
+        return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
+
+    @property
+    def ping_interval(self):
+        return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
 
     @property
     def remaining_trail_days(self):

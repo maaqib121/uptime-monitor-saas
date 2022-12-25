@@ -1,11 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
-from django.conf import settings
 from companies.models import Company
 from plans.api.v1.serializers import PriceSerializer
-from datetime import datetime, timedelta
-from pytz import timezone
-from math import ceil
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -26,11 +22,12 @@ class CompanySerializer(serializers.ModelSerializer):
     def get_remaining_trial_days(self, instance):
         return instance.remaining_trail_days
 
-    def get_plan_restrictions(self, obj):
+    def get_plan_restrictions(self, instance):
         return {
-            'allowed_users': obj.subscribed_plan.allowed_users if obj.subscribed_plan else int(settings.TRIAL_ALLOWED_USERS),
-            'allowed_domains': obj.subscribed_plan.allowed_domains if obj.subscribed_plan else int(settings.TRIAL_ALLOWED_DOMAINS),
-            'allowed_urls': obj.subscribed_plan.allowed_urls if obj.subscribed_plan else int(settings.TRIAL_ALLOWED_URLS)
+            'allowed_users': instance.allowed_users,
+            'allowed_domains': instance.allowed_domains,
+            'allowed_urls': instance.allowed_urls,
+            'ping_interval': instance.ping_interval
         }
 
 
