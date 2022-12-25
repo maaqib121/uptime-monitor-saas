@@ -7,12 +7,13 @@ from postmarker.core import PostmarkClient
 from twilio.rest import Client
 
 
-def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, body):
+def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, ping_interval, body):
     message = render_to_string('emails/quotation_email.html', {
         'user': user,
         'allowed_users': allowed_users,
         'allowed_domains': allowed_domains,
         'allowed_urls': allowed_urls,
+        'ping_interval': ping_interval,
         'body': body
     })
     try:

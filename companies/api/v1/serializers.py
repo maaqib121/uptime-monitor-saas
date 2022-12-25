@@ -32,7 +32,8 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class CompanyQuotationSerializer(serializers.Serializer):
-    allowed_users = serializers.IntegerField()
-    allowed_domains = serializers.IntegerField()
-    allowed_urls = serializers.IntegerField()
+    allowed_users = serializers.IntegerField(min_value=1)
+    allowed_domains = serializers.IntegerField(min_value=1)
+    allowed_urls = serializers.IntegerField(min_value=1)
+    ping_interval = serializers.IntegerField(min_value=1)
     body = serializers.CharField()
