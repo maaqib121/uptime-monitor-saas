@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.crypto import get_random_string
 from pingApi.constants import TRIAL_ALLOWED_USERS, TRIAL_ALLOWED_DOMAINS, TRIAL_ALLOWED_URLS, TRIAL_PING_INTERVAL
 from plans.models import Price
 from datetime import datetime, timedelta
@@ -20,6 +21,7 @@ class Company(models.Model):
     stripe_subscription_id = models.CharField(max_length=100, null=True, blank=True)
     subscribed_plan = models.ForeignKey(Price, on_delete=models.SET_NULL, null=True, blank=True)
     is_subscription_active = models.BooleanField(default=False)
+    downloadable_file_token = models.CharField(max_length=50, null=True, blank=True)
     created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
 
     class Meta:
@@ -27,6 +29,14 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def generate_downloadable_file_token(self):
+        self.downloadable_file_token = get_random_string(length=32)
+        self.save()
+
+    def clear_downloadable_file_token(self):
+        self.downloadable_file_token = None
+        self.save()
 
     def set_stripe_customer_id(self, stripe_customer_id):
         self.stripe_customer_id = stripe_customer_id
