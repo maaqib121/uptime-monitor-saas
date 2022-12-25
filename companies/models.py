@@ -61,5 +61,9 @@ class Company(models.Model):
         return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
 
     @property
+    def ping_interval_in_seconds(self):
+        return self.ping_interval * 60
+
+    @property
     def remaining_trail_days(self):
         return ceil((self.created_at + timedelta(days=7) - datetime.now(tz=timezone(settings.TIME_ZONE))).total_seconds() / (60 * 60 * 24))

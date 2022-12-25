@@ -14,7 +14,7 @@ def ping(company_id):
     if not company:
         return 'Company not Found.'
 
-    ping.apply_async((company_id,), countdown=1800)
+    ping.apply_async((company_id,), countdown=company.ping_interval_in_seconds)
     client = httpx.Client(http2=True)
 
     for domain in company.domain_set.all():
