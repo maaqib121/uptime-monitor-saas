@@ -142,3 +142,7 @@ class UrlCreateSerializer(serializers.ModelSerializer):
         UrlLabel.objects.bulk_create(url_labels)
 
         return urls
+
+
+class UrlExportSerializer(serializers.Serializer):
+    format = serializers.ChoiceField(choices=['csv', 'xls'])

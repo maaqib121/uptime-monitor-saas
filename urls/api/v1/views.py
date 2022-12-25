@@ -4,8 +4,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
+from domains.models import Domain
 from urls.models import Url
-from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer
+from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlExportSerializer
+from urls.utils.export import export_to_csv, export_to_xls
 from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
 from urls.permissions import IsUrlExists, IsUrlLessThanAllowed
@@ -93,3 +95,16 @@ class UrlDetailView(APIView):
         url = Url.objects.get(id=url_id)
         url.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UrlExportView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request, domain_id):
+        domain = Domain.objects.get(id=domain_id)
+        serializer = UrlExportSerializer(data=request.data)
+        if serializer.is_valid():
+            return export_to_csv(domain) if serializer.validated_data['format'] == 'csv' else export_to_xls(domain)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
