@@ -1,17 +1,21 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.db.models import Q
 from domains.models import Domain
 from urls.models import Url
-from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlExportSerializer
+from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlRequestFileSerializer, UrlExportSerializer
 from urls.utils.export import export_to_csv, export_to_xls
 from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
 from urls.permissions import IsUrlExists, IsUrlLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
+from urllib.parse import urlparse
 
 
 class UrlView(APIView, CustomPagination):
@@ -97,14 +101,42 @@ class UrlDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UrlExportView(APIView):
+class UrlRequestFileView(APIView):
     http_method_names = ('post',)
     permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request, domain_id):
-        domain = Domain.objects.get(id=domain_id)
-        serializer = UrlExportSerializer(data=request.data)
+        serializer = UrlRequestFileSerializer(data=request.data)
         if serializer.is_valid():
-            return export_to_csv(domain) if serializer.validated_data['format'] == 'csv' else export_to_xls(domain)
+            request.user.company.generate_downloadable_file_token()
+            uidb64 = urlsafe_base64_encode(force_bytes(request.user.company.id))
+            token = request.user.company.downloadable_file_token
+            uri = urlparse(request.build_absolute_uri())
+
+            response_data = {
+                'download_link': f'{uri.scheme}://{uri.netloc}{reverse("urls:export", kwargs={"domain_id": domain_id})}?uidb64={uidb64}&token={token}&export_format={serializer.validated_data["format"]}'
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UrlExportView(APIView):
+    http_method_names = ('get',)
+    permission_classes = (AllowAny,)
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request, domain_id):
+        request_data = {
+            'uidb64': request.GET.get('uidb64'),
+            'token': request.GET.get('token'),
+            'export_format': request.GET.get('export_format'),
+            'domain': domain_id,
+        }
+        serializer = UrlExportSerializer(data=request_data)
+        if serializer.is_valid():
+            company = serializer.get_company()
+            company.clear_downloadable_file_token()
+            domain = serializer.validated_data['domain']
+            return export_to_csv(domain) if serializer.validated_data['export_format'] == 'csv' else export_to_xls(domain)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

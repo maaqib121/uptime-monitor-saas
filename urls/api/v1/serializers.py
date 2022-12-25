@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
+from django.conf import settings
+from django.utils.http import urlsafe_base64_decode
+from companies.models import Company
+from domains.models import Domain
 from urls.models import Url, UrlLabel
 from urllib.parse import urlparse
+from datetime import datetime
+from pytz import timezone
 
 
 class UrlLabelSerializer(serializers.ModelSerializer):
@@ -144,5 +150,29 @@ class UrlCreateSerializer(serializers.ModelSerializer):
         return urls
 
 
-class UrlExportSerializer(serializers.Serializer):
+class UrlRequestFileSerializer(serializers.Serializer):
     format = serializers.ChoiceField(choices=['csv', 'xls'])
+
+
+class UrlExportSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+    domain = serializers.PrimaryKeyRelatedField(queryset=Domain.objects.all())
+    export_format = serializers.ChoiceField(choices=['csv', 'xls'])
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.company = None
+
+    def get_company(self):
+        return self.company
+
+    def validate(self, attrs):
+        company = Company.objects.filter(id=urlsafe_base64_decode(attrs['uidb64']).decode()).first()
+        if not company or company.downloadable_file_token != attrs['token']:
+            raise serializers.ValidationError('Invalid token.')
+        if attrs['domain'].company != company:
+            raise serializers.ValidationError('Does not belong to this company.')
+
+        self.company = company
+        return super().validate(attrs)
