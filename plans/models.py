@@ -7,6 +7,7 @@ class Plan(models.Model):
     allowed_users = models.PositiveIntegerField()
     allowed_domains = models.PositiveIntegerField()
     allowed_urls = models.PositiveIntegerField()
+    ping_interval = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, null=True, blank=True)
     stripe_product_id = models.CharField(max_length=100, null=True, blank=True)
@@ -47,3 +48,7 @@ class Price(models.Model):
     @property
     def allowed_urls(self):
         return self.plan.allowed_urls
+
+    @property
+    def ping_interval(self):
+        return self.plan.ping_interval
