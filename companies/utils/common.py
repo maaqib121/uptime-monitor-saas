@@ -42,10 +42,8 @@ def send_ping_email(domain, urls):
             print(exception)
 
 
-def send_ping_sms(domain, urls):
-    message = f'There is a problem in following urls of domain {domain}\n'
-    for url in urls:
-        message = f"{message}\n{url['url']}\n({url['status_code']})"
+def send_ping_sms(domain):
+    message = f'There is a problem in the urls of domain {domain}\n'
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     for user in domain.users.filter(is_phone_verified=True):
         try:

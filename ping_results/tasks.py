@@ -38,6 +38,6 @@ def ping(company_id):
 
         if urls:
             send_ping_email(domain, urls)
-            send_ping_sms(domain, urls)
+            send_ping_sms(domain)
 
     return f'All URLs of {company} have been pinged.'
