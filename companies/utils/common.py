@@ -43,7 +43,7 @@ def send_ping_email(domain, urls):
 
 
 def send_ping_sms(domain):
-    message = f'There is a problem in the urls of domain {domain}\n'
+    message = f'New alert on {domain}\nLogin to app.takemint.com to get the details of the urls.'
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     for user in domain.users.filter(is_phone_verified=True):
         try:
