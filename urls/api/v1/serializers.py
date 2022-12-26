@@ -44,6 +44,7 @@ class UrlSerializer(serializers.ModelSerializer):
             self.fields.pop('last_ping_status_code')
             self.fields.pop('last_alert_date_time')
             if self.instance:
+                self.fields.pop('url')
                 self.fields['labels'] = serializers.JSONField(required=False)
                 self.label_serializer = None
 
