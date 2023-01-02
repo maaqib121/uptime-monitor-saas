@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
+from django.db.models import Q
 from users.models import User
 from domains.models import Domain, DomainLabel
 from users.api.v1.serializers import UserSerializer
@@ -57,10 +58,20 @@ class DomainSerializer(serializers.ModelSerializer):
         domain_url = attrs['domain_url'] if attrs.get('domain_url') else self.instance.domain_url
         country = attrs['country'] if attrs.get('country') else self.instance.country
         company = attrs['company'] if attrs.get('company') else self.instance.company
+        if domain_url:
+            uri = urlparse(domain_url)
+            if uri.netloc.startswith('www.'):
+                second_url = domain_url.replace('www.', '')
+            else:
+                second_url = f'{uri.scheme}://www.{uri.netloc}'
 
         if (
-            (attrs.get('domain_url') or attrs.get('country')) and
-            company.domain_set.filter(domain_url=domain_url, country=country).exclude(id=domain_id).exists()
+            (domain_url or country) and
+            company.domain_set.filter(
+                Q(domain_url=domain_url) |
+                Q(domain_url=second_url),
+                country=country
+            ).exclude(id=domain_id).exists()
         ):
             raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
 
