@@ -60,7 +60,7 @@ class DomainSerializer(serializers.ModelSerializer):
 
         if (
             (attrs.get('domain_url') or attrs.get('country')) and
-            Domain.objects.filter(domain_url=domain_url, country=country).exclude(id=domain_id).exists()
+            company.domain_set.filter(domain_url=domain_url, country=country).exclude(id=domain_id).exists()
         ):
             raise serializers.ValidationError({'domain_url': 'Must be unique for a country.'})
 
