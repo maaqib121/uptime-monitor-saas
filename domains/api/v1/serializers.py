@@ -32,12 +32,16 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['users'] = UserSerializer(many=True)
             self.fields['country'] = CountrySerializer()
             self.fields['total_urls'] = serializers.SerializerMethodField()
+            self.fields['last_health_score'] = serializers.SerializerMethodField()
         else:
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
 
     def get_total_urls(self, instance):
         return instance.url_set.count()
+
+    def get_last_health_score(self, instance):
+        return instance.url_set.filter(last_ping_status_code=200).count() / instance.url_set.count() * 100
 
     def validate_domain_url(self, value):
         uri = urlparse(value)
