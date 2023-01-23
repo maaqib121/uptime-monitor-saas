@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
 from companies.models import Company
+from users.models import User
 from plans.api.v1.serializers import PriceSerializer
 
 
@@ -12,6 +13,7 @@ class CompanySerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         if data == empty:
+            self.fields['statistics'] = serializers.SerializerMethodField()
             self.fields['remaining_trial_days'] = serializers.SerializerMethodField()
             self.fields['plan_restrictions'] = serializers.SerializerMethodField()
             self.fields['subscribed_plan'] = PriceSerializer()
@@ -28,6 +30,13 @@ class CompanySerializer(serializers.ModelSerializer):
             'allowed_domains': instance.allowed_domains,
             'allowed_urls': instance.allowed_urls,
             'ping_interval': instance.ping_interval
+        }
+
+    def get_statistics(self, instance):
+        return {
+            'total_users': User.objects.filter(profile__company=instance).count(),
+            'total_domains': instance.domain_set.count(),
+            'total_urls': instance.url_set.count()
         }
 
 
