@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'domains',
     'urls',
     'ping_results',
+    'domain_uptime_results',
     'webhooks'
 ]
 
