@@ -16,11 +16,13 @@ click-plugins==1.1.1
 click-repl==0.2.0
 decorator==5.1.1
 Django==4.1.2
+django-celery-beat==2.4.0
 django-celery-results==2.4.0
 django-cleanup==6.0.0
 django-cors-headers==3.13.0
 django-environ==0.9.0
 django-extensions==3.2.1
+django-timezone-field==5.0
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.1
 executing==1.1.1
@@ -49,6 +51,8 @@ pycodestyle==2.9.1
 Pygments==2.13.0
 PyJWT==2.5.0
 pyparsing==3.0.9
+python-crontab==2.7.1
+python-dateutil==2.8.2
 python-http-client==3.3.7
 pytz==2022.4
 redis==4.4.0
@@ -64,6 +68,7 @@ stripe==4.2.0
 toml==0.10.2
 traitlets==5.4.0
 twilio==7.15.4
+tzdata==2022.7
 urllib3==1.26.12
 vine==5.0.0
 wcwidth==0.2.5

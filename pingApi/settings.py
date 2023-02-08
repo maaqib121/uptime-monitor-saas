@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_cleanup',
     'corsheaders',
     'django_celery_results',
+    'django_celery_beat',
 
     'countries',
     'companies',
