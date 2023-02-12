@@ -5,6 +5,7 @@ from users.models import User
 from domains.models import Domain, DomainLabel
 from users.api.v1.serializers import UserSerializer
 from countries.api.v1.serializers import CountrySerializer
+from domain_uptime_results.api.v1.serializers import DomainUptimeResultSerializer
 from urllib.parse import urlparse
 
 
@@ -33,6 +34,7 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['country'] = CountrySerializer()
             self.fields['total_urls'] = serializers.SerializerMethodField()
             self.fields['last_health_score'] = serializers.SerializerMethodField()
+            self.fields['last_uptime_result'] = serializers.SerializerMethodField()
         else:
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
@@ -42,6 +44,10 @@ class DomainSerializer(serializers.ModelSerializer):
 
     def get_last_health_score(self, instance):
         return instance.url_set.filter(last_ping_status_code=200).count() / instance.url_set.count() * 100
+
+    def get_last_uptime_result(self, instance):
+        last_domain_uptime_result = instance.domainuptimeresult_set.order_by('created_at').last()
+        return DomainUptimeResultSerializer(last_domain_uptime_result).data if last_domain_uptime_result else None
 
     def validate_domain_url(self, value):
         uri = urlparse(value)
