@@ -18,8 +18,13 @@ def get_domain_uptime_results():
         except:
             response = namedtuple('Response', {'status_code': 500})(**{'status_code': 500})
 
+        if response.status_code >= 200 and response.status_code <= 399:
+            domain_uptime_status = DomainUptimeResult.Status.UP
+        else:
+            domain_uptime_status = DomainUptimeResult.Status.DOWN
+
         domain_uptime_result = DomainUptimeResult(
-            status=DomainUptimeResult.Status.UP if response.status_code == 200 else DomainUptimeResult.Status.DOWN,
+            status=domain_uptime_status,
             status_code=response.status_code,
             response_time=response.elapsed.total_seconds(),
             domain=domain,
