@@ -37,6 +37,8 @@ class User(AbstractUser):
     confirmation_token_expiry_date = models.DateTimeField(null=True, blank=True)
     phone_otp = models.CharField(max_length=6, null=True, blank=True)
     phone_otp_expiry_date = models.DateTimeField(null=True, blank=True)
+    google_refresh_token = models.TextField(null=True, blank=True)
+    linked_google_email = models.EmailField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
