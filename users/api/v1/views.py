@@ -16,7 +16,8 @@ from users.api.v1.serializers import (
     ResetPasswordSerializer,
     UserSendPasswordSerializer,
     RequestPhoneOtpSerializer,
-    PhoneVerifySerializer
+    PhoneVerifySerializer,
+    GoogleAuthenticateSerializer
 )
 from companies.permissions import IsTrialActiveOrSubscribed
 from users.permissions import (
@@ -279,5 +280,18 @@ class UserPhoneVerifyView(APIView):
             request.user.verify_phone()
             request.user.clear_phone_otp()
             serializer = UserSerializer(request.user, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleAuthenticateView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request):
+        serializer = GoogleAuthenticateSerializer(request.user, data=request.data)
+        if serializer.is_valid():
+            serializer = UserSerializer(serializer.save())
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
