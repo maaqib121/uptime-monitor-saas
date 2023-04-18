@@ -7,7 +7,6 @@ class UserAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'email')
     list_filter = ('is_active',)
     search_fields = ('email',)
-    readonly_fields = ('google_refresh_token', 'linked_google_email')
 
     def company(self, obj):
         return obj.profile.company

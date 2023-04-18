@@ -18,6 +18,7 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_at')
     list_display_links = ('id', 'name')
     search_fields = ('name',)
+    readonly_fields = ('google_refresh_token', 'linked_google_email')
     form = CompanyForm
 
 

@@ -21,6 +21,8 @@ class Company(models.Model):
     stripe_subscription_id = models.CharField(max_length=100, null=True, blank=True)
     subscribed_plan = models.ForeignKey(Price, on_delete=models.SET_NULL, null=True, blank=True)
     is_subscription_active = models.BooleanField(default=False)
+    google_refresh_token = models.TextField(null=True, blank=True)
+    linked_google_email = models.EmailField(null=True, blank=True)
     downloadable_file_token = models.CharField(max_length=50, null=True, blank=True)
     created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
 
