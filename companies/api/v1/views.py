@@ -59,7 +59,7 @@ class CompanyQuotationView(APIView):
 
 class GoogleAuthenticateView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request):
@@ -72,7 +72,7 @@ class GoogleAuthenticateView(APIView):
 
 class GoogleDissociateView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request):
