@@ -11,9 +11,7 @@ from users.api.v1.views import (
     UserDetailView,
     UserSendPasswordView,
     RequestPhoneOtpView,
-    UserPhoneVerifyView,
-    GoogleAuthenticateView,
-    GoogleDissociateView
+    UserPhoneVerifyView
 )
 
 
@@ -29,7 +27,5 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetailView.as_view()),
     path('users/<int:pk>/send_password/', UserSendPasswordView.as_view()),
     path('users/request_phone_otp/', RequestPhoneOtpView.as_view()),
-    path('users/verify_phone/', UserPhoneVerifyView.as_view()),
-    path('users/authenticate_google/', GoogleAuthenticateView.as_view()),
-    path('users/dissociate_google/', GoogleDissociateView.as_view())
+    path('users/verify_phone/', UserPhoneVerifyView.as_view())
 ]
