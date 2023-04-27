@@ -15,5 +15,9 @@ app.conf.beat_schedule = {
     'get_domain_uptime_results': {
         'task': 'tasks.get_domain_uptime_results',
         'schedule': crontab()
+    },
+    'sync_google_analytics_domains': {
+        'task': 'tasks.sync_google_analytics_domains',
+        'schedule': crontab(minute=0, hour='*/1')
     }
 }
