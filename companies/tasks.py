@@ -14,7 +14,7 @@ def sync_google_analytics_domains():
             headers={'Authorization': f'Bearer {google_access_token}'}
         )
         if accounts_response.status_code != 200:
-            return accounts_response.json()['error']
+            continue
 
         for account in accounts_response.json()['items']:
             web_properties_response = requests.get(
@@ -22,7 +22,7 @@ def sync_google_analytics_domains():
                 headers={'Authorization': f'Bearer {google_access_token}'}
             )
             if web_properties_response.status_code != 200:
-                return web_properties_response.json()['error']
+                continue
 
             for web_property in web_properties_response.json()['items']:
                 uri = urlparse(web_property['websiteUrl'])
