@@ -14,4 +14,5 @@ def get_company_google_access_token(company):
     )
     if response != 200:
         company.clear_linked_google_account()
-    return response.json()['access_token']
+    else:
+        return response.json()['access_token']

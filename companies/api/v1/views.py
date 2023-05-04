@@ -10,6 +10,7 @@ from companies.api.v1.serializers import (
     GoogleDissociateSerializer
 )
 from companies.utils.common import send_quotation_email
+from companies.tasks import sync_company_google_analytics_domains
 from users.permissions import IsCurrentUserAdmin
 
 
@@ -65,7 +66,9 @@ class GoogleAuthenticateView(APIView):
     def post(self, request):
         serializer = GoogleAuthenticateSerializer(request.user.company, data=request.data)
         if serializer.is_valid():
-            serializer = CompanySerializer(serializer.save(), context={'request': request})
+            company = serializer.save()
+            sync_company_google_analytics_domains.delay(company)
+            serializer = CompanySerializer(company, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
