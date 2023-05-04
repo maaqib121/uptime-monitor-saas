@@ -52,6 +52,11 @@ class Company(models.Model):
         self.subscribed_plan = subscribed_plan
         self.save()
 
+    def clear_linked_google_account(self):
+        self.google_refresh_token = None
+        self.linked_google_email = None
+        self.save()
+
     @property
     def allowed_users(self):
         return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_USERS

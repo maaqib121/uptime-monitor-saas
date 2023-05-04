@@ -3,7 +3,7 @@ import requests
 
 
 def get_company_google_access_token(company):
-    return requests.post(
+    response = requests.post(
         url='https://oauth2.googleapis.com/token',
         data={
             'client_id': settings.GOOGLE_CLIENT_ID,
@@ -11,4 +11,7 @@ def get_company_google_access_token(company):
             'refresh_token': company.google_refresh_token,
             'grant_type': 'refresh_token'
         }
-    ).json()['access_token']
+    )
+    if response != 200:
+        company.clear_linked_google_account()
+    return response.json()['access_token']
