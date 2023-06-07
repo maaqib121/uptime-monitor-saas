@@ -67,7 +67,7 @@ class GoogleAuthenticateView(APIView):
         serializer = GoogleAuthenticateSerializer(request.user.company, data=request.data)
         if serializer.is_valid():
             company = serializer.save()
-            sync_company_google_analytics_domains.delay(company)
+            sync_company_google_analytics_domains.delay(company.id)
             serializer = CompanySerializer(company, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
