@@ -7,6 +7,7 @@ from datetime import datetime
 import ssl
 import socket
 import httpx
+import time
 
 
 @app.task(name='tasks.get_domain_uptime_results')
@@ -14,9 +15,15 @@ def get_domain_uptime_results():
     for domain in Domain.objects.all():
         client = httpx.Client(http2=True)
         try:
+            start_time = time.time()
             response = client.get(domain.domain_url)
+            end_time = time.time()
         except:
-            response = namedtuple('Response', {'status_code': 500})(**{'status_code': 500})
+            end_time = time.time()
+            response_data = {'status_code': 500}
+            response = namedtuple('Response', response_data)(**response_data)
+
+        elapsed_time = end_time - start_time
 
         if response.status_code >= 200 and response.status_code <= 399:
             domain_uptime_status = DomainUptimeResult.Status.UP
@@ -26,7 +33,7 @@ def get_domain_uptime_results():
         domain_uptime_result = DomainUptimeResult(
             status=domain_uptime_status,
             status_code=response.status_code,
-            response_time=response.elapsed.total_seconds(),
+            response_time=elapsed_time,
             domain=domain,
             company=domain.company
         )
