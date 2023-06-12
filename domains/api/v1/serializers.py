@@ -38,6 +38,8 @@ class DomainSerializer(serializers.ModelSerializer):
         else:
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
+            if self.instance:
+                self.fields.pop('domain_url')
 
     def get_total_urls(self, instance):
         return instance.url_set.filter(is_active=True).count()
