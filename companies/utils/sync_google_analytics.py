@@ -1,5 +1,6 @@
 from pingApi.constants import LANDING_PAGES_TO_RETRIEVE
 from companies.utils.generate_google_access_token import get_company_google_access_token
+from urls.models import Url
 from urllib.parse import urlparse
 import requests
 import json
@@ -52,7 +53,15 @@ def sync_from_google_analytics_account(company):
                     unique_landing_pages,
                     key=lambda x: x['score'],
                     reverse=True
-                )[: LANDING_PAGES_TO_RETRIEVE]
+                )[:LANDING_PAGES_TO_RETRIEVE]
 
+                url_ids = []
+                urls = []
                 for landing_page in top_landing_pages:
-                    domain.url_set.get_or_create(url=f'{domain.domain_url}{landing_page["url"]}', company=company)
+                    url, created = domain.url_set.get_or_create(url=f'{domain.domain_url}{landing_page["url"]}', company=company)
+                    url_ids.append(url.id)
+                    if not created and not url.is_active:
+                        urls.append(Url(id=url.id, is_active=True))
+
+                Url.objects.bulk_update(urls, fields=['is_active'])
+                domain.url_set.exclude(id__in=url_ids).update(is_active=False)
