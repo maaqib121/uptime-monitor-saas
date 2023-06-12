@@ -40,7 +40,7 @@ class DomainSerializer(serializers.ModelSerializer):
             self.label_serializer = None
 
     def get_total_urls(self, instance):
-        return instance.url_set.count()
+        return instance.url_set.filter(is_active=True).count()
 
     def get_last_health_score(self, instance):
         urls_count = instance.url_set.count()
