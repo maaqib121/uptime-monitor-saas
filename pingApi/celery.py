@@ -17,7 +17,7 @@ app.conf.beat_schedule = {
         'schedule': crontab()
     },
     'sync_google_analytics_domains': {
-        'task': 'tasks.sync_google_analytics_domains',
+        'task': 'tasks.sync_google_analytics',
         'schedule': crontab(minute=0, hour='*/1')
     }
 }
