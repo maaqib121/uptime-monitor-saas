@@ -7,13 +7,12 @@ from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.db.models import Q
-from domains.models import Domain
 from urls.models import Url
 from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlRequestFileSerializer, UrlExportSerializer
 from urls.utils.export import export_to_csv, export_to_xls
 from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
-from urls.permissions import IsUrlExists, IsUrlLessThanAllowed
+from urls.permissions import IsUrlActive, IsUrlLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
 from urllib.parse import urlparse
 
@@ -35,7 +34,7 @@ class UrlView(APIView, CustomPagination):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        url_qs = self.request.user.company.url_set.filter(domain_id=self.kwargs['domain_id'])
+        url_qs = self.request.user.company.url_set.filter(domain_id=self.kwargs['domain_id'], is_active=True)
 
         if self.request.GET.get('search'):
             url_qs = url_qs.filter(
@@ -55,7 +54,7 @@ class UrlView(APIView, CustomPagination):
         return super().get_paginated_response(serializer.data)
 
     def set_total_urls(self, response_data):
-        response_data['total_urls'] = self.request.user.company.url_set.count()
+        response_data['total_urls'] = self.request.user.company.url_set.filter(is_active=True).count()
         return response_data
 
     def get(self, request, domain_id):
@@ -79,7 +78,7 @@ class UrlView(APIView, CustomPagination):
 
 class UrlDetailView(APIView):
     http_method_names = ('get', 'patch', 'delete')
-    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUrlExists)
+    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUrlActive)
     authentication_classes = (JWTAuthentication,)
 
     def get(self, request, domain_id, url_id):

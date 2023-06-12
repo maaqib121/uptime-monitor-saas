@@ -1,11 +1,15 @@
 from rest_framework import permissions
 
 
-class IsUrlExists(permissions.BasePermission):
-    message = 'URL does not exists.'
+class IsUrlActive(permissions.BasePermission):
+    message = 'URL does not exists or is inactive.'
 
     def has_permission(self, request, view):
-        return request.user.company.url_set.filter(id=view.kwargs['url_id'], domain_id=view.kwargs['domain_id']).exists()
+        return request.user.company.url_set.filter(
+            id=view.kwargs['url_id'],
+            domain_id=view.kwargs['domain_id'],
+            is_active=True
+        ).exists()
 
 
 class IsUrlLessThanAllowed(permissions.BasePermission):
