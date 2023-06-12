@@ -19,7 +19,7 @@ def ping(company_id):
 
     for domain in company.domain_set.all():
         urls = []
-        for url in domain.url_set.all():
+        for url in domain.url_set.filter(is_active=True):
             try:
                 response = client.get(url.url)
             except:
