@@ -12,7 +12,7 @@ def get_company_google_access_token(company):
             'grant_type': 'refresh_token'
         }
     )
-    if response != 200:
+    if response.status_code != 200:
         company.clear_linked_google_account()
     else:
         return response.json()['access_token']
