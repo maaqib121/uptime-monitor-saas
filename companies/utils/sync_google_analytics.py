@@ -49,8 +49,10 @@ def sync_from_google_analytics_account(company):
 
                 unique_landing_pages = {d['url']: d for d in landing_pages}.values()
                 top_landing_pages = sorted(
-                    unique_landing_pages, key=lambda x: x['score'],
-                    reverse=True)[
-                    : LANDING_PAGES_TO_RETRIEVE]
+                    unique_landing_pages,
+                    key=lambda x: x['score'],
+                    reverse=True
+                )[: LANDING_PAGES_TO_RETRIEVE]
+
                 for landing_page in top_landing_pages:
                     domain.url_set.get_or_create(url=f'{domain.domain_url}{landing_page["url"]}', company=company)
