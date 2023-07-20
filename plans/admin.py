@@ -5,7 +5,7 @@ import stripe
 
 
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'allowed_users', 'allowed_domains', 'allowed_urls', 'get_ping_interval', 'company')
+    list_display = ('id', 'title', 'allowed_urls', 'get_ping_interval', 'company')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
 
