@@ -1,8 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.utils.crypto import get_random_string
-from pingApi.constants import TRIAL_ALLOWED_USERS, TRIAL_ALLOWED_DOMAINS, TRIAL_ALLOWED_URLS, TRIAL_PING_INTERVAL
-from plans.models import Price
 from datetime import datetime, timedelta
 from pytz import timezone
 from math import ceil
@@ -18,9 +16,6 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     stripe_customer_id = models.CharField(max_length=100, null=True, blank=True)
-    stripe_subscription_id = models.CharField(max_length=100, null=True, blank=True)
-    subscribed_plan = models.ForeignKey(Price, on_delete=models.SET_NULL, null=True, blank=True)
-    is_subscription_active = models.BooleanField(default=False)
     google_refresh_token = models.TextField(null=True, blank=True)
     linked_google_email = models.EmailField(null=True, blank=True)
     downloadable_file_token = models.CharField(max_length=50, null=True, blank=True)
@@ -56,30 +51,6 @@ class Company(models.Model):
         self.google_refresh_token = None
         self.linked_google_email = None
         self.save()
-
-    @property
-    def allowed_users(self):
-        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_USERS
-
-    @property
-    def allowed_domains(self):
-        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_DOMAINS
-
-    @property
-    def allowed_urls(self):
-        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_URLS
-
-    @property
-    def allowed_urls(self):
-        return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
-
-    @property
-    def ping_interval(self):
-        return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
-
-    @property
-    def ping_interval_in_seconds(self):
-        return self.ping_interval * 60
 
     @property
     def remaining_trail_days(self):
