@@ -1,9 +1,11 @@
 from django.db import models
 from django.core import exceptions
+from pingApi.constants import TRIAL_ALLOWED_URLS, TRIAL_PING_INTERVAL
 from countries.models import Country
 from companies.models import Company
 from users.models import User
 from urllib.parse import urlparse
+from plans.models import Price
 
 
 class Domain(models.Model):
@@ -11,6 +13,9 @@ class Domain(models.Model):
     country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     users = models.ManyToManyField(User, blank=True)
+    stripe_subscription_id = models.CharField(max_length=100, null=True, blank=True)
+    subscribed_plan = models.ForeignKey(Price, on_delete=models.SET_NULL, null=True, blank=True)
+    is_subscription_active = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('id',)
@@ -31,6 +36,18 @@ class Domain(models.Model):
             raise exceptions.ValidationError({'domain_url': 'Must be unique for a country.'})
 
         return super().clean()
+
+    @property
+    def allowed_urls(self):
+        return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_URLS
+
+    @property
+    def ping_interval(self):
+        return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
+
+    @property
+    def ping_interval_in_seconds(self):
+        return self.ping_interval * 60
 
 
 class DomainLabel(models.Model):
