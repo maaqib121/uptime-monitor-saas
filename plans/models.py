@@ -4,8 +4,6 @@ from django.core import exceptions
 
 class Plan(models.Model):
     title = models.CharField(max_length=100)
-    allowed_users = models.PositiveIntegerField()
-    allowed_domains = models.PositiveIntegerField()
     allowed_urls = models.PositiveIntegerField()
     ping_interval = models.PositiveIntegerField()
     description = models.TextField(null=True, blank=True)
@@ -36,14 +34,6 @@ class Price(models.Model):
         if Price.objects.filter(plan=self.plan, frequency=self.frequency).exclude(id=self.id).exists():
             raise exceptions.ValidationError(f'{self.get_frequency_display()} price already exists against this plan.')
         return super().clean()
-
-    @property
-    def allowed_users(self):
-        return self.plan.allowed_users
-
-    @property
-    def allowed_domains(self):
-        return self.plan.allowed_domains
 
     @property
     def allowed_urls(self):
