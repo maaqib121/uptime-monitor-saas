@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.db.models import Q
-from urls.models import Url
 from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlRequestFileSerializer, UrlExportSerializer
 from urls.utils.export import export_to_csv, export_to_xls
 from domains.permissions import IsDomainExists
@@ -76,21 +75,18 @@ class UrlDetailView(APIView):
     authentication_classes = (JWTAuthentication,)
 
     def get(self, request, domain_id, url_id):
-        url = Url.objects.get(id=url_id)
-        serializer = UrlSerializer(url, context={'request': request})
+        serializer = UrlSerializer(self.url, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, domain_id, url_id):
-        url = Url.objects.get(id=url_id)
-        serializer = UrlSerializer(url, data=request.data, partial=True, context={'company': request.user.company})
+        serializer = UrlSerializer(self.url, data=request.data, partial=True, context={'company': request.user.company})
         if serializer.is_valid():
             serializer = UrlSerializer(serializer.save(), context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, domain_id, url_id):
-        url = Url.objects.get(id=url_id)
-        url.delete()
+        self.url.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
