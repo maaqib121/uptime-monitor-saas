@@ -1,6 +1,6 @@
 from django.db import models
 from django.core import exceptions
-from pingApi.constants import TRIAL_ALLOWED_URLS, TRIAL_PING_INTERVAL
+from pingApi.constants import TRIAL_ALLOWED_URLS
 from countries.models import Country
 from companies.models import Company
 from users.models import User
@@ -40,14 +40,6 @@ class Domain(models.Model):
     @property
     def allowed_urls(self):
         return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_URLS
-
-    @property
-    def ping_interval(self):
-        return self.subscribed_plan.ping_interval if self.subscribed_plan else TRIAL_PING_INTERVAL
-
-    @property
-    def ping_interval_in_seconds(self):
-        return self.ping_interval * 60
 
 
 class DomainLabel(models.Model):
