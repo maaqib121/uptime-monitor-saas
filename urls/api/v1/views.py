@@ -10,7 +10,6 @@ from django.db.models import Q
 from urls.models import Url
 from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlRequestFileSerializer, UrlExportSerializer
 from urls.utils.export import export_to_csv, export_to_xls
-from companies.permissions import IsTrialActiveOrSubscribed
 from domains.permissions import IsDomainExists
 from urls.permissions import IsUrlActive, IsUrlLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
@@ -23,14 +22,9 @@ class UrlView(APIView, CustomPagination):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
+            permission_classes = (IsAuthenticated, IsDomainExists)
         else:
-            permission_classes = (
-                IsAuthenticated,
-                IsTrialActiveOrSubscribed,
-                IsDomainExists,
-                IsUrlLessThanAllowed
-            )
+            permission_classes = (IsAuthenticated, IsDomainExists, IsUrlLessThanAllowed)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -78,7 +72,7 @@ class UrlView(APIView, CustomPagination):
 
 class UrlDetailView(APIView):
     http_method_names = ('get', 'patch', 'delete')
-    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUrlActive)
+    permission_classes = (IsAuthenticated, IsUrlActive)
     authentication_classes = (JWTAuthentication,)
 
     def get(self, request, domain_id, url_id):
@@ -102,7 +96,7 @@ class UrlDetailView(APIView):
 
 class UrlRequestFileView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsDomainExists)
+    permission_classes = (IsAuthenticated, IsDomainExists)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request, domain_id):

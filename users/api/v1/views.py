@@ -18,7 +18,6 @@ from users.api.v1.serializers import (
     RequestPhoneOtpSerializer,
     PhoneVerifySerializer
 )
-from companies.permissions import IsTrialActiveOrSubscribed
 from users.permissions import (
     IsUserExists,
     IsCurrentUserAdmin,
@@ -160,9 +159,9 @@ class UserView(APIView, CustomPagination):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed)
+            permission_classes = (IsAuthenticated,)
         else:
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUserLessThanAllowed)
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserLessThanAllowed)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -207,11 +206,11 @@ class UserDetailView(APIView):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsUserExists)
+            permission_classes = (IsAuthenticated, IsUserExists)
         elif self.request.method == 'PATCH':
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUserExists)
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserExists)
         else:
-            permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUserExists, IsUserNotAdmin)
+            permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserExists, IsUserNotAdmin)
         return [permission() for permission in permission_classes]
 
     def get(self, request, pk):
@@ -235,7 +234,7 @@ class UserDetailView(APIView):
 
 class UserSendPasswordView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated, IsTrialActiveOrSubscribed, IsCurrentUserAdmin, IsUserExists, IsUserPasswordNotSet)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsUserExists, IsUserPasswordNotSet)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request, pk):
