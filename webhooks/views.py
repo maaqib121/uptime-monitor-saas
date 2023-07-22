@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.response import Response
 from django.conf import settings
-from companies.models import Company
+from domains.models import Domain
 from plans.models import Price
 from invoices.models import Invoice
 from datetime import datetime
@@ -37,18 +37,19 @@ class StripeWebhookView(APIView):
                 amount=event.data.object.subtotal / 100,
                 plan_name=f'{price.plan} - {price.get_frequency_display()}',
                 company_id=stripe_subscription.metadata['company_id'],
+                domain_id=stripe_subscription.metadata['domain_id'],
                 created_at=datetime.fromtimestamp(event.data.object.created)
             )
 
         elif event.type == 'invoice.payment_succeeded':
             stripe_subscription = stripe.Subscription.retrieve(event.data.object.subscription)
             Invoice.objects.filter(stripe_invoice_id=event.data.object.id).update(paid=True)
-            company = Company.objects.filter(id=stripe_subscription.metadata['company_id']).first()
+            domain = Domain.objects.filter(id=stripe_subscription.metadata['domain_id']).first()
             price = Price.objects.filter(stripe_price_id=event.data.object.lines.data[-1].price.id).first()
-            if company and price:
-                company.subscribed_plan = price
-                company.is_subscription_active = True
-                company.save()
+            if domain and price:
+                domain.subscribed_plan = price
+                domain.is_subscription_active = True
+                domain.save()
 
         elif event.type == 'payment_intent.succeeded':
             if event.data.object['payment_method']:
