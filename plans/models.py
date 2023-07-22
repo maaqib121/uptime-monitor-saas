@@ -35,5 +35,9 @@ class Price(models.Model):
         return super().clean()
 
     @property
+    def company(self):
+        return self.plan.company
+
+    @property
     def allowed_urls(self):
         return self.plan.allowed_urls
