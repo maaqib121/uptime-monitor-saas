@@ -24,7 +24,7 @@ class DomainLabelSerializer(serializers.ModelSerializer):
 class DomainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Domain
-        fields = '__all__'
+        exclude = ('stripe_subscription_id',)
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
@@ -36,6 +36,8 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['last_health_score'] = serializers.SerializerMethodField()
             self.fields['last_uptime_result'] = serializers.SerializerMethodField()
         else:
+            self.fields.pop('is_subscription_active')
+            self.fields.pop('subscribed_plan')
             self.fields['labels'] = serializers.JSONField(required=False)
             self.label_serializer = None
             if self.instance:
