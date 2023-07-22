@@ -5,14 +5,9 @@ import stripe
 
 
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'allowed_urls', 'get_ping_interval', 'company')
+    list_display = ('id', 'title', 'allowed_urls', 'company')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
-
-    def get_ping_interval(self, instance):
-        return instance.ping_interval
-
-    get_ping_interval.short_description = 'Ping Interval (mins)'
 
     def save_model(self, request, instance, form, change):
         if not change:
