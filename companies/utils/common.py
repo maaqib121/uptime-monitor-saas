@@ -2,18 +2,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.template.loader import render_to_string
 from django.conf import settings
-from users.models import User
 from postmarker.core import PostmarkClient
 from twilio.rest import Client
 
 
-def send_quotation_email(user, allowed_users, allowed_domains, allowed_urls, ping_interval, body):
+def send_quotation_email(user, allowed_users, allowed_urls, body):
     message = render_to_string('emails/quotation_email.html', {
         'user': user,
         'allowed_users': allowed_users,
-        'allowed_domains': allowed_domains,
         'allowed_urls': allowed_urls,
-        'ping_interval': ping_interval,
         'body': body
     })
     try:
