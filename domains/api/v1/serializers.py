@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
 from django.db.models import Q
+from pingApi.constants import ALLOWED_ALERT_EMAILS
 from users.models import User
 from domains.models import Domain, DomainLabel
 from users.api.v1.serializers import UserSerializer
@@ -36,6 +37,7 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['last_health_score'] = serializers.SerializerMethodField()
             self.fields['last_uptime_result'] = serializers.SerializerMethodField()
         else:
+            self.fields.pop('users')
             self.fields.pop('is_subscription_active')
             self.fields.pop('subscribed_plan')
             self.fields['labels'] = serializers.JSONField(required=False)
@@ -66,6 +68,14 @@ class DomainSerializer(serializers.ModelSerializer):
         self.label_serializer = DomainLabelSerializer(data=value, many=True)
         if not self.label_serializer.is_valid():
             raise serializers.ValidationError(self.label_serializer.errors)
+        return value
+
+    def validate_alert_emails(self, value):
+        if len(value) > ALLOWED_ALERT_EMAILS:
+            raise serializers.ValidationError(f'Can have maximum of {ALLOWED_ALERT_EMAILS} emails.')
+
+        if len(value) != len(set(value)):
+            raise serializers.ValidationError({'alert_emails': 'One or more emails are duplicate.'})
         return value
 
     def validate(self, attrs):

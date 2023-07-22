@@ -1,7 +1,7 @@
 from django.db import models
 from django.core import exceptions
 from django.contrib.postgres.fields import ArrayField
-from pingApi.constants import TRIAL_ALLOWED_URLS
+from pingApi.constants import TRIAL_ALLOWED_URLS, ALLOWED_ALERT_EMAILS
 from countries.models import Country
 from companies.models import Company
 from users.models import User
@@ -36,6 +36,12 @@ class Domain(models.Model):
             company=self.company
         ).exclude(id=self.id).exists():
             raise exceptions.ValidationError({'domain_url': 'Must be unique for a country.'})
+
+        if len(self.alert_emails) > ALLOWED_ALERT_EMAILS:
+            raise exceptions.ValidationError({'alert_emails': f'Can have maximum of {ALLOWED_ALERT_EMAILS} emails.'})
+
+        if len(self.alert_emails) != len(set(self.alert_emails)):
+            raise exceptions.ValidationError({'alert_emails': 'One or more emails are duplicate.'})
 
         return super().clean()
 
