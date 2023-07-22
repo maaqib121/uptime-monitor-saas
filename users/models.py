@@ -106,6 +106,10 @@ class User(AbstractUser):
         return self.profile.company
 
     @property
+    def company_id(self):
+        return self.profile.company_id
+
+    @property
     def is_company_admin(self):
         return self.profile.is_company_admin
 
