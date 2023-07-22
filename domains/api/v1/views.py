@@ -4,22 +4,15 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q, Count
-from domains.models import Domain
 from domains.api.v1.serializers import DomainSerializer
-from domains.permissions import IsDomainExists, IsDomainLessThanAllowed
+from domains.permissions import IsDomainExists
 from pingApi.utils.pagination import CustomPagination
 
 
 class DomainView(APIView, CustomPagination):
     http_method_names = ('get', 'post')
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            permission_classes = (IsAuthenticated,)
-        else:
-            permission_classes = (IsAuthenticated, IsDomainLessThanAllowed)
-        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         domain_qs = self.request.user.company.domain_set.all()
