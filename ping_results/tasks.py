@@ -1,5 +1,6 @@
 from django.conf import settings
 from pingApi.celery import app
+from pingApi.constants import PING_INTERVAL_IN_SECONDS
 from companies.models import Company
 from companies.utils.common import send_ping_email, send_ping_sms
 from datetime import datetime, timedelta
@@ -14,7 +15,7 @@ def ping(company_id):
     if not company:
         return 'Company not Found.'
 
-    ping.apply_async((company_id,), countdown=company.ping_interval_in_seconds)
+    ping.apply_async((company_id,), countdown=PING_INTERVAL_IN_SECONDS)
     client = httpx.Client(http2=True)
 
     for domain in company.domain_set.all():
