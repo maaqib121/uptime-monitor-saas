@@ -1,5 +1,6 @@
 from django.db import models
 from django.core import exceptions
+from django.contrib.postgres.fields import ArrayField
 from pingApi.constants import TRIAL_ALLOWED_URLS
 from countries.models import Country
 from companies.models import Company
@@ -13,6 +14,7 @@ class Domain(models.Model):
     country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     users = models.ManyToManyField(User, blank=True)
+    alert_emails = ArrayField(models.EmailField(), null=True, blank=True)
     stripe_subscription_id = models.CharField(max_length=100, null=True, blank=True)
     subscribed_plan = models.ForeignKey(Price, on_delete=models.SET_NULL, null=True, blank=True)
     is_subscription_active = models.BooleanField(default=False)
