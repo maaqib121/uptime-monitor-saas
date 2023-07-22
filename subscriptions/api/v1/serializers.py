@@ -1,13 +1,17 @@
 from rest_framework import serializers
+from companies.models import Company
 from plans.models import Price
+from domains.models import Domain
 
 
 class SubscriptionSerializer(serializers.Serializer):
     plan_price = serializers.PrimaryKeyRelatedField(queryset=Price.objects.all())
+    domain = serializers.PrimaryKeyRelatedField(queryset=Domain.objects.all())
+    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
 
-    def validate_plan_price(self, value):
-        if value.plan.company != None and value.plan.company != self.context['company']:
-            raise serializers.ValidationError('Cannot link this plan with your company.')
-        if self.context['company'].subscribed_plan == value:
-            raise serializers.ValidationError('Already subscribed.')
-        return value
+    def validate(self, attrs):
+        if attrs['plan_price'].plan.company != None and attrs['plan_price'].company != self.context['company']:
+            raise serializers.ValidationError({'plan_price': 'Cannot link this plan with your company.'})
+        if attrs['domain'].subscribed_plan == attrs['plan_price']:
+            raise serializers.ValidationError({'plan_price': 'Already subscribed.'})
+        return super().validate(attrs)

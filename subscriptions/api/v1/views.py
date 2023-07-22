@@ -3,56 +3,47 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
-from django.conf import settings
 from subscriptions.api.v1.serializers import SubscriptionSerializer
 from plans.api.v1.serializers import PriceSerializer
+from subscriptions.utils.stripe import get_or_create_stripe_customer, create_stripe_subscription, update_stripe_subscription
 from users.permissions import IsCurrentUserAdmin
-import stripe
+from domains.permissions import IsDomainExists
 
 
 class SubscriptionView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated, IsCurrentUserAdmin)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainExists)
     authentication_classes = (JWTAuthentication,)
 
-    def post(self, request):
-        serializer = SubscriptionSerializer(data=request.data, context={'company': request.user.company})
+    def post(self, request, domain_id):
+        request_data = request.data.copy()
+        request_data.update({'domain': domain_id, 'company': request.user.company_id})
+        serializer = SubscriptionSerializer(data=request_data)
         if serializer.is_valid():
-            if not request.user.company.stripe_customer_id:
-                stripe_customer = stripe.Customer.create(
-                    name=request.user.company.name,
-                    email=request.user.email,
-                    metadata={'company_id': request.user.company.id, 'user_id': request.user.id}
-                )
-                request.user.company.set_stripe_customer_id(stripe_customer.id)
+            stripe_customer = get_or_create_stripe_customer(request.user)
 
-            if request.user.company.stripe_subscription_id and request.user.company.subscribed_plan:
-                subscription = stripe.Subscription.retrieve(request.user.company.stripe_subscription_id)
-                stripe_subscription = stripe.Subscription.modify(
-                    subscription.id,
-                    cancel_at_period_end=False,
-                    proration_behavior='always_invoice',
-                    items=[{
-                        'id': subscription['items']['data'][0].id,
-                        'price': serializer.validated_data['plan_price'].stripe_price_id
-                    }],
-                    metadata={'company_id': request.user.company.id, 'user_id': request.user.id}
+            if self.domain.stripe_subscription_id:
+                stripe_subscription, is_created = update_stripe_subscription(
+                    stripe_customer,
+                    serializer.validated_data['plan_price'],
+                    self.domain,
+                    request.user
                 )
-                response_data = {'success': True}
             else:
-                stripe_subscription = stripe.Subscription.create(
-                    customer=request.user.company.stripe_customer_id,
-                    off_session=True,
-                    payment_behavior='default_incomplete',
-                    items=[{'price': serializer.validated_data['plan_price'].stripe_price_id}],
-                    expand=['latest_invoice.payment_intent'],
-                    metadata={'company_id': request.user.company.id, 'user_id': request.user.id}
+                stripe_subscription, is_created = create_stripe_subscription(
+                    stripe_customer,
+                    serializer.validated_data['plan_price'],
+                    self.domain,
+                    request.user
                 )
-                request.user.company.set_stripe_subscription_id(stripe_subscription.id)
-                response_data = {
-                    'client_secret': stripe_subscription.latest_invoice.payment_intent.client_secret,
-                    'price': PriceSerializer(serializer.validated_data['plan_price']).data
-                }
+
+                if is_created:
+                    response_data = {
+                        'client_secret': stripe_subscription.latest_invoice.payment_intent.client_secret,
+                        'price': PriceSerializer(serializer.validated_data['plan_price']).data
+                    }
+                else:
+                    response_data = {'success': True}
 
             return Response(response_data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
