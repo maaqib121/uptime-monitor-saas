@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import environ
 from datetime import timedelta
+import stripe
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -233,3 +234,5 @@ TWILIO_SENDER_PHONE_NO = os.environ.get('TWILIO_SENDER_PHONE_NO')
 
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
+
+stripe.api_key = STRIPE_SECRET_KEY

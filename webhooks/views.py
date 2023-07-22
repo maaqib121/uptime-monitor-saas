@@ -15,7 +15,6 @@ class StripeWebhookView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         event = None
         payload = request.body
         sig_header = request.headers['STRIPE_SIGNATURE']

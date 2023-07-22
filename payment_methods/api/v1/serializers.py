@@ -26,7 +26,6 @@ class PaymentMethodSerializer(serializers.Serializer):
         return instance.id == instance.customer.invoice_settings.default_payment_method
 
     def validate(self, attrs):
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         if not self.context['user'].company.stripe_customer_id:
             stripe_customer = stripe.Customer.create(
                 name=self.context['user'].company.name,

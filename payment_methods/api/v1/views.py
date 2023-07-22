@@ -16,7 +16,6 @@ class PaymentMethodView(APIView, CustomPagination):
     authentication_classes = (JWTAuthentication,)
 
     def get_stripe_payment_methods(self):
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         if self.request.user.company.stripe_customer_id:
             return stripe.Customer.list_payment_methods(
                 self.request.user.company.stripe_customer_id,
@@ -50,7 +49,6 @@ class PaymentMethodDetailView(APIView):
     authentication_classes = (JWTAuthentication,)
 
     def patch(self, request, payment_method_id):
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         if request.user.company.stripe_customer_id:
             try:
                 stripe.Customer.modify(
@@ -63,7 +61,6 @@ class PaymentMethodDetailView(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
     def delete(self, request, payment_method_id):
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             stripe.PaymentMethod.detach(payment_method_id)
         except Exception as exception:

@@ -12,7 +12,6 @@ class PlanAdmin(admin.ModelAdmin):
     def save_model(self, request, instance, form, change):
         if not change:
             metadata = {'company_id': instance.company.id} if instance.company else {}
-            stripe.api_key = settings.STRIPE_SECRET_KEY
             stripe_product = stripe.Product.create(name=instance.title, metadata=metadata)
             instance.stripe_product_id = stripe_product.id
         return super().save_model(request, instance, form, change)
@@ -26,7 +25,6 @@ class PriceAdmin(admin.ModelAdmin):
 
     def save_model(self, request, instance, form, change):
         if not change:
-            stripe.api_key = settings.STRIPE_SECRET_KEY
             stripe_price = stripe.Price.create(
                 unit_amount=instance.amount * 100,
                 currency='eur',
