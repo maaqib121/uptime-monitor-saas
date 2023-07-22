@@ -37,6 +37,22 @@ class Domain(models.Model):
 
         return super().clean()
 
+    def set_stripe_subscription_id(self, stripe_subscription_id):
+        self.stripe_subscription_id = stripe_subscription_id
+        self.save()
+
+    def start_subscription(self, subscribed_plan):
+        self.is_subscription_active = True
+        self.subscribed_plan = subscribed_plan
+        self.is_trial_available = False
+        self.save()
+
+    def clear_subscription(self):
+        self.is_subscription_active = False
+        self.stripe_subscription_id = None
+        self.subscribed_plan = None
+        self.save()
+
     @property
     def allowed_urls(self):
         return self.subscribed_plan.allowed_users if self.subscribed_plan else TRIAL_ALLOWED_URLS
