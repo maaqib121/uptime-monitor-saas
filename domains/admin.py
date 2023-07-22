@@ -1,8 +1,22 @@
 from django.contrib import admin
+from django import forms
 from domains.models import Domain, DomainLabel
+from django.forms import Textarea
+
+
+class DomainForm(forms.ModelForm):
+    class Meta:
+        model = Domain
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['alert_emails'].widget = Textarea()
+        self.fields['alert_emails'].delimiter = '\n'
 
 
 class DomainAdmin(admin.ModelAdmin):
+    form = DomainForm
     list_display = ('id', 'domain_url', 'country', 'company', 'labels')
     list_display_links = ('id', 'domain_url')
     list_filter = ('company',)
