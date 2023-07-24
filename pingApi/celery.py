@@ -12,6 +12,10 @@ app.conf.broker_url = settings.BASE_REDIS_URL
 app.conf.beat_scheduler = 'django_celery_beat.schedulers.DatabaseScheduler'
 app.conf.timezone = settings.TIME_ZONE
 app.conf.beat_schedule = {
+    'ping': {
+        'task': 'tasks.ping',
+        'schedule': crontab(minute=0, hour='*/1')
+    },
     'get_domain_uptime_results': {
         'task': 'tasks.get_domain_uptime_results',
         'schedule': crontab()
