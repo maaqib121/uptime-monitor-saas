@@ -61,7 +61,14 @@ class DomainSerializer(serializers.ModelSerializer):
 
     def get_last_health_score(self, instance):
         urls_count = instance.url_set.filter(is_active=True).count()
-        return instance.url_set.filter(is_active=True, last_ping_status_code=200).count() / urls_count * 100 if urls_count else 0
+        if urls_count:
+            instance.url_set.filter(is_active=True, last_ping_status_code=200).count()
+            return instance.url_set.filter(
+                is_active=True,
+                last_ping_status_code__gte=200,
+                last_ping_status_code__lte=399
+            ).count() / urls_count * 100
+        return 0
 
     def get_last_uptime_result(self, instance):
         last_domain_uptime_result = instance.domainuptimeresult_set.order_by('created_at').last()
