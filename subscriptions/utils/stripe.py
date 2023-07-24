@@ -22,7 +22,7 @@ def create_stripe_subscription(customer, price, domain, user):
         payment_behavior='default_incomplete',
         items=[{'price': price.stripe_price_id}],
         expand=['latest_invoice.payment_intent'],
-        metadata={'company_id': user.company.id, 'domain': domain.id, 'user_id': user.id}
+        metadata={'company_id': user.company.id, 'domain_id': domain.id, 'user_id': user.id}
     )
     domain.set_stripe_subscription_id(stripe_subscription.id)
     return stripe_subscription, True
