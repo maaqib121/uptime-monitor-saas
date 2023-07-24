@@ -26,11 +26,12 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def get_statistics(self, instance):
         total_urls = instance.url_set.count()
+        valid_urls = instance.url_set.filter(last_ping_status_code__gte=200, last_ping_status_code__lte=399).count()
         return {
             'total_users': User.objects.filter(profile__company=instance).count(),
             'total_domains': instance.domain_set.count(),
             'total_urls': total_urls,
-            'last_health_score': round(instance.url_set.filter(last_ping_status_code=200).count() / total_urls * 100, 2) if total_urls else 0
+            'last_health_score': round(valid_urls / total_urls * 100, 2) if total_urls else 0
         }
 
 
