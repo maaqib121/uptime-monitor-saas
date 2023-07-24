@@ -37,13 +37,13 @@ class SubscriptionView(APIView):
                     request.user
                 )
 
-                if is_created:
-                    response_data = {
-                        'client_secret': stripe_subscription.latest_invoice.payment_intent.client_secret,
-                        'price': PriceSerializer(serializer.validated_data['plan_price']).data
-                    }
-                else:
-                    response_data = {'success': True}
+            if is_created:
+                response_data = {
+                    'client_secret': stripe_subscription.latest_invoice.payment_intent.client_secret,
+                    'price': PriceSerializer(serializer.validated_data['plan_price']).data
+                }
+            else:
+                response_data = {'success': True}
 
             return Response(response_data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
