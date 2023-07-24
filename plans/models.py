@@ -9,6 +9,9 @@ class Plan(models.Model):
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, null=True, blank=True)
     stripe_product_id = models.CharField(max_length=100, null=True, blank=True)
 
+    class Meta:
+        ordering = ('id',)
+
     def __str__(self):
         return self.title
 
