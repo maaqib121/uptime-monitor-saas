@@ -31,13 +31,20 @@ class DomainSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         if data == empty:
-            self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
-            self.fields['users'] = UserSerializer(many=True)
-            self.fields['country'] = CountrySerializer()
-            self.fields['subscribed_plan'] = PriceSerializer()
-            self.fields['total_urls'] = serializers.SerializerMethodField()
-            self.fields['last_health_score'] = serializers.SerializerMethodField()
-            self.fields['last_uptime_result'] = serializers.SerializerMethodField()
+            if 'no_labels' not in self.context:
+                self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
+            if 'no_users' not in self.context:
+                self.fields['users'] = UserSerializer(many=True)
+            if 'no_country' not in self.context:
+                self.fields['country'] = CountrySerializer()
+            if 'no_subscribed_plan' not in self.context:
+                self.fields['subscribed_plan'] = PriceSerializer()
+            if 'no_total_urls' not in self.context:
+                self.fields['total_urls'] = serializers.SerializerMethodField()
+            if 'no_last_health_score' not in self.context:
+                self.fields['last_health_score'] = serializers.SerializerMethodField()
+            if 'no_last_uptime_result' not in self.context:
+                self.fields['last_uptime_result'] = serializers.SerializerMethodField()
         else:
             self.fields.pop('users')
             self.fields.pop('is_subscription_active')
