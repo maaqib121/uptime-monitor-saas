@@ -35,6 +35,8 @@ class DomainSerializer(serializers.ModelSerializer):
                 self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
             if 'no_users' not in self.context:
                 self.fields['users'] = UserSerializer(many=True)
+            else:
+                self.fields.pop('users')
             if 'no_country' not in self.context:
                 self.fields['country'] = CountrySerializer()
             if 'no_subscribed_plan' not in self.context:
