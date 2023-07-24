@@ -29,7 +29,7 @@ def create_stripe_subscription(customer, price, domain, user):
 
 
 def update_stripe_subscription(customer, price, domain, user):
-    stripe_subscription = stripe.Subscription.retrieve(user.company.stripe_subscription_id)
+    stripe_subscription = stripe.Subscription.retrieve(domain.stripe_subscription_id)
     if stripe_subscription.status == 'incomplete':
         stripe.Subscription.delete(stripe_subscription.id)
         stripe_subscription = create_stripe_subscription(customer, price, user)
