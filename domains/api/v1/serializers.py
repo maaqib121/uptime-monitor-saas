@@ -6,6 +6,7 @@ from users.models import User
 from domains.models import Domain, DomainLabel
 from users.api.v1.serializers import UserSerializer
 from countries.api.v1.serializers import CountrySerializer
+from plans.api.v1.serializers import PriceSerializer
 from domain_uptime_results.api.v1.serializers import DomainUptimeResultSerializer
 from urllib.parse import urlparse
 
@@ -33,6 +34,7 @@ class DomainSerializer(serializers.ModelSerializer):
             self.fields['labels'] = DomainLabelSerializer(source='domainlabel_set', many=True)
             self.fields['users'] = UserSerializer(many=True)
             self.fields['country'] = CountrySerializer()
+            self.fields['subscribed_plan'] = PriceSerializer()
             self.fields['total_urls'] = serializers.SerializerMethodField()
             self.fields['last_health_score'] = serializers.SerializerMethodField()
             self.fields['last_uptime_result'] = serializers.SerializerMethodField()
