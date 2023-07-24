@@ -10,7 +10,7 @@ class SubscriptionSerializer(serializers.Serializer):
     company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
 
     def validate(self, attrs):
-        if attrs['plan_price'].plan.company != None and attrs['plan_price'].company != self.context['company']:
+        if attrs['plan_price'].company != None and attrs['plan_price'].company != attrs['company']:
             raise serializers.ValidationError({'plan_price': 'Cannot link this plan with your company.'})
         if attrs['domain'].subscribed_plan == attrs['plan_price']:
             raise serializers.ValidationError({'plan_price': 'Already subscribed.'})
