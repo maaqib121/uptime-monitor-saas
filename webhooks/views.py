@@ -59,5 +59,10 @@ class StripeWebhookView(APIView):
                     invoice_settings={'default_payment_method': event.data.object.payment_method}
                 )
 
+        elif event.type == 'customer.subscription.deleted':
+            domain = Domain.objects.filter(id=event.data.object.metadata.domain_id).first()
+            if domain:
+                domain.clear_subscription()
+
         response_data = {'success': True}
         return Response(response_data, status=status.HTTP_200_OK)
