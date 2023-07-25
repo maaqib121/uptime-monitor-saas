@@ -26,6 +26,10 @@ def sync_from_google_analytics_account(company):
                     url=f"https://www.googleapis.com/analytics/v3/management/accounts/{account['id']}/webproperties/{web_property['id']}/profiles",
                     headers={'Authorization': f'Bearer {google_access_token}'})
 
+                if not domain.is_subscription_active and company.remaining_trail_days < 0:
+                    continue
+
+                landing_pages_to_retrieve = domain.subscribed_plan.allowed_urls if domain.subscribed_plan else LANDING_PAGES_TO_RETRIEVE
                 landing_pages = []
                 for profile in profiles_response.json()['items']:
                     report_response = requests.post(
@@ -39,7 +43,7 @@ def sync_from_google_analytics_account(company):
                                     'metrics': [{'expression': 'ga:entrances'}],
                                     'dimensions': [{'name': 'ga:landingPagePath'}],
                                     'orderBys': [{'fieldName': 'ga:entrances', 'sortOrder': 'DESCENDING'}],
-                                    'pageSize': 100
+                                    'pageSize': landing_pages_to_retrieve
                                 }
                             ]
                         })
@@ -53,7 +57,7 @@ def sync_from_google_analytics_account(company):
                     unique_landing_pages,
                     key=lambda x: x['score'],
                     reverse=True
-                )[:LANDING_PAGES_TO_RETRIEVE]
+                )[:landing_pages_to_retrieve]
 
                 url_ids = []
                 urls = []
