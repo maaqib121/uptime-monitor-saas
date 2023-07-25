@@ -7,3 +7,8 @@ class IsDomainExists(permissions.BasePermission):
     def has_permission(self, request, view):
         view.domain = request.user.company.domain_set.filter(id=view.kwargs['domain_id']).first()
         return True if view.domain else False
+
+
+class IsSubscribed(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return view.domain.is_subscription_active

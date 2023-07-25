@@ -5,9 +5,14 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from subscriptions.api.v1.serializers import SubscriptionSerializer
 from plans.api.v1.serializers import PriceSerializer
-from subscriptions.utils.stripe import get_or_create_stripe_customer, create_stripe_subscription, update_stripe_subscription
+from subscriptions.utils.stripe import (
+    get_or_create_stripe_customer,
+    create_stripe_subscription,
+    update_stripe_subscription,
+    delete_stripe_subscription
+)
 from users.permissions import IsCurrentUserAdmin
-from domains.permissions import IsDomainExists
+from domains.permissions import IsDomainExists, IsSubscribed
 
 
 class SubscriptionView(APIView):
@@ -47,3 +52,14 @@ class SubscriptionView(APIView):
 
             return Response(response_data, status=status.HTTP_200_OK)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SubscriptionCancelView(APIView):
+    http_method_names = ('delete',)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainExists, IsSubscribed)
+    authentication_classes = (JWTAuthentication,)
+
+    def delete(self, request):
+        delete_stripe_subscription(self.domain)
+        self.domain.clear_subscription()
+        return Response(status=status.HTTP_204_NO_CONTENT)

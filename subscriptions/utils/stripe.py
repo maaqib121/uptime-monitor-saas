@@ -45,3 +45,7 @@ def update_stripe_subscription(customer, price, domain, user):
         is_created = False
 
     return stripe_subscription, is_created
+
+
+def delete_stripe_subscription(domain):
+    stripe.Subscription.delete(domain.stripe_subscription_id)
