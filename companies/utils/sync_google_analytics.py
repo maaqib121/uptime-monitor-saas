@@ -27,6 +27,7 @@ def sync_from_google_analytics_account(company):
                     headers={'Authorization': f'Bearer {google_access_token}'})
 
                 if not domain.is_subscription_active and company.remaining_trail_days < 0:
+                    domain.url_set.update(is_active=False)
                     continue
 
                 landing_pages_to_retrieve = domain.subscribed_plan.allowed_urls if domain.subscribed_plan else LANDING_PAGES_TO_RETRIEVE
