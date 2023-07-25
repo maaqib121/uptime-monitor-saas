@@ -47,4 +47,4 @@ def get_domain_uptime_results():
 
         domain_uptime_result.save()
 
-    return 'All Domain Uptime Results has been stored successfully.'
+    return 'All Domain Uptime Results have been stored successfully.'
