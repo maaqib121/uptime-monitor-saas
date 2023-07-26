@@ -1,9 +1,10 @@
 from django.urls import path, include
-from domains.api.v1.views import DomainView, DomainDetailView
+from domains.api.v1.views import DomainView, DomainDetailView, DomainSelectView
 
 
 urlpatterns = [
     path('', DomainView.as_view()),
+    path('select/', DomainSelectView.as_view()),
     path('<int:domain_id>/', DomainDetailView.as_view()),
     path('<int:domain_id>/urls/', include('urls.api.v1.urls')),
     path('<int:domain_id>/', include('ping_results.api.v1.urls')),

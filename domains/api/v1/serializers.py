@@ -155,3 +155,30 @@ class DomainSerializer(serializers.ModelSerializer):
             DomainLabel.objects.filter(id__in=removable_domain_labels).delete()
 
         return super().update(instance, validated_data)
+
+
+class DomainSelectSerializer(serializers.Serializer):
+    def __init__(self, instance=None, data=empty, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.fields['selected_domains'] = serializers.PrimaryKeyRelatedField(
+            queryset=self.context['company'].domain_set.all(),
+            many=True
+        )
+        self.fields['unselected_domains'] = serializers.PrimaryKeyRelatedField(
+            queryset=self.context['company'].domain_set.all(),
+            many=True
+        )
+
+    def create(self, validated_data):
+        selected_domains = []
+        unselected_domains = []
+        for selected_domain in validated_data['selected_domains']:
+            selected_domains.append(Domain(id=selected_domain.id, is_active=True))
+        for unselected_domain in validated_data['unselected_domains']:
+            unselected_domains.append(Domain(id=unselected_domain.id, is_active=False))
+        unselected_domains = Domain.objects.bulk_update(unselected_domains, fields=['is_active'])
+        selected_domains = Domain.objects.bulk_update(selected_domains, fields=['is_active'])
+        return {
+            'selected_domains': Domain.objects.filter(id__in=[domain.id for domain in validated_data['selected_domains']]),
+            'unselected_domains': Domain.objects.filter(id__in=[domain.id for domain in validated_data['unselected_domains']])
+        }

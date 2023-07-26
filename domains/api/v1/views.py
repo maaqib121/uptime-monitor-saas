@@ -4,7 +4,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q, Count
-from domains.api.v1.serializers import DomainSerializer
+from domains.api.v1.serializers import DomainSerializer, DomainSelectSerializer
 from domains.permissions import IsDomainExists
 from pingApi.utils.pagination import CustomPagination
 
@@ -81,3 +81,27 @@ class DomainDetailView(APIView):
     def delete(self, request, domain_id):
         self.domain.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DomainSelectView(APIView):
+    http_method_names = ('post',)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request):
+        serializer = DomainSelectSerializer(data=request.data, context={'company': request.user.company})
+        if serializer.is_valid():
+            domains = serializer.save()
+            context = {
+                'no_labels': True,
+                'no_users': True,
+                'no_total_urls': True,
+                'no_last_health_score': True,
+                'no_last_uptime_result': True
+            }
+            response_data = {
+                'selected_domains': DomainSerializer(domains['selected_domains'], many=True, context=context).data,
+                'unselected_domains': DomainSerializer(domains['unselected_domains'], many=True, context=context).data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
