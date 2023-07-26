@@ -3,7 +3,6 @@ from rest_framework.fields import empty
 from django.conf import settings
 from companies.models import Company
 from users.models import User
-from plans.api.v1.serializers import PriceSerializer
 import requests
 
 
@@ -25,11 +24,15 @@ class CompanySerializer(serializers.ModelSerializer):
         return instance.remaining_trail_days
 
     def get_statistics(self, instance):
-        total_urls = instance.url_set.count()
-        valid_urls = instance.url_set.filter(last_ping_status_code__gte=200, last_ping_status_code__lte=399).count()
+        total_urls = instance.url_set.filter(is_active=True).count()
+        valid_urls = instance.url_set.filter(
+            is_active=True,
+            last_ping_status_code__gte=200,
+            last_ping_status_code__lte=399
+        ).count()
         return {
             'total_users': User.objects.filter(profile__company=instance).count(),
-            'total_domains': instance.domain_set.count(),
+            'total_domains': instance.domain_set.filter(is_active=True).count(),
             'total_urls': total_urls,
             'last_health_score': round(valid_urls / total_urls * 100, 2) if total_urls else 0
         }
