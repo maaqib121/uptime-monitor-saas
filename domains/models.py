@@ -11,6 +11,7 @@ from plans.models import Price
 
 class Domain(models.Model):
     domain_url = models.URLField()
+    is_active = models.BooleanField(default=False)
     country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     users = models.ManyToManyField(User, blank=True)
