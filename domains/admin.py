@@ -17,9 +17,9 @@ class DomainForm(forms.ModelForm):
 
 class DomainAdmin(admin.ModelAdmin):
     form = DomainForm
-    list_display = ('id', 'domain_url', 'country', 'company', 'labels')
+    list_display = ('id', 'domain_url', 'is_active', 'country', 'company', 'labels')
     list_display_links = ('id', 'domain_url')
-    list_filter = ('company',)
+    list_filter = ('is_active', 'company')
     search_fields = ('domain_url',)
 
     def labels(self, instance):
