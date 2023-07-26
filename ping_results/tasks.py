@@ -1,6 +1,5 @@
 from django.conf import settings
 from pingApi.celery import app
-from pingApi.constants import PING_INTERVAL_IN_SECONDS
 from companies.models import Company
 from companies.utils.common import send_ping_email, send_ping_sms
 from datetime import datetime, timedelta
@@ -13,7 +12,10 @@ import httpx
 def ping():
     for company in Company.objects.all():
         client = httpx.Client(http2=True)
-        for domain in company.domain_set.all():
+        for domain in company.domain_set.filter(is_active=True):
+            if not domain.is_subscription_active and company.remaining_trail_days < 0:
+                continue
+
             urls = []
             for url in domain.url_set.filter(is_active=True):
                 try:
