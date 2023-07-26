@@ -9,7 +9,7 @@ from django.utils.encoding import force_bytes
 from django.db.models import Q
 from urls.api.v1.serializers import UrlSerializer, UrlCreateSerializer, UrlRequestFileSerializer, UrlExportSerializer
 from urls.utils.export import export_to_csv, export_to_xls
-from domains.permissions import IsDomainExists
+from domains.permissions import IsDomainActive
 from urls.permissions import IsUrlActive, IsUrlLessThanAllowed
 from pingApi.utils.pagination import CustomPagination
 from urllib.parse import urlparse
@@ -21,9 +21,9 @@ class UrlView(APIView, CustomPagination):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = (IsAuthenticated, IsDomainExists)
+            permission_classes = (IsAuthenticated, IsDomainActive)
         else:
-            permission_classes = (IsAuthenticated, IsDomainExists, IsUrlLessThanAllowed)
+            permission_classes = (IsAuthenticated, IsDomainActive, IsUrlLessThanAllowed)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -92,7 +92,7 @@ class UrlDetailView(APIView):
 
 class UrlRequestFileView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated, IsDomainExists)
+    permission_classes = (IsAuthenticated, IsDomainActive)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request, domain_id):

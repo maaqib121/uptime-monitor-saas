@@ -5,12 +5,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from domain_uptime_results.models import DomainUptimeResult
 from datetime import datetime, timedelta
-from domains.permissions import IsDomainExists
+from domains.permissions import IsDomainActive
 
 
 class DomainUptimeHistoryView(APIView):
     http_method_names = ('get',)
-    permission_classes = (IsAuthenticated, IsDomainExists)
+    permission_classes = (IsAuthenticated, IsDomainActive)
     authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self):

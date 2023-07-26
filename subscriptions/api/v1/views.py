@@ -12,12 +12,12 @@ from subscriptions.utils.stripe import (
     delete_stripe_subscription
 )
 from users.permissions import IsCurrentUserAdmin
-from domains.permissions import IsDomainExists, IsSubscribed
+from domains.permissions import IsDomainActive, IsSubscribed
 
 
 class SubscriptionView(APIView):
     http_method_names = ('post',)
-    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainExists)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainActive)
     authentication_classes = (JWTAuthentication,)
 
     def post(self, request, domain_id):
@@ -56,7 +56,7 @@ class SubscriptionView(APIView):
 
 class SubscriptionCancelView(APIView):
     http_method_names = ('delete',)
-    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainExists, IsSubscribed)
+    permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainActive, IsSubscribed)
     authentication_classes = (JWTAuthentication,)
 
     def delete(self, request):

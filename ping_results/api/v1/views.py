@@ -5,13 +5,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from ping_results.models import PingResult
 from datetime import datetime, timedelta
-from domains.permissions import IsDomainExists
+from domains.permissions import IsDomainActive
 from urls.permissions import IsUrlActive
 
 
 class PingHistoryView(APIView):
     http_method_names = ('get',)
-    permission_classes = (IsAuthenticated, IsDomainExists, IsUrlActive)
+    permission_classes = (IsAuthenticated, IsDomainActive, IsUrlActive)
     authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self):
@@ -61,9 +61,9 @@ class HealthRateView(APIView):
 
     def get_permissions(self):
         if 'url_id' in self.kwargs:
-            permission_classes = (IsAuthenticated, IsDomainExists, IsUrlActive)
+            permission_classes = (IsAuthenticated, IsDomainActive, IsUrlActive)
         elif 'domain_id' in self.kwargs:
-            permission_classes = (IsAuthenticated, IsDomainExists)
+            permission_classes = (IsAuthenticated, IsDomainActive)
         else:
             permission_classes = (IsAuthenticated,)
         return [permission() for permission in permission_classes]

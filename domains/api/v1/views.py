@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from domains.api.v1.serializers import DomainSerializer, DomainSelectSerializer
-from domains.permissions import IsDomainExists
+from domains.permissions import IsDomainActive
 from pingApi.utils.pagination import CustomPagination
 
 
@@ -64,7 +64,7 @@ class DomainView(APIView, CustomPagination):
 
 class DomainDetailView(APIView):
     http_method_names = ('get', 'patch', 'delete')
-    permission_classes = (IsAuthenticated, IsDomainExists)
+    permission_classes = (IsAuthenticated, IsDomainActive)
     authentication_classes = (JWTAuthentication,)
 
     def get(self, request, domain_id):
