@@ -30,7 +30,7 @@ class DomainView(APIView, CustomPagination):
             domain_qs = domain_qs.annotate(total_urls=Count('url')).order_by(self.request.GET['ordering'])
 
         if self.request.GET.get('is_active'):
-            is_active = True if self.request['is_active'] == 'true' else False
+            is_active = True if self.request.GET['is_active'] == 'true' else False
             domain_qs = domain_qs.filter(is_active=is_active)
 
         return domain_qs
