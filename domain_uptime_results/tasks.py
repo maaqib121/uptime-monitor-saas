@@ -12,7 +12,7 @@ import time
 
 @app.task(name='tasks.get_domain_uptime_results')
 def get_domain_uptime_results():
-    for domain in Domain.objects.all():
+    for domain in Domain.objects.filter(is_active=True):
         client = httpx.Client(http2=True)
         try:
             start_time = time.time()
