@@ -59,7 +59,7 @@ class SubscriptionCancelView(APIView):
     permission_classes = (IsAuthenticated, IsCurrentUserAdmin, IsDomainActive, IsSubscribed)
     authentication_classes = (JWTAuthentication,)
 
-    def delete(self, request):
+    def delete(self, request, domain_id):
         delete_stripe_subscription(self.domain)
         self.domain.clear_subscription()
         return Response(status=status.HTTP_204_NO_CONTENT)
