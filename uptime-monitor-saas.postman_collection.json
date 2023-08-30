@@ -1,0 +1,2254 @@
+{
+	"info": {
+		"_postman_id": "abf015ca-cc9d-4bb3-90e3-27c9d8791194",
+		"name": "uptime-monitor-saas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33387610",
+		"_collection_link": "https://socketier.postman.co/workspace/Team-Workspace~95381e77-af95-4cac-83b5-b4d1efae9c6d/collection/33387610-abf015ca-cc9d-4bb3-90e3-27c9d8791194?action=share&source=collection_link&creator=33387610"
+	},
+	"item": [
+		{
+			"name": "Authenticate",
+			"item": [
+				{
+					"name": "Authenticate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"youremail@example.com\",\n    \"password\": \"yourpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/authenticate/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authenticate",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Signup",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"youremail@example.com\",\n    \"password\": \"yourpassword\",\n    \"password2\": \"yourpassword\",\n    \"first_name\": \"Muhammad\",\n    \"last_name\": \"Aaqib\",\n    \"company_name\": \"Socketier\",\n    \"redirect_uri\": \"https://localhost:8000/api/v1/users/confirmation\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/signup/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"signup",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/confirm/:uidb64/:token/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"confirm",
+								":uidb64",
+								":token",
+								""
+							],
+							"variable": [
+								{
+									"key": "uidb64",
+									"value": "NDc"
+								},
+								{
+									"key": "token",
+									"value": "lIHGHbPqURlL8cD2IoLBcXjW4Y76U06M"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reset Password",
+			"item": [
+				{
+					"name": "Forget Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"youremail@gmail.com\",\n    \"redirect_uri\": \"http://localhost:8000/reset_password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/forget_password/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forget_password",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Confirmation Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{adulis_url}}/api/v1/verify_confirmation_token/:uidb64/:token/",
+							"host": [
+								"{{adulis_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"verify_confirmation_token",
+								":uidb64",
+								":token",
+								""
+							],
+							"variable": [
+								{
+									"key": "uidb64",
+									"value": "MzQ"
+								},
+								{
+									"key": "token",
+									"value": "wgbeBcPm3GM0Dao6MyKLqIcjHhfLDVd8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"yourpassword\",\n    \"password2\": \"yourpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{adulis_url}}/api/v1/reset_password/:uidb64/:token/",
+							"host": [
+								"{{adulis_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reset_password",
+								":uidb64",
+								":token",
+								""
+							],
+							"variable": [
+								{
+									"key": "uidb64",
+									"value": "MzQ"
+								},
+								{
+									"key": "token",
+									"value": "wgbeBcPm3GM0Dao6MyKLqIcjHhfLDVd8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Countries",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/countries/?search=Pakis",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"countries",
+								""
+							],
+							"query": [
+								{
+									"key": "is_active",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Pakis"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Company",
+			"item": [
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/company/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"company",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Socketier",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/Users/aaqib/Desktop/product-1.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/company/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"company",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Quotation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"allowed_users\": 50,\n    \"allowed_urls\": 100,\n    \"body\": \"I need a plan with 50 users and I need to add 50 domains and 100 URLs against those domains. Please quote the price according to my requirements for Monthly and Yearly plan.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/company/quotation/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"company",
+								"quotation",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate Google",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"4/0AbUR2VPfzd06LDhrW3y5httDnOxZg8M63Q3kXTXWxs8uEKhuMGaUUSNyJ1HDVgNvAeC2YA\",\n    \"redirect_uri\": \"http://localhost:8000/api/v1/company/authenticate_google/\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/company/authenticate_google/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"company",
+								"authenticate_google",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dissociate Google",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/company/dissociate_google/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"company",
+								"dissociate_google",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/profile/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Muhammad",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Aaqib",
+									"type": "text"
+								},
+								{
+									"key": "profile_pic",
+									"type": "file",
+									"src": "/Users/aaqib/Desktop/product-3.jpg"
+								},
+								{
+									"key": "is_company_admin",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+923206424900",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/profile/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Phone OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/request_phone_otp/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"request_phone_otp",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Phone",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"otp\": \"278830\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/verify_phone/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"verify_phone",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Plans",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/plans/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"plans",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/?no_paginate=true",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							],
+							"query": [
+								{
+									"key": "no_paginate",
+									"value": "true"
+								},
+								{
+									"key": "search",
+									"value": "Muhammad Aaqib",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "youremail@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "profile",
+									"value": "{\"first_name\": \"Mo\", \"last_name\": \"Aaq\", \"is_company_admin\": true}",
+									"type": "text"
+								},
+								{
+									"key": "profile_pic",
+									"type": "file",
+									"src": "/Users/aaqib/Desktop/product-1.jpg"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8000/api/v1/set_password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/12/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"12",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_company_admin\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/48/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"48",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/48/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"48",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Password Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"redirect_uri\": \"http://localhost:8000/api/v1/set_password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/users/35/send_password/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"35",
+								"send_password",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Payment Methods",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/payment_methods/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payment_methods",
+								""
+							],
+							"query": [
+								{
+									"key": "no_paginate",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payment_method_id\": \"pm_1M349SIWXNA8B3vNzFxIeWaf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/payment_methods/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payment_methods",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/payment_methods/pm_1M349SIWXNA8B3vNzFxIeWaf/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payment_methods",
+								"pm_1M349SIWXNA8B3vNzFxIeWaf",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/payment_methods/pm_1M33xFIWXNA8B3vNA3Q0FkLT/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payment_methods",
+								"pm_1M33xFIWXNA8B3vNA3Q0FkLT",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Invoices",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/invoices/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"invoices",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Domains",
+			"item": [
+				{
+					"name": "Subscriptions",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"plan_price\": 3\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ping_url}}/api/v1/domains/:domain_id/subscriptions/",
+									"host": [
+										"{{ping_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"domains",
+										":domain_id",
+										"subscriptions",
+										""
+									],
+									"variable": [
+										{
+											"key": "domain_id",
+											"value": "26"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{ping_url}}/api/v1/domains/:domain_id/subscriptions/cancel/",
+									"host": [
+										"{{ping_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"domains",
+										":domain_id",
+										"subscriptions",
+										"cancel",
+										""
+									],
+									"variable": [
+										{
+											"key": "domain_id",
+											"value": "26"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "apikey",
+						"apikey": [
+							{
+								"key": "value",
+								"value": "{{ping_token}}",
+								"type": "string"
+							},
+							{
+								"key": "key",
+								"value": "Authorization",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/?is_active=true",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "ordering",
+									"value": "-total_urls",
+									"description": "domain_url, total_urls",
+									"disabled": true
+								},
+								{
+									"key": "is_active",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domain_url\": \"https://abc.takemint.com\",\n    \"country\": 52,\n    \"users\": [],\n    \"labels\": [\n        {\n            \"label\": \"take\"\n        },\n        {\n            \"label\": \"mint\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/26/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"26",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domain_url\": \"https://takemintt.com\",\n    \"country\": 52,\n    \"labels\": [\n        {\n            \"id\": 35,\n            \"label\": \"atss\"\n        }\n    ],\n    \"alert_emails\": [\"maaqib121@gmail.com\", \"maaqib121+test@gmail.com\", \"maaqib121+test2@gmail.com\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/26/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"26",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/7/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Select",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"selected_domains\": [26, 51],\n    \"unselected_domains\": [51]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/select/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"select",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Urls",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/112/urls/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"112",
+								"urls",
+								""
+							],
+							"query": [
+								{
+									"key": "no_paginate",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "ordering",
+									"value": "-url",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "200",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"labels\": [\n        {\n            \"label\": \"customer\"\n        },\n        {\n            \"label\": \"earnings\"\n        }\n    ],\n    \"urls\": [\n        {\n            \"url\": \"https://adulis.com/productss\"\n        },\n        {\n            \"url\": \"https://adulis.com/orderss\"\n        },\n        {\n            \"url\": \"https://adulis.com/dashboards\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/8/urls/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"8",
+								"urls",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/112/urls/1664/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"112",
+								"urls",
+								"1664",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"url\": \"https://adulis.com/products\",\n    \"labels\": [\n        {\n            \"id\": 2,\n            \"label\": \"products\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/8/urls/3/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"8",
+								"urls",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/8/urls/20/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"8",
+								"urls",
+								"20",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"format\": \"xls\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/8/urls/request_file/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"8",
+								"urls",
+								"request_file",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/8/urls/export/?uidb64=MTE&token=u7rEdMgwX6BpNnxnDsSWBcChOTL1KUB7&format=xls",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"8",
+								"urls",
+								"export",
+								""
+							],
+							"query": [
+								{
+									"key": "uidb64",
+									"value": "MTE"
+								},
+								{
+									"key": "token",
+									"value": "u7rEdMgwX6BpNnxnDsSWBcChOTL1KUB7"
+								},
+								{
+									"key": "format",
+									"value": "xls"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Ping Results",
+			"item": [
+				{
+					"name": "Ping History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/112/urls/1664/ping_history/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"112",
+								"urls",
+								"1664",
+								"ping_history",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health Rate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/health_rate/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health_rate",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Account Level",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ping_url}}/api/v1/health_rate/",
+									"host": [
+										"{{ping_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"health_rate",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Domain Level",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ping_url}}/api/v1/domains/8/health_rate/",
+									"host": [
+										"{{ping_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"domains",
+										"8",
+										"health_rate",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Url Level",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ping_url}}/api/v1/domains/8/urls/3/health_rate/",
+									"host": [
+										"{{ping_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"domains",
+										"8",
+										"urls",
+										"3",
+										"health_rate",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Domain Uptime Results",
+			"item": [
+				{
+					"name": "Domain Uptime History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ping_url}}/api/v1/domains/26/domain_uptime_history/",
+							"host": [
+								"{{ping_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"domains",
+								"26",
+								"domain_uptime_history",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "{{ping_token}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Google Integration",
+			"item": [
+				{
+					"name": "OAuth2",
+					"item": [
+						{
+							"name": "Obtain Auth Code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=&redirect_uri=http://localhost:3000/api/v1/company/authenticate_google/&scope=email https://www.googleapis.com/auth/analytics.readonly&approval_promt=force&access_type=offline",
+									"protocol": "https",
+									"host": [
+										"accounts",
+										"google",
+										"com"
+									],
+									"path": [
+										"o",
+										"oauth2",
+										"auth"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "code"
+										},
+										{
+											"key": "client_id",
+											"value": ""
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:3000/api/v1/company/authenticate_google/"
+										},
+										{
+											"key": "scope",
+											"value": "email https://www.googleapis.com/auth/analytics.readonly"
+										},
+										{
+											"key": "approval_promt",
+											"value": "force"
+										},
+										{
+											"key": "access_type",
+											"value": "offline"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Access/Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"code\": \"4/0AbUR2VNlRAe03yQZRWKFNwkVZGkNtLrK60ZGPNBgJ8wYb1xOSN_Zr_40zI2HhvbEw9-kjw\",\n    \"client_id\": \"\",\n    \"client_secret\": \"\",\n    \"redirect_uri\": \"http://localhost:8000/api/v1/company/authenticate_google/\",\n    \"grant_type\": \"authorization_code\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://oauth2.googleapis.com/token",
+									"protocol": "https",
+									"host": [
+										"oauth2",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate Access Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"client_id\": \"338706188706-6ool7nore93nvg3ilmh06un35scemfil.apps.googleusercontent.com\",\n    \"client_secret\": \"\",\n    \"refresh_token\": \"\",\n    \"grant_type\": \"refresh_token\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://oauth2.googleapis.com/token",
+									"protocol": "https",
+									"host": [
+										"oauth2",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Me",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://www.googleapis.com/userinfo/v2/me",
+									"protocol": "https",
+									"host": [
+										"www",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"userinfo",
+										"v2",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revoke Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"client_id\": \"\",\n    \"client_secret\": \"\",\n    \"token\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://oauth2.googleapis.com/revoke",
+									"protocol": "https",
+									"host": [
+										"oauth2",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"revoke"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Google Token",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://oauth2.googleapis.com/tokeninfo?id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk2OTcxODA4Nzk2ODI5YTk3MmU3OWE5ZDFhOWZmZjExY2Q2MWIxZTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMzg3MDYxODg3MDYtNm9vbDdub3JlOTNudmczaWxtaDA2dW4zNXNjZW1maWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMzg3MDYxODg3MDYtNm9vbDdub3JlOTNudmczaWxtaDA2dW4zNXNjZW1maWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIzMTg3MjE4OTYzODg1NTkxODUiLCJlbWFpbCI6Im1hYXFpYjEyMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IlNuZ1hUUVlmMlZMdFphRFhZT2lUQkEiLCJpYXQiOjE2ODE3Njk4MzIsImV4cCI6MTY4MTc3MzQzMn0.a2JWrt-3x9YoGtYMtkh9o09KsXm8sY-jJKLnu-wQ2xjxQhD5lXGHrvFEPYXg4f5ukJU6oaXlYiXzp7G41X3zddLWiGk3Cy8fpPA-D7ynSDemzhUZnHhOYj20uPDavhYwFwcb6Bd4TqyLEXkzRmYB6_7sWao-RrWNe6bRW-rN18TjZT0CdxSd9aPjOPxxu5NFA3MHplXCigjRfMPaCR5rARggN6pAjTrZMuBIzrKtOmeNWZ5KOP90KBIx2z1hTk0BhMUutYtswfRaU-xh4s06z4dfW5Zx7GXd8IwoV8WZDbbhiy_yIw85YtjtLKt2FQveIgDDrQNJdraku7QwV6-PxQ",
+									"protocol": "https",
+									"host": [
+										"oauth2",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"tokeninfo"
+									],
+									"query": [
+										{
+											"key": "id_token",
+											"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk2OTcxODA4Nzk2ODI5YTk3MmU3OWE5ZDFhOWZmZjExY2Q2MWIxZTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMzg3MDYxODg3MDYtNm9vbDdub3JlOTNudmczaWxtaDA2dW4zNXNjZW1maWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMzg3MDYxODg3MDYtNm9vbDdub3JlOTNudmczaWxtaDA2dW4zNXNjZW1maWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIzMTg3MjE4OTYzODg1NTkxODUiLCJlbWFpbCI6Im1hYXFpYjEyMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IlNuZ1hUUVlmMlZMdFphRFhZT2lUQkEiLCJpYXQiOjE2ODE3Njk4MzIsImV4cCI6MTY4MTc3MzQzMn0.a2JWrt-3x9YoGtYMtkh9o09KsXm8sY-jJKLnu-wQ2xjxQhD5lXGHrvFEPYXg4f5ukJU6oaXlYiXzp7G41X3zddLWiGk3Cy8fpPA-D7ynSDemzhUZnHhOYj20uPDavhYwFwcb6Bd4TqyLEXkzRmYB6_7sWao-RrWNe6bRW-rN18TjZT0CdxSd9aPjOPxxu5NFA3MHplXCigjRfMPaCR5rARggN6pAjTrZMuBIzrKtOmeNWZ5KOP90KBIx2z1hTk0BhMUutYtswfRaU-xh4s06z4dfW5Zx7GXd8IwoV8WZDbbhiy_yIw85YtjtLKt2FQveIgDDrQNJdraku7QwV6-PxQ"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Analytics",
+					"item": [
+						{
+							"name": "Get Accounts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://www.googleapis.com/analytics/v3/management/accounts",
+									"protocol": "https",
+									"host": [
+										"www",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"analytics",
+										"v3",
+										"management",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Web Properties",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://www.googleapis.com/analytics/v3/management/accounts/:account_id/webproperties",
+									"protocol": "https",
+									"host": [
+										"www",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"analytics",
+										"v3",
+										"management",
+										"accounts",
+										":account_id",
+										"webproperties"
+									],
+									"variable": [
+										{
+											"key": "account_id",
+											"value": "15563494"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Profiles",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://www.googleapis.com/analytics/v3/management/accounts/:account_id/webproperties/:web_property_id/profiles",
+									"protocol": "https",
+									"host": [
+										"www",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"analytics",
+										"v3",
+										"management",
+										"accounts",
+										":account_id",
+										"webproperties",
+										":web_property_id",
+										"profiles"
+									],
+									"variable": [
+										{
+											"key": "account_id",
+											"value": "15563494"
+										},
+										{
+											"key": "web_property_id",
+											"value": "UA-15563494-1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Reports",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"reportRequests\": [{\n            \"viewId\": \"289632042\",\n            \"dateRanges\": [{\n                \"startDate\": \"7daysAgo\",\n                \"endDate\": \"today\"\n            }],\n            \"metrics\": [{\n                \"expression\": \"ga:entrances\"\n            }],\n            \"dimensions\": [{\n                \"name\": \"ga:landingPagePath\"\n            }],\n            \"orderBys\": [{\n                \"fieldName\": \"ga:entrances\",\n                \"sortOrder\": \"DESCENDING\"\n            }],\n            \"pageSize\": 2\n        }]\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://analyticsreporting.googleapis.com/v4/reports:batchGet",
+									"protocol": "https",
+									"host": [
+										"analyticsreporting",
+										"googleapis",
+										"com"
+									],
+									"path": [
+										"v4",
+										"reports:batchGet"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "apikey",
+						"apikey": [
+							{
+								"key": "value",
+								"value": "",
+								"type": "string"
+							},
+							{
+								"key": "key",
+								"value": "Authorization",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
