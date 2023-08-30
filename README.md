@@ -43,7 +43,7 @@
 
 
 ## 🚀 Postman
-Import `uptime-monitor-saas.postman_collection.json` to Postman for documentati
+Import `uptime-monitor-saas.postman_collection.json` to Postman for documentation
 
 ## 🚀 Deployment
 Deploy on AWS, Azure, or GCP using your preferred tools. Make sure to configure environment variables, disable DEBUG, and use production-ready database/queues.
